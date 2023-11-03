@@ -16,3 +16,4 @@ The `blueprints` directory within the Janus project adopts the Flask "Blueprints
 - `In Progress`: [design](./design) - Blueprint focused on the design portfolio and related content.
 - `PENDING`: [art](./art) - Blueprint dedicated to the art portfolio and showcase.
 - `PENDING`: [philosophy](./philosophy) - Blueprint for philosophical musings and writings.
+- `In Progress`: [home](./home) - Blueprint for the main landing or homepage of the Janus project.
