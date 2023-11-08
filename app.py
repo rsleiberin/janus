@@ -1,35 +1,11 @@
-from flask import Flask, render_template
+# app.py at the root of your Flask application (~/janus/app.py)
+import logging
+from app import create_app
 
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return render_template('home.html')
-
-# Design routes
-@app.route('/design/digital')
-def digital():
-    return render_template('design_digital.html')
-
-# ... Additional routes for each subcategory ...
-
-# Art routes
-@app.route('/art/audio/music')
-def music():
-    return render_template('music.html')
-
-# ... And so on for every subcategory ...
-
-# Philosophy routes
-@app.route('/philosophy/mission/observations')
-def observations():
-    return render_template('observations.html')
-
-# ... Continue this pattern ...
-
-@app.route('/shop')
-def shop():
-    return render_template('shop.html')
+app = create_app()
 
 if __name__ == '__main__':
+    # Set up logging to the console at a DEBUG level
+    app.logger.setLevel(logging.DEBUG)
+    # Start the Flask application with detailed logging
     app.run(debug=True)

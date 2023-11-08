@@ -26,7 +26,4 @@ The `janus` directory serves as the root for the Flask-based web application com
 - `In Progress`: [frontend](./frontend) - The Next.js frontend directory, initialized and integrated with Tailwind CSS.
 - `PENDING`: [templates](./templates) - HTML templates for rendering views.
 - `PENDING`: [static](./static) - Directory for static assets like CSS, JavaScript, and images.
-- `PENDING`: [models](./models) - Directory for database models.
 - `PENDING`: [utils](./utils) - Directory for utility functions.
-- `PENDING`: [ai_images](./ai_images) - Directory for storing AI-rendered images.
-- `PENDING`: [design_components](./design_components) - Directory for atomic design components.
