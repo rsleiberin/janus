@@ -1,18 +1,21 @@
-/** @type {import('tailwindcss').Config} */
+// ~/janus/frontend/tailwind.config.js
+
 module.exports = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  purge: [
+    // Paths to all of your components' files
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './src/**/*.{js,ts,jsx,tsx}', // If this is where your Next.js components live
+    '../../app/blueprints/**/templates/**/*.{html,js}', // Path to Flask templates
+    '../../app/blueprints/**/static/**/*.{css,js}', // Path to Flask static assets
+    // Add additional paths as your project grows
   ],
+  darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
-    },
+    extend: {},
+  },
+  variants: {
+    extend: {},
   },
   plugins: [],
 }
