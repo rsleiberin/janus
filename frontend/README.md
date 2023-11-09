@@ -1,29 +1,25 @@
-# Frontend Directory - Janus Flask Project
+# Frontend Directory - Next.js Application
 
 ## Introduction
-The `frontend` directory is where the Next.js-based frontend of the Janus Flask Project resides. This section of the application is designed to offer a modern user interface, presenting the user's expertise and personal brand in a compelling manner.
+The `frontend` directory hosts the Next.js-based frontend application for Project Janus. This division of the project leverages the latest web technologies to create a visually appealing and interactive user experience.
 
 ## Status
-- `In Progress`
+- `Completed`: Setup and configuration of the Next.js project with Tailwind CSS.
+- `In Progress`: Refinement and enhancement of page designs and UI components.
+- `Planned`: Connection of frontend components to backend services via API integrations.
 
 ## Tasks
-- [x] Initialize the Next.js project.
-- [x] Integrate Tailwind CSS for styling purposes.
-- [x] Create basic pages: Home, About, Projects, and Contact.
-- [x] Implement the navigation bar component.
-- [ ] Enhance the design and interactivity of each page.
-- [ ] Introduce additional reusable UI components.
-- [ ] Connect the frontend with the Flask backend via API calls.
+- [x] Initialize the Next.js project layout.
+- [x] Establish Tailwind CSS utility classes for project-wide styling.
+- [ ] Design and implement interactive UI elements and features.
+- [ ] Develop a responsive and accessible interface.
 
-## Files
-- `In Progress`: [next.config.js](./next.config.js) - Configuration for the Next.js project.
-- `In Progress`: [postcss.config.js](./postcss.config.js) - Configuration for PostCSS, aiding in the Tailwind CSS integration.
-- `In Progress`: [tailwind.config.js](./tailwind.config.js) - Configuration for Tailwind CSS.
-- `In Progress`: [tsconfig.json](./tsconfig.json) - TypeScript configuration for the project.
-
-## Directories
-- `In Progress`: [src](./src) - Contains the main source code, components, layouts, and pages of the application.
-- `In Progress`: [public](./public) - Contains static assets for the Next.js application.
-- `In Progress`: [node_modules](./node_modules) - Directory for project dependencies.
-- `PENDING`: Further subdivision of the `src` directory (pages, components, layouts) to be detailed in its own README.
-
+## Files and Directories
+- `[next.config.js](./next.config.js)` - Configurations for Next.js customizations.
+- `[tailwind.config.js](./tailwind.config.js)` - Customizations for Tailwind CSS.
+- `[postcss.config.js](./postcss.config.js)` - PostCSS setup aiding in Tailwind CSS integration.
+- `[tsconfig.json](./tsconfig.json)` - TypeScript configurations.
+- `[src](./src)` - The main source code directory including components, layouts, and pages.
+- `[public](./public)` - Houses static files accessible to the Next.js application.
+- `[styles](./styles)` - Contains global and component-specific style sheets.
+- `[node_modules](./node_modules)` - Third-party dependencies of the Next.js project.

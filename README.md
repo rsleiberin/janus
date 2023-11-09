@@ -1,29 +1,20 @@
-# Project Janus - Next.js and Flask Website
+# Project Janus - Next.js Web Application
 
 ## Introduction
-The `janus` directory serves as the root for the Flask-based web application combined with a Next.js frontend. The project aims to showcase the user's expertise in UX design, artistic endeavors, and personal brand. This directory is vital for both human collaborators and AI agents to understand the structure and purpose of the application.
+The `janus` directory serves as the root for the Next.js web application. The project focuses on showcasing expertise in UX design, artistic endeavors, and establishing a robust personal brand through a holistic online presence.
 
 ## Status
-- `In Progress`: Design considerations and implementation.
-- `In Progress`: Initialize and configure Next.js for the frontend.
-- `In Progress`: Integrate Tailwind CSS into the Next.js project.
-- `In Progress`: Flask application setup and initial route creation.
-- [ ] Build UI components in Next.js using atomic design principles.
-- [ ] Define API endpoints in Flask for communication with Next.js.
-- [ ] Begin drafting routes and views for the Flask app.
-- [ ] Design visually appealing transitions between different styles.
-- [ ] Implement AI-rendered image display and navigation.
-- [ ] Explore the use of vector embeddings for image correlations.
+- `Completed`: Initialization and configuration of Next.js for the frontend.
+- `Completed`: Integration of Tailwind CSS into the Next.js project.
+- `Planned`: Development of UI components in Next.js following atomic design principles.
+- `Planned`: Definition of API endpoints for dynamic content delivery and management.
+- `Planned`: Implementation of smooth transitions and AI-powered features.
 
 ## Files
-- `PENDING`: `config.py` - Configuration settings for the Flask app.
-- `PENDING`: `forms.py` - Form definitions using WTForms.
-- `In Progress`: `run.py` - Script to run the Flask application locally.
-- `COMPLETED`: [INFORMATION_ARCHITECTURE.md](./INFORMATION_ARCHITECTURE.md) - The page structure of the website.
+- `config.py` - Flask configuration settings (may be repurposed or removed).
+- `forms.py` - Form definitions using WTForms (may be repurposed or removed).
+- `run.py` - Script to run the development server.
 
 ## Directories
-- `In Progress`: [app](./app) - Flask application directory containing initialization and route definitions.
-- `In Progress`: [frontend](./frontend) - The Next.js frontend directory, initialized and integrated with Tailwind CSS.
-- `PENDING`: [templates](./templates) - HTML templates for rendering views.
-- `PENDING`: [static](./static) - Directory for static assets like CSS, JavaScript, and images.
-- `PENDING`: [utils](./utils) - Directory for utility functions.
+- `[frontend](./frontend)` - Contains the frontend application built with Next.js and Tailwind CSS.
+- `[app](./app)` - Contains backend logic; reevaluation needed on its role in the application.
