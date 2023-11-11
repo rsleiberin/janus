@@ -51,3 +51,20 @@ The Executor's role is to implement the strategic vision of the project by trans
 
 ## Note
 This document acts as a dynamic blueprint for the Executor's contribution to the project. As the project evolves, so will the requirements and tasks listed here.
+
+## High-Level Project Maintenance: Executor Instructions
+
+### Project Vision and Objectives
+Using the principles of the ACE Framework and Sparse Priming Representations, continue to maintain the project’s integrity by overseeing the development of a cohesive and modular design system.
+
+### Action Points
+1. **Accessibility (A):** Ensure the design system documentation is accessible, understandable, and allows for seamless developer engagement.
+2. **Consistency (C):** Maintain consistency across the documentation, ensuring that all design tokens are reflective of the project's visual language and can be applied uniformly across the backend (Flask) and frontend (Next.js with Tailwind CSS).
+3. **Efficiency (E):** Develop efficient processes for integrating feedback, refining the design token system, and applying updates that enhance the system's usability and functionality.
+
+### Sparse Priming Representation Implementation
+1. **Distillation:** Condense complex information into concise, clear representations that facilitate easy understanding and application by developers.
+2. **Expansion:** Utilize Sparse Priming Representations to evolve the design token system, integrating new insights from ongoing research.
+3. **Documentation:** Document each development step effectively, using representations that serve as cognitive primers for future updates.
+
+Proceed with the outlined tasks while keeping these principles at the forefront of your development strategy.
