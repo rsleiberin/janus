@@ -1,7 +1,22 @@
-# Best Practices Documentation
+# Best Practices
 
-## Purpose
-This directory collates documents on best practices in UI/UX design, guiding the development team towards creating intuitive, accessible, and visually pleasing user interfaces.
+## Introduction
+This directory contains documents related to the best practices for UI/UX design and development workflows.
 
-## Content
-- `ui_ux_best_practices.md`: A distillation of contemporary UI/UX design trends and recommendations.
+## Status
+- `COMPLETED`
+
+## Files
+The following files are listed in the suggested reading order:
+- [UI/UX Best Practices](./ui_ux_best_practices.md) - Comprehensive guide to best practices for UI/UX design
+
+## Directories
+The following directories are listed in the suggested reading order:
+- None currently available
+
+## Special Considerations
+### For Humans
+This directory serves as a knowledge base for best practices and guidelines in UI/UX design and development workflows.
+
+### For AIs
+N/A
