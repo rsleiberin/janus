@@ -1,4 +1,4 @@
-# Design Token Category Library
+# Combined Design Tokens Documentation
 
 ## Color Tokens
 
@@ -28,7 +28,7 @@
 ### Font Sizes
 - `font-size-root`: 16px
 - `font-size-scale`: 12px, 14px, 16px, 20px, 24px, 32px
-
+   
 ### Font Weights
 - `font-weight-regular`: 400
 - `font-weight-medium`: 500
@@ -158,5 +158,39 @@
 - `gutter-width-lg`: 48px
 - `gutter-width-xl`: 64px
 
-Citations:
-- [20 Best Design System Examples | Built In](https://builtin.com/design/20-best-design-system-examples)
+## Expanded Color Tokens
+- **Base Colors**: Detailed use cases for each shade.
+  - `Dark Base` - Ideal for primary backgrounds and UI components.
+  - `Light Base` - Suitable for secondary backgrounds and contrast elements.
+- **Gradients**: Application examples for depth and visual interest.
+  - Gradient from `#333333` to `#474747` - Subtle background for cards or sections.
+- **Opacity Levels**: Use in overlays and UI layering.
+  - `50% Opacity Black` - Overlay for modal backgrounds.
+
+## Enhanced Typography Tokens
+- **Font Styles**: Recommendations for UI elements.
+  - `Arial` for headers, `Helvetica` for body text.
+- **Font Weights**: Usage in text hierarchy.
+  - `Bold (700)` for headings, `Regular (400)` for body text.
+
+## Updated Spacing Tokens
+- **Application Examples**:
+  - Standard margins: `16px` for containers.
+  - Padding: `8px` for buttons, `12px` for input fields.
+
+## Advanced Typography
+- **Contemporary Font Styles**: 
+  - `Roboto`, `Open Sans`, `Lato` for their modern and clean appearance.
+- **Font Weights and Styles**: 
+  - `Bold (700)` for headings, `Regular (400)` for body text, `Italic` for emphasis.
+- **Usage Scenarios**: 
+  - Headings: Bold weights for visual impact.
+  - Body Text: Regular or light weights for readability.
+  - Interactive Elements: Medium weights for buttons and links.
+
+## Advanced Spacing
+- **Margin and Padding Tokens**: 
+  - Standardized units like `8px`, `16px`, `24px` for consistent spacing.
+- **Layout Grids**: 
+  - Columns and Rows for element alignment.
+  - Responsive Breakpoints for adaptive design across devices.
