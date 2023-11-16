@@ -1,11 +1,15 @@
 import React from 'react';
 import Navigation from '../components/Navigation';
+import Breadcrumbs from '../components/Breadcrumbs';
 
-export default function MainLayout({ children }) {
+const MainLayout = ({ children }) => {
   return (
-    <div className='container mx-auto p-4'>
+    <>
       <Navigation />
-      {children}
-    </div>
+      <Breadcrumbs />
+      <main>{children}</main>
+    </>
   );
-}
+};
+
+export default MainLayout;
