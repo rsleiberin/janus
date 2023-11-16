@@ -1,18 +1,16 @@
-# app/blueprints/home/routes.py
-
-from flask import render_template, current_app
+from flask import jsonify, current_app
 from . import home
 
-@home.route('/hometest')
-def hometest():
-    current_app.logger.debug('Home test route is being called')
-    return 'Home test route works!'
-
-@home.route('/')
-def index():
-    current_app.logger.debug('Index route is being called')
-    try:
-        return render_template('index.html')
-    except Exception as e:
-        current_app.logger.error('Error in index route: {}'.format(e))
-        raise e
+@home.route('/api/home')
+def home_data():
+    current_app.logger.debug('Home data API route is being called')
+    # Example data structure
+    home_content = {
+        "title": "Welcome to Lodestone",
+        "introText": "Discover our unique approach...",
+        "projects": [
+            {"id": 1, "title": "Project 1", "description": "Description of Project 1"},
+            # ... other projects
+        ]
+    }
+    return jsonify(home_content)
