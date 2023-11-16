@@ -1,21 +1,34 @@
-// ~/janus/frontend/tailwind.config.js
+// Import your design tokens
+const colors = require('./src/design-tokens/colors');
+const typography = require('./src/design-tokens/typography');
+const spacing = require('./src/design-tokens/spacing');
 
 module.exports = {
-  purge: [
-    // Paths to all of your components' files
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-    './src/**/*.{js,ts,jsx,tsx}', // If this is where your Next.js components live
-    '../../app/blueprints/**/templates/**/*.{html,js}', // Path to Flask templates
-    '../../app/blueprints/**/static/**/*.{css,js}', // Path to Flask static assets
-    // Add additional paths as your project grows
-  ],
+  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        // Spread the colors from your tokens here
+        ...colors,
+      },
+      fontSize: {
+        // Spread the font sizes from your tokens here
+        ...typography.fontSizes,
+      },
+      fontWeight: {
+        // Spread the font weights from your tokens here
+        ...typography.fontWeights,
+      },
+      spacing: {
+        // Spread the spacing values from your tokens here
+        ...spacing,
+      },
+      // Add any other token categories you've defined
+    },
   },
   variants: {
     extend: {},
   },
   plugins: [],
-}
+};
