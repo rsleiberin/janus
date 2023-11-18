@@ -5,7 +5,7 @@ const spacing = require('./src/design-tokens/spacing');
 
 module.exports = {
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: `class`, // or 'media' or false
   theme: {
     extend: {
       colors: {
