@@ -29,17 +29,16 @@
 - Files in the `design_tokens` directory | Status: Unverified | Design tokens for animations, buttons, colors, icons, responsiveness, spacing, and typography.
 
 #### /layouts
-- **MainLayout.js** | Status: Unverified | Main layout component for the application.
+- **MainLayout.js** | Status: Verified | Serves as the primary layout component wrapping around page content. Includes Navigation and Breadcrumbs components for consistent navigation and user experience across the application. Ensure styling, accessibility, and SEO considerations are addressed.
 
 #### /pages
-- **_app.js** | Status: To Be Created | Special Next.js file for overriding the default App component. It is recommended for importing global styles and including persistent layout components.
+- **_app.js** | Status: Implemented | Overrides the default App component in Next.js. It is used for importing global styles (`global.css`) and can also be utilized for adding persistent layout components across the application. This setup ensures consistency in styling and layout throughout the project.
 - **index.js** | Status: Verified | Serves as the main entry page for the application. It currently fetches data and renders components dynamically for the homepage layout.
 
 
 ### /frontend/public
 - Files in the `images` directory | Status: Unverified | Images used in the application.
-- **next.svg** | Status: Unverified | SVG file for Next.js logo.
-- **vercel.svg** | Status: Unverified | SVG file for Vercel logo.
+
 
 ### /frontend/styles
 - **globals.css** | Status: Minimally Configured | Currently incorporates Tailwind directives essential for Tailwind CSS to function. Minimal custom global styles are defined, aligning with the project's focus on dynamic user-driven theming and styling.
