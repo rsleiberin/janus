@@ -28,8 +28,12 @@
 - **dynamic_theming_nextjs.md** | Status: Integration Complete | Approaches for creating dynamic theming capabilities in Next.js based applications.
 
 ## Current Focus
-- Conducting final validations and review for the design token system documentation.
-- Proceeding with the development of a prototype website to illustrate the practical use of design tokens.
-- Implementing user feedback mechanisms to gather insights for continuous refinement post-deployment.
+- Assisting in the development of the frontend by providing guidelines and resources on design tokens, ensuring their consistent application across the frontend developed by the frontend agent.
+- Defining and refining the design tokens for both light and dark modes, to be utilized by the frontend agent for implementing a flexible theme system.
+- Collaborating with the frontend agent to ensure a cohesive implementation of the design system, particularly focusing on the integration of light/dark mode capabilities.
+- Preparing for the future enhancement of the design system to support a hyper-customization feature, which will enable users to personalize design tokens based on their preferences. This involves conceptual planning and establishing guidelines for dynamic customization capabilities.
+- Continuously researching and updating the design system to align with current best practices in UI/UX design, and ensuring these updates are communicated to the frontend agent for implementation.
+
+
 
 _Note: This document will be updated regularly to reflect the advancements and current status of the Design System Researcher's tasks._
