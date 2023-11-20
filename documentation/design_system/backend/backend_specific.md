@@ -1,75 +1,46 @@
-# Backend Design Token Integration
+# Flask-Specific Configurations for Design Token System
 
 ## Introduction
-This document outlines Flask-specific processes and best practices for the integration and management of design tokens within the backend environment of our web application.
+This document outlines Flask-specific configurations and best practices for serving design tokens to a Next.js frontend.
 
-## Serving Design Tokens via Flask's API
+## API Endpoint Configuration
 
-Design tokens are served via a RESTful API, following best practices for security and scalability:
+### Creating Efficient Routes
+Optimize Flask routes for serving design tokens to the frontend.
 
-### RESTful API Design
+\```python
+@app.route('/api/design-tokens')
+def get_design_tokens():
+    # Logic to fetch and serve design tokens
+    return jsonify(designTokens)
+\```
 
-```python
-# Flask endpoint for retrieving theming design tokens
-@app.route('/api/design_tokens/themes', methods=['GET'])
-def get_themes():
-    # Load design tokens from a JSON file
-    with open('design_tokens/themes.json', 'r') as f:
-        themes = json.load(f)
-    return jsonify(themes)
-```
+## Flask Application Structure
 
-## API Versioning
+### Organizing Flask App for Design Token Delivery
+- Use Blueprints for modularizing design token functionality.
+- Structure the application for quick updates to design tokens.
 
-```python
-# Versioned API endpoint for theming design tokens
-@app.route('/api/v1/design_tokens/themes', methods=['GET'])
-def get_themes_v1():
-    # Logic for Version 1 API for themes
-    pass
-```
+## Performance Optimization
 
-For more details on API design and versioning, refer to the comprehensive guide in `./design_token_system.md`
+### Caching Strategies
+Implement caching for frequently requested design tokens to reduce load times.
 
-## Dynamic Design Token Manipulation in Flask
-Leverage Flask-Assets and Jinja2 to enable dynamic token updates within the templating system:
+### Load Balancing
+Consider load balancing for handling increased traffic and data requests.
 
-### Flask-Assets Integration
+## Security Considerations
 
-```python
-# Setup Flask-Assets to compile and serve assets
-from flask_assets import Environment, Bundle
+### Secure Data Transmission
+- Ensure the use of HTTPS for API endpoints.
+- Implement necessary authentication and authorization.
 
-assets = Environment(app)
+## Flask Best Practices
 
-# Define and configure asset bundles
-js = Bundle('src/js/app.js', filters='jsmin', output='dist/js/app.min.js')
-css = Bundle('src/css/style.scss', filters='scss', cssmin', output='dist/css/style.min.css')
+### Consistent API Design
+- Maintain API consistency for frontend ease of use.
+- Follow RESTful principles for API endpoint structure.
 
-assets.register('js_all', js)
-assets.register('css_all', css)
-```
-
-### Jinja2 Templating with Autoversioning
-
-```html
-<!-- Jinja2 template example with an autoversioning filter for stylesheet link -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') | autoversion }}">
-```
-
-### Autoversion Filter
-
-```python
-# Flask template filter for asset autoversioning to handle cache busting
-@app.template_filter('autoversion')
-def autoversion_filter(filename):
-    # Build the full path for the filename
-    fullpath = os.path.join('app/static', filename)
-    # Extract the last modified timestamp for versioning
-    timestamp = str(os.path.getmtime(fullpath))
-    # Append the timestamp to the filename as a query string
-    new_filename = f"{filename}?v={timestamp}"
-    return url_for('static', filename=new_filename)
-```
-
-This document provides a more detailed look at Flask-specific best practices for design tokens. For more in-depth information and broader guidelines on the design token system, please refer to `./design_token_system.md`.
+### Testing and Documentation
+- Conduct thorough tests on endpoints serving design tokens.
+- Provide clear frontend developer documentation.

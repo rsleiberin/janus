@@ -4,7 +4,7 @@ import typography from '../design-tokens/typography';
 import colors from '../design-tokens/colors';
 import spacing from '../design-tokens/spacing';
 
-const IntroOrganism = ({ title, description, buttonText }) => {
+const HomeHero = ({ title, description, buttonText }) => {
   return (
     <section style={{
       padding: spacing.lg,
@@ -30,4 +30,4 @@ const IntroOrganism = ({ title, description, buttonText }) => {
   );
 };
 
-export default IntroOrganism;
+export default HomeHero;
