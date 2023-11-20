@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import MainLayout from '../layouts/MainLayout';
-import IntroOrganism from '../components/IntroOrganism';
+import HomeHero from '../components/HomeHero';
 import OrganismGrid from '../components/OrganismGrid';
 import ProjectShowcase from '../components/ProjectShowcase';
 
@@ -22,7 +22,7 @@ const HomePage = () => {
 
   return (
     <MainLayout>
-      <IntroOrganism
+      <HomeHero
         title={homeData.title}
         description={homeData.introText}
         buttonText="Explore Projects"

@@ -194,3 +194,33 @@
 - **Layout Grids**: 
   - Columns and Rows for element alignment.
   - Responsive Breakpoints for adaptive design across devices.
+
+# Design Tokens for AR/VR and 3D UI
+
+## Hand and Gesture-Based Navigation Tokens
+- `gestureRecognitionSensitivity`: Range from low to high sensitivity for gesture recognition.
+- `handTrackingEffectiveness`: Defines effectiveness levels for hand tracking.
+- `interactionFeedbackIntensity`: Varies intensity of visual and haptic feedback.
+
+## Voice-Activated UI Tokens
+- `voiceCommandResponseTime`: Sets the response time for voice command recognition.
+- `speechRecognitionAccuracy`: Defines accuracy levels for speech recognition.
+- `voiceActivationEffect`: Styling for voice-activated UI elements.
+
+## 3D UI Elements Tokens
+- `threeDObjectStyle`: Defines styles for 3D objects like buttons, menus, and icons.
+- `spatialDepth`: Sets depth perception for spatial positioning in 3D environments.
+
+## Procedural UI Tokens
+- `dynamicUIVisibility`: Controls visibility of dynamically appearing UI elements.
+
+## Customizable UI Tokens
+- `uiCustomizationOptions`: Range of options available for UI personalization.
+
+## Minimalistic Design Tokens
+- `minimalisticElementStyle`: Styling options focusing on simplicity and essential elements.
+
+## Gamification Tokens
+- `gameInteractionStyle`: Defines styles for game-like elements in UI.
+
+These tokens are tailored to support the latest in AR/VR and 3D UI design, ensuring a versatile and future-proof design system.
