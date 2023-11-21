@@ -1,147 +1,37 @@
 # Design Tokens Documentation
 
-This document serves as a comprehensive guide for the customization and implementation of design tokens. Each category is expanded upon with guidelines that allow developers and agents to apply these tokens effectively in creating a modular and flexible design system.
+## Customizing Design Tokens
+This document guides the effective application of design tokens, enhancing the flexibility and modularity of the design system.
 
-## Color Tokens
+### Color Tokens Customization
+- Adjust `base-palette`, `accent-colors`, `semantic-colors`, `gradients`, and `custom-illustrations` colors for brand consistency and visual identity.
 
-Customization of color tokens is critical for matching the brand's visual identity and ensuring consistency across all digital properties. Users can adjust the following color tokens to fit their brand:
+### Typography Tokens Customization
+- Customize `font-families`, `font-sizes`, `font-weights`, and `font-styles` to align with brand guidelines and enhance readability.
 
-- `base-palette` for backgrounds and UI components
-- `accent-colors` for interactive elements
-- `semantic-colors` for system feedback such as success, error, or warning messages
-- `gradients` for dynamic visual effects and backgrounds
-- `custom-illustrations` colors for unique brand graphics
+### Spacing Tokens Customization
+- Modify `space-scale` and `space-responsive` for consistent layout and spacing across devices.
 
-The following CSS custom properties can be used for color customization:
-\```css
-:root {
-  --primary-color: #hex-value; /* Replace with brand's primary color */
-  --secondary-color: #hex-value; /* Replace with brand's secondary color */
-  --error-color: #hex-value; /* Replace with brand's error color */
-  --success-color: #hex-value; /* Replace with brand's success color */
-  --gradient-start: #hex-value; /* Start color for gradients */
-  --gradient-end: #hex-value; /* End color for gradients */
-}
-\```
+### Border and Corner Tokens Customization
+- Adjust `border-width`, `border-style`, and `radius` values for diverse UI element styles.
 
-## Typography Tokens
+### Elevation Tokens Customization
+- Apply and adjust `shadow` and `z-index` for depth and layering in the UI.
 
-Typography impacts usability and brand perception. Customization of typography tokens includes:
+### Motion Tokens Customization
+- Tailor `duration` and `easing` tokens for smooth and engaging UI animations and transitions.
 
-- `font-families` for specifying primary and secondary typefaces
-- `font-sizes` for defining hierarchy and readability
-- `font-weights` for emphasizing text weight in different contexts
-- `font-styles` for applying modern and clean typefaces like Roboto, Open Sans, Lato
+## AR/VR and 3D UI Customization
+- **Hand and Gesture-Based Navigation**: Adapt gesture recognition and feedback styles for specific AR/VR interaction needs.
+- **Voice-Activated UI**: Customize voice command response times and feedback for intuitive voice interactions.
+- **3D UI Elements**: Adjust spatial positioning and depth perception for enhanced 3D effects.
+- **Procedural UI**: Configure dynamic UI visibility for user actions and context in virtual environments.
+- **Customizable UI**: Provide personalization options for UI in VR/AR settings.
+- **Minimalistic Design**: Focus on simplicity to reduce clutter in AR/VR interfaces.
+- **Gamification**: Integrate game-like interactions for engaging AR/VR experiences.
 
-Example of customization using CSS:
-\```css
-body {
-  font-family: var(--primary-font);
-  font-size: var(--font-size-root);
-  font-style: var(--font-style-regular);
-}
+### Implementation Notes
+- Define tokens within CSS preprocessors or styling solutions.
+- Apply tokens consistently across projects for a unified design system.
 
-h1 {
-  font-weight: var(--font-weight-bold);
-  font-style: var(--font-style-italic);
-}
-h2 {
-  font-weight: var(--font-weight-medium);
-}
-\```
-
-## Spacing Tokens
-
-Consistent spacing tokens contribute to a cohesive visual language. Users should customize spacing for:
-
-- `space-scale` for margins, paddings, and gaps between UI elements
-- `space-responsive` for adapting spacing in different screen sizes
-
-Adjustment of spacing tokens can be done through CSS like so:
-\```css
-.container {
-  padding: var(--space-unit);
-}
-
-.card {
-  margin-bottom: var(--space-scale);
-}
-\```
-
-## Border and Corner Tokens
-
-Borders and corners can define the style and feel of UI elements. Developers can customize border and corner tokens by adjusting:
-
-- `border-width` for outer strokes
-- `border-style` for visual effect
-- `radius` values for corner roundness
-
-For instance:
-\```css
-.button {
-  border-width: var(--border-width-thin);
-  border-radius: var(--radius-medium);
-}
-\```
-
-## Elevation Tokens
-
-Elevation tokens such as `shadow` and `z-index` add depth to the UI. Here's an example of how to apply and adjust elevation tokens:
-\```css
-.modal {
-  box-shadow: var(--shadow-1);
-  z-index: var(--z-index-modal);
-}
-\```
-
-## Motion Tokens
-
-Motion can guide users through the interface, making it essential to customize motion tokens to suit interaction patterns. Below are tokens available for customization for animations and transitions:
-- `duration` for controlling timing
-- `easing` for creating smooth motion curves
-
-Modify motion tokens as follows:
-\```css
-.alert {
-  transition: background-color var(--duration-normal) var(--easing-ease-in-out);
-}
-\```
-
-## Implementation
-
-These guidelines facilitate the adjustment of design elements to craft unique and brand-appropriate user interfaces. For implementation and integration with codebases, developers are advised to define these tokens within their CSS preprocessor or styling solution and apply them across their project for a uniform design system.
-
-By following these outlined customization options, developers can create a uniquely tailored experience that adheres to their branding requirements while maintaining design system consistency. This modular approach enables precise control over the aesthetic and functio
-
-# Customizing Design Tokens for AR/VR and 3D UI
-
-## Introduction
-This guide provides insights into customizing design tokens for immersive AR/VR and 3D user interfaces, considering the unique challenges and opportunities these mediums present.
-
-## Hand and Gesture-Based Navigation
-- Customize gesture recognition sensitivity and feedback styles based on the specific interaction requirements of your AR/VR environment.
-
-## Voice-Activated UI
-- Tailor voice command response times and feedback styles to ensure a seamless and intuitive voice interaction experience.
-
-## 3D UI Elements
-- Adjust spatial positioning and depth perception tokens to enhance the 3D effect and ensure user comfort in virtual environments.
-
-## Procedural UI
-- Configure dynamic UI visibility settings to cater to the user's actions and the context within the virtual world.
-
-## Customizable UI
-- Offer a range of personalization options for users to tailor the UI to their preferences, enhancing their immersion and experience.
-
-## Minimalistic Design
-- Emphasize simplicity in design tokens to reduce visual clutter and improve user focus in AR/VR settings.
-
-## Gamification
-- Integrate game-like interaction styles to make the AR/VR experience more engaging and enjoyable for the user.
-
-## Best Practices
-- Understand the specific requirements of your AR/VR platform to optimize design token customization&#8203;``【oaicite:2】``&#8203;.
-- Embrace first-person design principles, focusing on the user's perspective and experience within the virtual environment&#8203;``【oaicite:1】``&#8203;.
-- Be mindful of the challenges and limitations in designing for AR/VR, and set realistic expectations for project timelines&#8203;``【oaicite:0】``&#8203;.
-
-These guidelines will help you effectively customize design tokens for AR/VR and 3D UIs, ensuring an immersive and user-friendly experience.
+By customizing these tokens, developers can create a unique, brand-aligned experience while maintaining consistency within the design system. This approach supports precise aesthetic and functional control, adaptable for both traditional and immersive AR/VR interfaces.
