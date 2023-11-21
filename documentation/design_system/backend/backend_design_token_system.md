@@ -1,50 +1,22 @@
 # Design Token System in Flask
 
 ## Introduction
-This document outlines best practices for managing and serving design tokens within a Flask application, focusing on its role as a backend service for a Next.js frontend.
+Best practices for managing and serving design tokens in Flask, serving as a backend for a Next.js frontend.
 
-## Serving Design Tokens via Flask Routes
-Flask can efficiently serve design tokens to the frontend, providing a dynamic and adaptable way to manage UI constants.
+## Serving Design Tokens via Flask
+- Efficient routes for serving dynamic design tokens to the frontend.
+- Focus on Flask's role in providing data and logic for UI design.
 
-### Flask API for Design Tokens
-Create Flask routes to serve design tokens, allowing the frontend to fetch them as needed.
+## Flask's Streamlined Role in UI Design
+- Serve dynamic data, including design tokens, without direct UI manipulation.
+- Optimize communication between backend and frontend.
 
-\```python
-@app.route('/design-tokens/colors')
-def color_tokens():
-    colors = {
-        "primary": "#005f73",
-        "secondary": "#0a9396",
-        "tertiary": "#94d2bd",
-        // Additional colors...
-    }
-    return jsonify(colors)
-\```
-
-## Simplified Backend Role
-Focus on the backend's role in providing data and logic, minimizing its involvement in direct UI rendering.
-
-### Dynamic Updates to Design Tokens
-Use API endpoints to introduce changes in design tokens, enabling dynamic updates on the client-side.
-
-\```python
-@app.route('/api/update_design_tokens', methods=['POST'])
-def update_design_tokens():
-    // Logic to update tokens
-    return jsonify(success=True)
-\```
-
-## Streamlining Flask's Role in UI Design
-Keep Flask's involvement in UI design to the essentials, ensuring clear separation of concerns and optimal performance.
-
-### Best Practices for Flask's Involvement
-- Use Flask to serve dynamic data, including design tokens, to the frontend.
-- Avoid direct manipulation of UI components in Flask; delegate this to the frontend.
-- Streamline communication between backend and frontend, focusing on efficiency and clarity.
+## Best Practices in Flask
+- Modularization with Blueprints.
+- Use of virtual environments and environment variables for security.
+- Integration with databases for token storage.
+- Performance optimization with caching.
+- Logging for debugging and performance monitoring.
 
 ## Conclusion
-Flask's streamlined role in serving design tokens ensures a clear separation between backend logic and frontend presentation, aligning with modern web application architectures.
-
-## Appendices
-- Additional resources and tools for Flask API development.
-- Examples of efficient data serving methods for frontend consumption.
+Flask's role is streamlined for serving design tokens, ensuring efficient backend support for frontend presentation, and aligning with modern web application architectures.
