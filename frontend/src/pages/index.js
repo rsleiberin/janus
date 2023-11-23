@@ -1,45 +1,23 @@
-// Next.js: pages/index.js
-
-import React, { useEffect, useState } from 'react';
-import MainLayout from '../layouts/MainLayout';
-import HomeHero from '../components/HomeHero';
-import OrganismGrid from '../components/OrganismGrid';
-import ProjectShowcase from '../components/ProjectShowcase';
+import React from 'react';
+import colors from '../design_tokens/colors';
 
 const HomePage = () => {
-  const [homeData, setHomeData] = useState({
-    title: '',
-    introText: '',
-    projects: []
-  });
-
-  useEffect(() => {
-    fetch('http://localhost:5000/')  // Replace with your Flask server URL
-      .then(response => response.json())
-      .then(data => setHomeData(data))
-      .catch(error => console.error('Error fetching home data:', error));
-  }, []);
-
-  return (
-    <MainLayout>
-      <HomeHero
-        title={homeData.title}
-        description={homeData.introText}
-        buttonText="Explore Projects"
-      />
-      <OrganismGrid>
-        {homeData.projects.map(project => (
-          <ProjectShowcase
-            key={project.id}
-            title={project.title}
-            description={project.description}
-            imageUrl="/path/to/image.jpg" // Replace with actual image path for each project
-          />
-        ))}
-      </OrganismGrid>
-      {/* Add more content or components that belong to the home page here */}
-    </MainLayout>
-  );
+    return (
+        <div style={{ backgroundColor: colors.lightBase, color: colors.textDark }}>
+            <header>
+                {/* Header content goes here */}
+                <h1>Welcome to Our Website</h1>
+            </header>
+            <main>
+                {/* Main content goes here */}
+                <p>This is the home page of our awesome application.</p>
+            </main>
+            <footer>
+                {/* Footer content goes here */}
+                <p>© 2023 Your Company Name</p>
+            </footer>
+        </div>
+    );
 };
 
 export default HomePage;
