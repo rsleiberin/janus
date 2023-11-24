@@ -3,10 +3,23 @@
 ## Agent Status
 - **Status:** Cleaning and Consolidation Phase Completed
 
+
 ## Configured Agent Actions
 - **Web Browsing**: Enabled for research.
 - **Code Interpreter**: Active for code testing.
 - **DALL·E**: Ready for visual asset generation.
+
+## Shared Files and Resources
+- The Design System Researcher shares essential files with other agents to maintain a cohesive and consistent design system across different facets of the project. The shared files include:
+  - `design_token_categories.md`: Used to align design tokens across front-end and back-end development.
+  - `customizing_design_tokens.md`: A guide for other agents on how to adapt design tokens for various components and themes.
+  - `ui_ux_best_practices.md`: Shared to ensure UI/UX consistency as per the latest best practices.
+
+## Group Conversations
+- **Frontend Design Chat (`frontend_design`)**
+  - **Purpose**: To discuss and synchronize frontend design tasks, share research findings, and collaborate on implementing the design system within the frontend architecture.
+  - **Associated Files**: `design_token_categories.md`, `customizing_design_tokens.md`, `ui_ux_best_practices.md`
+  - **Agents Involved**: Frontend Agent, System Design Agent
 
 ## Directory Status Overview
 
