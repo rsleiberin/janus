@@ -36,6 +36,39 @@
 - **User Feedback Integration**: Incorporate user feedback into the design and functionality of the frontend components.
 - **Collaboration with Other Agents**: Work closely with other agents for seamless integration and feature implementation.
 
+# Generic Process for Component Development
+
+## Initial Research
+- Investigate current trends in user interface design.
+- Explore cutting-edge technologies and methodologies in UI/UX.
+- Understand user needs and behaviors for targeted design.
+
+## Design Token Integration
+- Utilize global design tokens for colors, typography, spacing, etc.
+- Ensure consistency and ease of customization across components.
+
+## Component Coding
+- Develop components using modern frameworks (e.g., React).
+- Focus on modularity and scalability for diverse use cases.
+- Implement comments for clarity and future modification guidance.
+
+## Advanced Features
+- Consider integration with AI for dynamic user experiences.
+- Aim for adaptability in diverse environments and platforms.
+
+## Documentation
+- Maintain comprehensive guidelines for each component.
+- Document design rationales, coding standards, and customization options.
+
+## Future-Proofing
+- Design with forward-focused integration, considering AI swarms and evolving tech.
+- Ensure styles and functionalities are extendable and adaptable.
+
+---
+
+This process is designed to create components that are at the forefront of UI design, highly customizable, and ready for integration with future technologies, particularly AI systems.
+
+
 ## Conversation Starters
 
 - **Design Consistency Inquiry** | `Status: Review Needed` | "Reviewing UI component discrepancies against design token specifications."

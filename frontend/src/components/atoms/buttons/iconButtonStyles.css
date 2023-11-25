@@ -1,0 +1,18 @@
+/* Correct Import design tokens */
+@import '../../../utilities/design_tokens/colors.js';
+@import '../../../utilities/design_tokens/typography.js';
+@import '../../../utilities/design_tokens/spacing.js';
+
+/* Base icon button styles */
+.icon-btn {
+  /* ... base styles ... */
+  /* Use design tokens for colors, font, etc. */
+}
+
+/* Size and style variations */
+/* ... define styles for different sizes and types ... */
+
+/* Notes:
+- Leverage CSS custom properties for easy theme adjustments.
+- Consider responsive design and accessibility in styling.
+*/
