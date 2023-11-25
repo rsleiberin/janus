@@ -1,0 +1,30 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/buttons.js';
+@import '../../../utilitiesdesign_tokens/typography.js';
+
+/* Base button styles */
+.btn {
+  font-family: var(--body-font);
+  font-size: var(--base-font-size);
+  padding: var(--md-spacing);
+  border-radius: var(--sm-spacing);
+  transition: background-color 0.3s, color 0.3s;
+  /* ... other base styles ... */
+}
+
+/* Size variations */
+.btn.small { font-size: var(--sm-font-size); padding: var(--sm-spacing); }
+.btn.medium { font-size: var(--base-font-size); padding: var(--md-spacing); }
+.btn.large { font-size: var(--lg-font-size); padding: var(--lg-spacing); }
+
+/* Style variations */
+.btn.primary { background-color: var(--primary-color); color: var(--white); }
+.btn.secondary { background-color: var(--secondary-color); color: var(--black); }
+
+/* Additional styles for hover, active, disabled states can be added here */
+
+/* Notes:
+- Use design tokens for consistent styling across components.
+- Add or modify classes for custom button sizes and styles.
+- Incorporate responsive design and accessibility best practices.
+*/
