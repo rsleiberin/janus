@@ -31,5 +31,14 @@
 - Visual Hierarchy: Establish a clear hierarchy in icon design for user prioritization.
 - Contextual Relevance: Icons should be appropriate for their usage context.
 
+### Responsive Design
+- Device Adaptability: Ensure design adapts to various screen sizes and orientations.
+- Relative Length Units: Use scalable units for layout elements.
+- Layout Considerations: Implement flexible grids and logical structures.
+- Navigation Adaptability: Tailor navigation for ease of use on different devices.
+- Responsive Images: Ensure images scale appropriately with layout changes.
+- Text Readability: Maintain legible and appropriately sized text across devices.
+
+
 
 (Additional design token categories and their key considerations can be added here as they are refined.)
