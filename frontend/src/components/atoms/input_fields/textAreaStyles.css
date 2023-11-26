@@ -1,0 +1,34 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/colors';
+@import '../../../utilities/design_tokens/typography';
+
+/* Text Area styles */
+.text-area {
+  font-family: var(--body-font);
+  font-size: var(--base-font-size);
+  color: var(--black);
+  background-color: var(--offWhite);
+  border: 1px solid var(--mediumGray);
+  padding: var(--sm-spacing);
+  width: 100%;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.text-area:focus {
+  outline: none;
+  border-color: var(--darkGray);
+}
+
+.text-area::placeholder {
+  color: var(--lightGray);
+}
+
+/* Notes:
+- The styling uses the achromatic design tokens for consistency.
+- The TextArea allows vertical resizing, aligning with responsive design practices.
+- The focus state is highlighted by changing the border color.
+- Placeholder styling provides a lighter shade for better UX.
+- The styles can be customized further by adjusting the design tokens.
+- Padding and font sizes are set according to the spacing and typography tokens.
+*/
