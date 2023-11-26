@@ -1,0 +1,26 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/colors';
+@import '../../../utilities/design_tokens/typography';
+
+/* Text Field styles */
+.text-field {
+  font-family: var(--body-font);
+  font-size: var(--base-font-size);
+  color: var(--black);
+  background-color: var(--offWhite);
+  border: 1px solid var(--mediumGray);
+  padding: var(--sm-spacing);
+  border-radius: var(--xs-spacing);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.text-field:focus {
+  border-color: var(--darkGray);
+  box-shadow: 0 0 0 3px var(--lightGray);
+}
+
+/* Notes:
+- The styling is based on the achromatic design tokens.
+- Adjustments can be made via design tokens for theme consistency.
+- Focus state includes a box-shadow for visual feedback.
+*/

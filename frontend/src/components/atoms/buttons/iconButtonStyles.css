@@ -5,14 +5,45 @@
 
 /* Base icon button styles */
 .icon-btn {
-  /* ... base styles ... */
-  /* Use design tokens for colors, font, etc. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-md); /* Using design token for medium size */
+  height: var(--size-md);
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 50%;
+  padding: var(--spacing-sm);
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
-/* Size and style variations */
-/* ... define styles for different sizes and types ... */
+/* Size variations */
+.icon-btn.small { width: var(--size-sm); height: var(--size-sm); }
+.icon-btn.large { width: var(--size-lg); height: var(--size-lg); }
+
+/* Style variations */
+.icon-btn.secondary {
+  background-color: var(--white);
+  color: var(--black);
+  border: 1px solid var(--black);
+}
+
+/* Hover and active states */
+.icon-btn:hover, .icon-btn:active {
+  background-color: var(--lightGray);
+  transform: scale(1.1);
+}
+
+/* Disabled state */
+.icon-btn:disabled {
+  background-color: var(--mediumGray);
+  color: var(--darkGray);
+  cursor: not-allowed;
+}
 
 /* Notes:
-- Leverage CSS custom properties for easy theme adjustments.
-- Consider responsive design and accessibility in styling.
+- These styles leverage the design tokens provided.
+- Adjustments can be made by changing design token values or adding new classes.
 */
