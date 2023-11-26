@@ -4,17 +4,39 @@
 
 /* Floating Action Button styles */
 .fab {
-  /* ... base styles ... */
-  position: fixed;
-  bottom: var(--lg-spacing);
-  right: var(--lg-spacing);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-lg);
+  height: var(--size-lg);
+  background-color: var(--danger); /* Highlighting the FAB for primary action */
+  color: var(--white);
+  border: none;
   border-radius: 50%;
-  /* Use design tokens for colors and sizes */
+  padding: var(--spacing-md);
+  cursor: pointer;
+  position: fixed;
+  bottom: var(--spacing-xl);
+  right: var(--spacing-xl);
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2); /* subtle shadow for elevation */
+  transition: background-color 0.2s, box-shadow 0.2s;
 }
 
-/* Add styles for different states like hover, active, etc. */
+/* Hover and active states */
+.fab:hover, .fab:active {
+  background-color: var(--success); /* Color change for interactivity */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* deeper shadow for elevation */
+}
+
+/* Disabled state */
+.fab:disabled {
+  background-color: var(--mediumGray);
+  box-shadow: none;
+  cursor: not-allowed;
+}
 
 /* Notes:
-- Positioning and size should follow the best practices as per research.
-- Consider adding animations or transitions for interactive effects.
+- The FAB uses larger size tokens to stand out for primary actions.
+- The shadow adds a sense of elevation, typical for FABs.
+- Colors and sizes are easily customizable via design tokens.
 */
