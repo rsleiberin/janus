@@ -1,0 +1,28 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/colors';
+@import '../../../utilities/design_tokens/typography';
+
+/* RadioButton styles */
+.radio-button-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--sm-spacing);
+}
+
+.radio-input {
+  margin-right: var(--xs-spacing);
+}
+
+.radio-label {
+  font-family: var(--body-font);
+  font-size: var(--base-font-size);
+  color: var(--black);
+}
+
+/* Notes:
+- The styling uses the achromatic design tokens for consistency.
+- Adjustments can be made via design tokens for theme consistency.
+- The radio button and label are aligned horizontally for clarity.
+- Customization in terms of colors and typography can be achieved through design tokens.
+- Consider adding custom styles for the radio indicator for a unique look.
+*/

@@ -4,9 +4,13 @@
 
 #### MVP
 - **Buttons**
-  - Standard Button
-  - Icon Button
-  - Floating Action Button
+  - **Standard Button**
+    - Fully implemented with base and hover styles. Customizable size and color through design tokens.
+  - **Icon Button**
+    - Developed with accessibility in mind, supporting ARIA labels and keyboard navigation. Customizable icons and styles.
+  - **Floating Action Button**
+    - Stands out for primary actions with a distinctive style and position. Offers interactive states and is customizable via design tokens.
+
 - **Input Fields**
   - Text Field
   - Text Area
