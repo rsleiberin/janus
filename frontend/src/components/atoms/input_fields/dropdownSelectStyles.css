@@ -1,0 +1,27 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/colors';
+@import '../../../utilities/design_tokens/typography';
+
+/* DropdownSelect styles */
+.dropdown-select-container {
+  margin-bottom: var(--md-spacing);
+}
+
+.dropdown-select {
+  font-family: var(--body-font);
+  font-size: var(--base-font-size);
+  color: var(--black);
+  background-color: var(--offWhite);
+  border: 1px solid var(--mediumGray);
+  padding: var(--sm-spacing);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Notes:
+- The styling is based on the achromatic design tokens for consistency.
+- The dropdown is fully styled to align with the overall design system.
+- Adjustments to the styling can be made via the design tokens for theme consistency.
+- Consider adding custom styles or icons for the dropdown arrow for a unique look.
+- Ensure that the dropdown is responsive and accessible in its design.
+*/

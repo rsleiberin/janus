@@ -1,0 +1,27 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/colors';
+@import '../../../utilities/design_tokens/typography';
+
+/* Checkbox styles */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-input {
+  margin-right: var(--xs-spacing);
+}
+
+.checkbox-label {
+  font-family: var(--body-font);
+  font-size: var(--base-font-size);
+  color: var(--black);
+}
+
+/* Notes:
+- The styling uses the achromatic design tokens for consistency.
+- Adjustments can be made via design tokens for theme consistency.
+- The checkbox and label are aligned horizontally for clarity and ease of use.
+- Customization in terms of colors and typography can be achieved through design tokens.
+- Focus and hover states can be added for enhanced interactivity.
+*/
