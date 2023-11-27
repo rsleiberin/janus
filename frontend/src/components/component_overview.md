@@ -10,14 +10,20 @@
     - Developed with accessibility in mind, supporting ARIA labels and keyboard navigation. Customizable icons and styles.
   - **Floating Action Button**
     - Stands out for primary actions with a distinctive style and position. Offers interactive states and is customizable via design tokens.
-
 - **Input Fields**
-  - Text Field
-  - Text Area
-  - Checkbox
-  - Radio Button
-  - Toggle Switch
-  - Dropdown Select
+  - **Text Field**
+    - Versatile for various text input types. Includes customizable styles for consistency with design tokens. Features clear labeling and validation states.
+  - **Text Area**
+    - Designed for multi-line input with adjustable size. Customizable via design tokens, supporting placeholder text and character count limit.
+  - **Checkbox**
+    - Allows multiple selections with clear visual feedback. Customizable appearance, including size and color, adhering to design tokens.
+  - **Radio Button**
+    - Exclusive selection with a clear indication of the chosen option. Styling aligned with the application’s design system, allowing customization through design tokens.
+  - **Toggle Switch**
+    - Provides an interactive switch for on/off states. Features responsive design and accessible functionality. Customizable colors and styles using design tokens.
+  - **Dropdown Select**
+    - Offers organized options in a compact dropdown format. Includes a search feature for long lists and supports custom styling aligned with design tokens.
+
 - **Navigation Elements**
   - Tab
   - Breadcrumb
