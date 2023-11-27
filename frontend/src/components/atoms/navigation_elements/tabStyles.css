@@ -1,0 +1,27 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/colors';
+@import '../../../utilities/design_tokens/typography';
+
+/* Tab styles */
+.tab-item {
+  cursor: pointer;
+  padding: var(--sm-spacing) var(--md-spacing);
+  display: inline-block;
+  font-family: var(--body-font);
+  font-size: var(--base-font-size);
+  color: var(--mediumGray);
+  border-bottom: 2px solid transparent;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.tab-item.active {
+  color: var(--black);
+  border-bottom-color: var(--black);
+}
+
+/* Notes:
+- The styling uses design tokens for consistent, responsive design.
+- Hover and active states provide visual feedback.
+- Adjustments to the styling can be made via the design tokens to match the theme.
+- Consider adding animations or transitions for a smoother user experience.
+*/
