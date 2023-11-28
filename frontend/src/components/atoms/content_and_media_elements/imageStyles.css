@@ -1,0 +1,45 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/colors.js';
+@import '../../../utilities/design_tokens/responsive.js';
+
+/* Custom Image styles */
+.custom-image {
+  max-width: 100%;
+  height: auto;
+  border: 0; /* Remove default border styles */
+  display: block; /* Ensures no extra space around the image */
+  margin-left: auto;
+  margin-right: auto; /* Center the image horizontally */
+}
+
+/* Responsive image styles for small devices */
+@media (max-width: var(--responsive-breakpoints-sm)) {
+  .custom-image {
+    /* Example: reduce margin for small devices */
+    margin-left: var(--spacing-xs);
+    margin-right: var(--spacing-xs);
+  }
+}
+
+/* Responsive image styles for medium devices */
+@media (min-width: var(--responsive-breakpoints-md)) and (max-width: var(--responsive-breakpoints-lg)) {
+  .custom-image {
+    /* Example: adjust width for medium devices */
+    max-width: 80%;
+  }
+}
+
+/* Responsive image styles for large devices */
+@media (min-width: var(--responsive-breakpoints-lg)) {
+  .custom-image {
+    /* Example: adjust width for large devices */
+    max-width: 70%;
+  }
+}
+
+/* Notes:
+- The max-width and height properties ensure the image is responsive and scales with the container.
+- Media queries adjust image styling based on device-specific breakpoints defined in design tokens.
+- The .custom-image class can be used directly or extended with more specific classes for further customization.
+- Remember to replace the example adjustments with actual responsive styling needed for your project.
+*/
