@@ -55,3 +55,53 @@
 ### Designing Header Tags
 - **Size and Spacing**: Relative sizing to paragraph text and appropriate line spacing.
 - **Visual Distinction**: Distinct look for headers while maintaining readability.
+
+## BodyText Design Guidelines
+
+### Best Practices
+- **Start with Body Text**: Prioritize clarity and readability, avoiding overly stylistic features.
+- **Characteristics of Good Body Text Typeface**:
+  - **Simple Character Shapes**: Ensure clear glyph shapes and larger open apertures.
+  - **Moderate X-Height**: A medium to high x-height improves legibility.
+  - **Low Contrast**: Opt for low to medium stroke contrast.
+  - **Basic Styles and Weights**: Include regular, italic, bold, and bold italic styles.
+  - **Avoid Headline/Display Fonts for Body Text**: Choose typefaces suitable for long-form reading.
+
+### Formatting for Readability
+- **Font Selection**: Explore web-safe and accessible serif and sans serif fonts.
+- **Text Size and Spacing**: Base text size on typeface characteristics; use a line height of 120%-130%.
+- **Line Length**: Aim for 50-100 characters per line, depending on design and legibility.
+- **Color Contrast**: Ensure high contrast between text and background for readability.
+
+### Testing and Refinement
+- **Comprehensive Testing**: Test typography on a variety of screens and conditions to ensure robustness and accessibility.
+
+### Notes on Branding and System Integration
+- **Align with Brand Identity**: Ensure body text aligns with the overall brand identity and tone.
+- **Accessibility Compliance**: Prioritize accessibility to make content inclusive for all users.
+
+## Link Design Guidelines
+
+### Basic Principles
+- **Hyperlink States**: Design distinct styles for `a:link`, `a:visited`, `a:hover`, `a:active`, and `a:focus`.
+- **CSS Properties**: Utilize properties like `color`, `text-decoration`, and `font-weight` for styling.
+
+### Designing Effective Hyperlinks
+- **Meaningful Phrases**: Embed hyperlinks in informative, self-explanatory phrases.
+- **Download Links**: Indicate file format and size for downloadable resources.
+- **Style Different States**: Differentiate styles for various link states to aid navigation.
+
+### Prioritizing Key Links
+- **Highlight Primary Links**: Use button styles or distinct formatting for main actions.
+
+### Managing Link-Rich Texts
+- **Avoid Overcrowding**: Group links logically and make primary links stand out.
+
+### Accessibility in Link Design
+- **WCAG Compliance**: Ensure links are distinguishable by more than color, maintain proper contrast, and optimize for screen readers.
+- **Keyboard Focus**: Maintain visible focus state for accessibility.
+- **Avoid Duplicate Links**: Use singular, well-defined links for each destination.
+
+### Notes on Branding and System Integration
+- **Consistent Link Styling**: Align link design with overall brand aesthetics and functionality.
+- **User Experience Focus**: Design links that enhance the overall user experience and interaction on the site.
