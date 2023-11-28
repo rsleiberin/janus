@@ -1,0 +1,24 @@
+/* Default styles for body text. Customize as needed. */
+.body-text {
+    font-family: 'Open Sans', sans-serif; /* Example font. Replace with your preferred font. */
+    font-size: 16px; /* Base font size. Adjust as needed for your design. */
+    line-height: 1.3; /* Line height as 130% of the font size. Modify for desired readability. */
+    color: #333; /* Default text color. Change according to your color scheme. */
+    max-width: 100ch; /* Controls maximum line length for readability. Adjust as needed. */
+    margin-bottom: 1em; /* Spacing after paragraphs. Customize based on layout requirements. */
+  }
+  
+  /* Responsive design adjustments for smaller screens. */
+  @media (max-width: 768px) {
+    .body-text {
+      font-size: 14px; /* Smaller font size for mobile devices. Adjust based on your mobile design. */
+    }
+  }
+  
+  /* Additional custom styles can be added here. Example:
+  .body-text.custom-style {
+    font-style: italic;
+    color: blue;
+  }
+  */
+  
