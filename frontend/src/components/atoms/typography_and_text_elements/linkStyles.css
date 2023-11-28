@@ -1,0 +1,28 @@
+/* Achromatic link styles - Customize as per design requirements */
+.achromatic-link {
+    font-family: Arial, sans-serif; /* Change font family as needed */
+    font-size: 16px; /* Adjust font size as required */
+    text-decoration: none; /* No underline for normal state */
+    color: black; /* Text color for normal state - change for different achromatic shades */
+    transition: all 0.3s ease-in-out; /* Transition for hover and active effects */
+  }
+  
+  /* Hover state with animated underline */
+  .achromatic-link:hover {
+    border-bottom: 1px solid black; /* Animated underline - modify color and thickness */
+    text-decoration: none;
+  }
+  
+  /* Active state with micro-animation */
+  .achromatic-link:active {
+    animation: clickAnimation 0.5s ease; /* Click animation - adjust timing and easing */
+    text-decoration: none;
+  }
+  
+  /* Keyframes for click animation - Customize the animation as needed */
+  @keyframes clickAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); } /* Scale can be adjusted for different effects */
+    100% { transform: scale(1); }
+  }
+  

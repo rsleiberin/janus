@@ -28,14 +28,32 @@
     - Enables easy organization and switching between content sections. Clearly highlights the active tab and supports responsive design.
   - **Breadcrumb**
     - Provides a secondary navigation scheme that indicates the user's location within the site hierarchy. Supports clickable links for easy navigation and is styled consistently with the application's design system.
-
 - **Content and Media Elements**
-  - Icon
-  - Image
+  - **Icon**
+    - Utilizes SVG for scalability and accessibility, with aria-labels for screen readers.
+    - Offers size customization through design tokens (`--icons-sizes-small`, `--icons-sizes-medium`, `--icons-sizes-large`).
+    - CSS styling for icons (`iconStyles.css`) allows for color adjustments using fill and stroke properties.
+    - The `.icon` class ensures proper alignment and display, with predefined size variations (`.icon-small`, `.icon-medium`, `.icon-large`).
+  - **Image**
+    - The `Image` component is designed for responsive and accessible web design, supporting alt text for SEO and accessibility.
+    - Includes lazy loading (`loading="lazy"`) for performance optimization.
+    - Customizable appearance and behavior through CSS and the `className` prop.
+    - Responsive design accommodates various device sizes, with CSS media queries in `imageStyles.css` based on design tokens (`--responsive-breakpoints-sm`, `--responsive-breakpoints-md`, `--responsive-breakpoints-lg`).
+    - The `.custom-image` class provides a default responsive style, easily extendable for specific project needs.
 - **Typography and Text Elements**
-  - Headings (H1, H2, H3, etc.)
-  - Body Text
-  - Link
+  - **Headings (H1, H2, H3, etc.)**
+    - Provides a clear hierarchy for content organization. Customizable sizes and styles via design tokens.
+    - Includes responsive design for adaptability across devices.
+    - Achromatic styling aligns with image-driven design focus, enhancing readability without relying on color.
+  - **Body Text**
+    - Designed for optimal readability and user comfort. Includes customizable styles consistent with design tokens.
+    - Adapts to various device sizes, ensuring legibility in different viewing contexts.
+    - Supports achromatic color schemes, maintaining the brand's focus on image-driven design.
+  - **Link**
+    - Innovative, image-driven design with achromatic styling. Follows web accessibility best practices.
+    - Includes distinct styles for normal, hover, and clicked states.
+    - Employs subtle animations and text styling for an engaging user experience.
+
 - **Lists and Layout Elements**
   - Divider
   - Grid Layout
