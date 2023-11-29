@@ -1,5 +1,5 @@
 import React from 'react';
-import './BodyTextStyles.css';
+import './bodyTextStyles.css';
 
 // BodyText component for rendering paragraph text.
 // 'text' prop for the content and 'className' for additional styling.

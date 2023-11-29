@@ -1,0 +1,11 @@
+.divider {
+    border-bottom: 1px solid rgba(51, 51, 51, 0.12); /* Using the black color token with 12% opacity */
+    margin: 16px 0; /* Based on the medium spacing token */
+  }
+  
+  /* Notes:
+  - The thickness and color of the divider can be adjusted as per design requirements.
+  - The margin ensures appropriate spacing around the divider, enhancing visual separation.
+  - For darker themes, change the border color to a lighter shade for better visibility.
+  */
+  

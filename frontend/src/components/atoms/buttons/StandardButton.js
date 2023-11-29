@@ -1,5 +1,5 @@
 import React from 'react';
-import './buttonStyles.css'; // Ensure to link to your CSS file for buttons
+import './standardButtonStyles.css'; // Ensure to link to your CSS file for buttons
 
 // Standard Button Component
 const StandardButton = ({ text, size = 'medium', styleType = 'primary', onClick }) => {

@@ -1,0 +1,31 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/responsive.js';
+@import '../../../utilities/design_tokens/spacing.js';
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--md-spacing); /* Medium spacing */
+  padding: var(--lg-spacing); /* Large spacing */
+}
+
+/* Responsive breakpoints */
+@media (max-width: var(--sm-breakpoint)) {
+  .grid-layout {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: var(--xs-breakpoint)) {
+  .grid-layout {
+    grid-template-columns: 1fr;
+    padding: var(--sm-spacing); /* Small spacing */
+  }
+}
+
+/* Notes:
+- This CSS file uses design tokens from the 'responsive' and 'spacing' modules.
+- Adjust the 'minmax' values and breakpoints as needed for custom layouts.
+- The grid's gap and padding are set using spacing tokens for consistency.
+- Add additional media queries for finer control over responsive behavior.
+*/
