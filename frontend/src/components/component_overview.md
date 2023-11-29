@@ -55,9 +55,13 @@
     - Employs subtle animations and text styling for an engaging user experience.
 
 - **Lists and Layout Elements**
-  - Divider
-  - Grid Layout
-  - List Item (Ordered, Unordered, Description)
+  - **Divider**
+    - A thin, lightweight rule used to group content in lists and layouts. Offers full-bleed and inset styles for different visual separations. Customizable via design tokens for thickness and opacity.
+  - **GridLayout**
+    - A flexible layout component using CSS Grid. Adapts to various screen sizes with responsive design. Customizable columns, gaps, and alignment through design tokens.
+  - **ListItem (Ordered, Unordered, Description)**
+    - Designed for optimal scannability and readability. Supports single-line, two-line, and image-based variations. Customizable through design tokens for font, color, and spacing. Incorporates icons and interactive elements for enhanced user engagement.
+
 
 #### Post Release Expansion
 - **Input Fields**

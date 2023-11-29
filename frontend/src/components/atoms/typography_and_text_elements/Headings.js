@@ -1,5 +1,5 @@
 import React from 'react';
-import './HeadingStyles.css';
+import './headingStyles.css';
 
 const Heading = ({ level, text, className }) => {
   const Tag = `h${level}`;

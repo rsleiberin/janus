@@ -1,5 +1,5 @@
 import React from 'react';
-import './LinkStyles.css';
+import './linkStyles.css';
 
 // Link component for achromatic, image-driven design.
 // 'href' for URL and 'text' for display text.

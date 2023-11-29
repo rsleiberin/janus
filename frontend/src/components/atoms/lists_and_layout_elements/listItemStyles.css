@@ -1,0 +1,40 @@
+.list-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #CCC; /* Indented separator */
+  }
+  
+  .icon {
+    margin-right: 12px;
+  }
+  
+  .text-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .primary-text {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .secondary-text {
+    font-size: 0.875rem;
+    color: #555;
+  }
+  
+  /* Hover effect for interaction */
+  .list-item:hover {
+    background-color: #EEE;
+  }
+  
+  /* Notes:
+  - Consistent design for all list items for better scannability.
+  - Dividers (border-bottom) distinguish between list items.
+  - Hover effect enhances user interaction.
+  - Adjust colors and fonts as per design guidelines.
+  - Expand or modify for specific project needs.
+  */
+  
