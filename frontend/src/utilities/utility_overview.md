@@ -1,44 +1,39 @@
-# Design Token Best Practices
+# Utilities Best Practices
 
-## Buttons
-- Size: Ensure buttons are large enough for easy interaction, following guidelines like a minimum of 10mm x 10mm.
-- Color: Use strong visual weight and contrast for primary actions; secondary actions should have weaker visual attraction.
-- Shape: Opt for square or square with rounded corners to enhance information processing and maintain consistency.
+## Design Tokens
+- **Buttons**: Ensure easy interaction with appropriately sized buttons. Use contrasting colors for primary and secondary actions, and maintain shape consistency.
+- **Colors**: Focus on an achromatic palette, highlighting colorful AI-generated content. Ensure readability and accessibility through sufficient contrast.
+- **Typography**: Choose fonts that align with the minimalist theme and implement scalable sizing for legibility.
+- **Spacing**: Use a 4-point grid system for consistency and precision.
 
-## Colors
-- Focus on an achromatic palette that highlights colorful AI-generated content.
-- Ensure sufficient contrast for readability and accessibility.
+## Animations
+- **3D Motion Graphics**: Create engaging and interactive experiences with realistic 3D animations.
+- **Hover Effects**: Enhance UI interactivity with hover animations.
+- **Morphing**: Use morphing effects for artistic transitions.
+- **Anthropomorphic Animations**: Incorporate human-like animations for immersive experiences.
+- **Kinetic Typography**: Captivate attention with moving text animations.
 
-## Typography
-- Align font choices with the project's minimalist theme.
-- Implement scalable font sizing strategies for legibility.
+## Icons
+- **Simplicity**: Keep icons simple and recognizable.
+- **Consistency**: Maintain a cohesive visual style across all icons.
+- **Clarity**: Ensure icons are unambiguous and clearly convey their purpose.
+- **Scalability**: Design icons to be scalable across different sizes.
+- **Visual Hierarchy**: Establish clear hierarchy in icon design.
+- **Contextual Relevance**: Ensure appropriate usage context for icons.
 
-## Spacing
-- Implement a 4-point grid system for consistency and precision.
+## Responsive Design
+- **Device Adaptability**: Design should adapt to various screen sizes and orientations.
+- **Relative Length Units**: Use scalable units for layout elements.
+- **Layout Considerations**: Implement flexible grids and logical structures.
+- **Navigation Adaptability**: Tailor navigation for different devices.
+- **Responsive Images**: Ensure images scale with layout changes.
+- **Text Readability**: Maintain legible text across devices.
 
-### Animations
-- 3D Motion Graphics: Use realistic 3D animations to create engaging and interactive experiences.
-- Hover Effects: Implement hover animations for interactive UI elements.
-- Morphing: Use morphing effects for artistic transitions and increased user engagement.
-- Anthropomorphic Animations: Incorporate subtle, human-like animations for immersive experiences.
-- Kinetic Typography: Utilize moving text animations to captivate user attention and set the tone.
+## Axios Instance for API Calls
+- **Usage**: Use Axios for efficient HTTP requests to backend services.
+- **Configuration**: Centralize Axios configuration in `axiosInstance.js` for consistent API interactions.
+- **Error Handling**: Implement robust error handling for API responses.
+- **Interceptors**: Utilize Axios interceptors for global request/response processing.
+- **Customization**: Tailor Axios instance to fit specific project needs, including headers and timeouts.
 
-### Icons
-- Simplicity: Keep icons simple and easily recognizable.
-- Consistency: Ensure a cohesive visual style across all icons.
-- Clarity: Icons should be unambiguous and clearly convey their purpose.
-- Scalability: Design icons to be scalable across a range of sizes.
-- Visual Hierarchy: Establish a clear hierarchy in icon design for user prioritization.
-- Contextual Relevance: Icons should be appropriate for their usage context.
-
-### Responsive Design
-- Device Adaptability: Ensure design adapts to various screen sizes and orientations.
-- Relative Length Units: Use scalable units for layout elements.
-- Layout Considerations: Implement flexible grids and logical structures.
-- Navigation Adaptability: Tailor navigation for ease of use on different devices.
-- Responsive Images: Ensure images scale appropriately with layout changes.
-- Text Readability: Maintain legible and appropriately sized text across devices.
-
-
-
-(Additional design token categories and their key considerations can be added here as they are refined.)
+(Additional considerations for utilities and their usage can be added here as needed.)
