@@ -1,6 +1,8 @@
 /* Import design tokens */
 @import '../../../utilities/design_tokens/buttons.js';
-@import '../../../utilitiesdesign_tokens/typography.js';
+@import '../../../utilities/design_tokens/typography.js';
+@import '../../../utilities/design_tokens/shadow.js';  /* Importing shadow token */
+@import '../../../utilities/design_tokens/border.js';  /* Importing border token */
 
 /* Base button styles */
 .btn {
@@ -8,7 +10,9 @@
   font-size: var(--base-font-size);
   padding: var(--md-spacing);
   border-radius: var(--sm-spacing);
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;  /* Added transition for box-shadow */
+  box-shadow: var(--default-shadow);  /* Applying default shadow */
+  border: var(--medium-border-width) var(--border-solid) var(--primary-color);  /* Applying border */
   /* ... other base styles ... */
 }
 

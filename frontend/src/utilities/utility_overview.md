@@ -29,6 +29,55 @@
 - **Responsive Images**: Ensure images scale with layout changes.
 - **Text Readability**: Maintain legible text across devices.
 
+## Shadow Token Design Guidelines
+
+### Overview
+Shadow tokens in a design system add depth and define elevations, enhancing the user interface's interactive and visual appeal. They are crucial for creating a sense of layering and indicating interactive elements.
+
+### Best Practices for Shadow Tokens
+
+#### Elevations in Design Systems
+- **Elevations**: Comprise surfaces and shadows, offering depth or lift impressions.
+- **Levels**: Four basic elevation levels - Sunken, Default, Raised, and Overlay.
+- **Depth in Dark Themes**: Higher elevations (Raised and Overlay) paired with shadows for added depth, especially important in dark modes where shadows are less prominent.
+
+#### Design Tokens Application
+- **Surface and Shadow Pairings**: Follow recommended pairings; avoid mixing different shadow and surface elevation tokens.
+- **Raised and Overlay Elevations**: Use cautiously to prevent a busy UI. Group related elements if required to overlay other UI components.
+- **Accessibility**: Ensure contrast ratios meet accessibility standards in both light and dark modes.
+
+#### General Usage
+- **Visual Style Description**: Use shadow tokens to describe shadows' visual styles, ensuring consistency across technologies and platforms.
+- **Properties**: Define shadows' color, blur, spread, and offsets.
+
+### Implementation Recommendations
+- Create tokens for shadow properties considering different UI elements and elevation levels.
+- Utilize shadows to enhance usability and aesthetics, particularly for interactive elements like buttons and cards.
+- Prioritize accessibility and visual harmony in both light and dark themes.
+
+Incorporating these shadow token guidelines will enhance the depth, interactivity, and overall visual quality of the user interface, contributing to a consistent and accessible user experience.
+
+## Border Token Design Guidelines
+
+### Overview
+Border tokens are crucial in defining the boundaries and structure of UI elements. They play a significant role in guiding user interaction and enhancing the clarity of the interface.
+
+### Purpose
+- Establishing consistent and reusable border styles throughout the application.
+- Enhancing user understanding of the interface by clearly defining where a design begins and ends.
+
+### Design Token Implementation
+- **Border Width**: Standardize border widths to maintain consistency across UI components.
+- **Border Style**: Define styles such as solid, dotted, or dashed to suit different design needs.
+- **Border Color**: Align border colors with the overall color scheme of the design system.
+
+### Application in UI Design
+- Use border tokens to define the edges of buttons, input fields, cards, and other components.
+- Employ borders to visually separate different sections of the UI or to highlight interactive elements.
+
+By implementing these border token guidelines, we ensure that our UI components are consistent, intuitive, and aesthetically pleasing, contributing to a cohesive and user-friendly experience.
+
+
 ## Axios Instance for API Calls
 - **Usage**: Use Axios for efficient HTTP requests to backend services.
 - **Configuration**: Centralize Axios configuration in `axiosInstance.js` for consistent API interactions.
