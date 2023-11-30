@@ -1,6 +1,8 @@
 /* Import design tokens */
 @import '../../../utilities/design_tokens/colors';
 @import '../../../utilities/design_tokens/typography';
+@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
+@import '../../../utilities/design_tokens/border'; /* Importing border token */
 
 /* Tab styles */
 .tab-item {
@@ -10,13 +12,15 @@
   font-family: var(--body-font);
   font-size: var(--base-font-size);
   color: var(--mediumGray);
-  border-bottom: 2px solid transparent;
-  transition: color 0.3s, border-color 0.3s;
+  border-bottom: var(--border-solid); /* Using border token for consistent styling */
+  box-shadow: var(--shadow-default); /* Applying a soft shadow for depth */
+  transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
 .tab-item.active {
   color: var(--black);
-  border-bottom-color: var(--black);
+  border-bottom-color: var(--primary-color); /* Highlighting the active tab */
+  box-shadow: var(--shadow-raised); /* Enhanced shadow for active tab */
 }
 
 /* Notes:
@@ -24,4 +28,5 @@
 - Hover and active states provide visual feedback.
 - Adjustments to the styling can be made via the design tokens to match the theme.
 - Consider adding animations or transitions for a smoother user experience.
+- Shadow and border tokens add depth and clarity to the tab items.
 */

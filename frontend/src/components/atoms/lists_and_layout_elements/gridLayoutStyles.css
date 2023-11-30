@@ -1,12 +1,16 @@
 /* Import design tokens */
 @import '../../../utilities/design_tokens/responsive.js';
 @import '../../../utilities/design_tokens/spacing.js';
+@import '../../../utilities/design_tokens/shadow.js'; /* Importing shadow token for depth */
+@import '../../../utilities/design_tokens/border.js'; /* Importing border token for clear delineation */
 
 .grid-layout {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--md-spacing); /* Medium spacing */
   padding: var(--lg-spacing); /* Large spacing */
+  box-shadow: var(--shadow-default); /* Applying a soft shadow for depth */
+  border: var(--border-solid); /* Applying a consistent border */
 }
 
 /* Responsive breakpoints */
@@ -24,8 +28,8 @@
 }
 
 /* Notes:
-- This CSS file uses design tokens from the 'responsive' and 'spacing' modules.
-- Adjust the 'minmax' values and breakpoints as needed for custom layouts.
-- The grid's gap and padding are set using spacing tokens for consistency.
+- This CSS file uses design tokens from the 'responsive', 'spacing', 'shadow', and 'border' modules.
+- Adjust the 'minmax' values, shadows, borders, and breakpoints as needed for custom layouts.
+- The grid's gap, padding, shadow, and border are set using design tokens for consistency.
 - Add additional media queries for finer control over responsive behavior.
 */
