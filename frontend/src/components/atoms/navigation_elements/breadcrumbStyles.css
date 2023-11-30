@@ -1,6 +1,8 @@
 /* Import design tokens */
 @import '../../../utilities/design_tokens/colors';
 @import '../../../utilities/design_tokens/typography';
+@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
+@import '../../../utilities/design_tokens/border'; /* Importing border token */
 
 /* Breadcrumbs styles */
 .breadcrumb {
@@ -8,30 +10,38 @@
   padding: 0;
   display: flex;
   align-items: center;
+  box-shadow: var(--shadow-default); /* Soft shadow for depth */
+  border: var(--border-none); /* No border needed for breadcrumb */
 }
 
 .breadcrumb-item {
   font-family: var(--body-font);
   font-size: var(--base-font-size);
-  color: var(--mediumGray);
+  color: var(--color-mediumGray);
 }
 
 .breadcrumb-item a {
-  color: var(--darkGray);
+  color: var(--color-darkGray);
   text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb-item a:hover {
+  color: var(--primary-color); /* Color change on hover */
 }
 
 .breadcrumb-item.active {
-  color: var(--black);
+  color: var(--color-black);
 }
 
 .breadcrumb-item:not(:last-child)::after {
   content: '/';
-  margin: 0 var(--xs-spacing);
+  margin: 0 var(--spacing-xs);
 }
 
 /* Notes:
 - The styling uses design tokens for consistent, accessible design.
 - Breadcrumbs are flexibly styled to adapt to different screen sizes.
 - Separator styling and hover effects can be adjusted via CSS.
+- Shadow adds a subtle depth to the breadcrumb navigation.
 */

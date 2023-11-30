@@ -1,40 +1,48 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/colors';
+@import '../../../utilities/design_tokens/typography';
+@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
+@import '../../../utilities/design_tokens/border'; /* Importing border token */
+
 .list-item {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    border-bottom: 1px solid #CCC; /* Indented separator */
-  }
-  
-  .icon {
-    margin-right: 12px;
-  }
-  
-  .text-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .primary-text {
-    font-weight: bold;
-    font-size: 1rem;
-    color: #333;
-  }
-  
-  .secondary-text {
-    font-size: 0.875rem;
-    color: #555;
-  }
-  
-  /* Hover effect for interaction */
-  .list-item:hover {
-    background-color: #EEE;
-  }
-  
-  /* Notes:
-  - Consistent design for all list items for better scannability.
-  - Dividers (border-bottom) distinguish between list items.
-  - Hover effect enhances user interaction.
-  - Adjust colors and fonts as per design guidelines.
-  - Expand or modify for specific project needs.
-  */
-  
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm); /* Updated to use spacing token */
+  border-bottom: var(--border-solid); /* Updated to use border token */
+  box-shadow: var(--shadow-default); /* Applying a soft shadow for depth */
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.icon {
+  margin-right: var(--spacing-md); /* Updated to use spacing token */
+}
+
+.text-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.primary-text {
+  font-weight: bold;
+  font-size: var(--font-size-lg); /* Updated to use typography token */
+  color: var(--color-dark); /* Updated to use color token */
+}
+
+.secondary-text {
+  font-size: var(--font-size-md); /* Updated to use typography token */
+  color: var(--color-medium); /* Updated to use color token */
+}
+
+/* Hover effect for interaction */
+.list-item:hover {
+  background-color: var(--color-light); /* Updated to use color token */
+  box-shadow: var(--shadow-raised); /* Enhanced shadow for hover */
+}
+
+/* Notes:
+- Consistent design for all list items for better scannability.
+- Dividers (border-bottom) and shadows distinguish between list items.
+- Hover effect enhances user interaction.
+- Adjust colors, fonts, and shadows as per design guidelines.
+- Expand or modify for specific project needs.
+*/

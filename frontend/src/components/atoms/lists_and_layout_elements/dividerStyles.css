@@ -1,11 +1,16 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/colors';
+@import '../../../utilities/design_tokens/spacing';
+@import '../../../utilities/design_tokens/border'; /* Importing border token */
+
 .divider {
-    border-bottom: 1px solid rgba(51, 51, 51, 0.12); /* Using the black color token with 12% opacity */
-    margin: 16px 0; /* Based on the medium spacing token */
-  }
-  
-  /* Notes:
-  - The thickness and color of the divider can be adjusted as per design requirements.
-  - The margin ensures appropriate spacing around the divider, enhancing visual separation.
-  - For darker themes, change the border color to a lighter shade for better visibility.
-  */
-  
+  border-bottom: var(--border-solid); /* Using border token for consistent styling */
+  margin: var(--md-spacing); /* Based on the medium spacing token */
+  opacity: 0.12; /* Adjusting opacity to match the original style */
+}
+
+/* Notes:
+- The thickness and color of the divider can be adjusted as per design requirements.
+- The margin ensures appropriate spacing around the divider, enhancing visual separation.
+- For darker themes, change the border color to a lighter shade for better visibility.
+*/
