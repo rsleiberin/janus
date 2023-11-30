@@ -1,6 +1,8 @@
 /* Import design tokens */
 @import '../../../utilities/design_tokens/colors';
 @import '../../../utilities/design_tokens/typography';
+@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
+@import '../../../utilities/design_tokens/border'; /* Importing border token */
 
 /* Text Field styles */
 .text-field {
@@ -8,19 +10,21 @@
   font-size: var(--base-font-size);
   color: var(--black);
   background-color: var(--offWhite);
-  border: 1px solid var(--mediumGray);
+  border: var(--border-solid); /* Updated to use border token */
   padding: var(--sm-spacing);
   border-radius: var(--xs-spacing);
+  box-shadow: var(--shadow-default); /* Soft shadow for depth */
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .text-field:focus {
-  border-color: var(--darkGray);
-  box-shadow: 0 0 0 3px var(--lightGray);
+  border-color: var(--primary-color); /* Highlighting focus with primary color */
+  box-shadow: var(--shadow-raised); /* Enhanced shadow for focus */
 }
 
 /* Notes:
 - The styling is based on the achromatic design tokens.
 - Adjustments can be made via design tokens for theme consistency.
-- Focus state includes a box-shadow for visual feedback.
+- Focus state includes a box-shadow for enhanced visual feedback.
+- Border and shadow tokens ensure consistency in appearance and interactivity.
 */

@@ -1,6 +1,8 @@
 /* Import design tokens */
 @import '../../../utilities/design_tokens/colors';
 @import '../../../utilities/design_tokens/typography';
+@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
+@import '../../../utilities/design_tokens/border'; /* Importing border token */
 
 /* Text Area styles */
 .text-area {
@@ -8,16 +10,19 @@
   font-size: var(--base-font-size);
   color: var(--black);
   background-color: var(--offWhite);
-  border: 1px solid var(--mediumGray);
+  border: var(--border-solid); /* Updated to use border token */
   padding: var(--sm-spacing);
   width: 100%;
   resize: vertical;
   box-sizing: border-box;
+  box-shadow: var(--shadow-default); /* Soft shadow for depth */
+  transition: box-shadow 0.2s, border-color 0.2s;
 }
 
 .text-area:focus {
   outline: none;
-  border-color: var(--darkGray);
+  border-color: var(--primary-color); /* Highlighting focus with primary color */
+  box-shadow: var(--shadow-raised); /* Enhanced shadow for focus */
 }
 
 .text-area::placeholder {
@@ -25,9 +30,9 @@
 }
 
 /* Notes:
-- The styling uses the achromatic design tokens for consistency.
+- The styling uses design tokens for consistent appearance.
 - The TextArea allows vertical resizing, aligning with responsive design practices.
-- The focus state is highlighted by changing the border color.
+- The focus state is highlighted by changing the border color and shadow.
 - Placeholder styling provides a lighter shade for better UX.
 - The styles can be customized further by adjusting the design tokens.
 - Padding and font sizes are set according to the spacing and typography tokens.

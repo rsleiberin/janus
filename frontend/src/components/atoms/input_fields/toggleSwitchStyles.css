@@ -1,6 +1,8 @@
 /* Import design tokens */
 @import '../../../utilities/design_tokens/colors';
 @import '../../../utilities/design_tokens/typography';
+@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
+@import '../../../utilities/design_tokens/border'; /* Importing border token */
 
 /* ToggleSwitch styles */
 .toggle-switch-container {
@@ -14,6 +16,7 @@
   display: inline-block;
   width: 60px;
   height: 34px;
+  box-shadow: var(--shadow-default); /* Soft shadow for depth */
 }
 
 .toggle-input {
@@ -32,6 +35,7 @@
   background-color: var(--mediumGray);
   transition: .4s;
   border-radius: 34px;
+  border: var(--border-none); /* No border for the slider */
 }
 
 .slider:before {
@@ -44,6 +48,7 @@
   background-color: var(--white);
   transition: .4s;
   border-radius: 50%;
+  box-shadow: var(--shadow-raised); /* Raised shadow for the knob */
 }
 
 .toggle-input:checked + .slider {
@@ -51,7 +56,7 @@
 }
 
 .toggle-input:focus + .slider {
-  box-shadow: 0 0 1px var(--success);
+  box-shadow: 0 0 1px var(--success), var(--shadow-overlay); /* Enhanced shadow for focus */
 }
 
 .toggle-input:checked + .slider:before {

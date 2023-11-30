@@ -1,6 +1,8 @@
 /* Import design tokens */
 @import '../../../utilities/design_tokens/colors';
 @import '../../../utilities/design_tokens/typography';
+@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
+@import '../../../utilities/design_tokens/border'; /* Importing border token */
 
 /* Checkbox styles */
 .checkbox-container {
@@ -10,6 +12,20 @@
 
 .checkbox-input {
   margin-right: var(--xs-spacing);
+  appearance: none; /* Removes default browser styling */
+  width: var(--size-md); /* Size of the checkbox */
+  height: var(--size-md);
+  background-color: var(--white);
+  border: var(--border-solid); /* Updated to use border token */
+  border-radius: var(--border-radius-small); /* Slightly rounded corners */
+  box-shadow: var(--shadow-default); /* Soft shadow for depth */
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.checkbox-input:checked {
+  background-color: var(--primary-color);
+  box-shadow: var(--shadow-raised); /* Deeper shadow for checked state */
 }
 
 .checkbox-label {
@@ -18,10 +34,13 @@
   color: var(--black);
 }
 
+/* Focus and hover states */
+.checkbox-input:focus, .checkbox-input:hover {
+  box-shadow: var(--shadow-overlay); /* Enhanced shadow for focus/hover */
+}
+
 /* Notes:
-- The styling uses the achromatic design tokens for consistency.
-- Adjustments can be made via design tokens for theme consistency.
-- The checkbox and label are aligned horizontally for clarity and ease of use.
-- Customization in terms of colors and typography can be achieved through design tokens.
-- Focus and hover states can be added for enhanced interactivity.
+- The styling uses design tokens for consistent appearance.
+- The checkbox's size, border, and shadow can be customized via design tokens.
+- Focus and hover states are enhanced for better interactivity and accessibility.
 */
