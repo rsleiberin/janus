@@ -1,6 +1,8 @@
 /* Import design tokens */
 @import '../../../utilities/design_tokens/colors';
 @import '../../../utilities/design_tokens/typography';
+@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
+@import '../../../utilities/design_tokens/border'; /* Importing border token */
 
 /* RadioButton styles */
 .radio-button-container {
@@ -11,6 +13,20 @@
 
 .radio-input {
   margin-right: var(--xs-spacing);
+  appearance: none; /* Removes default browser styling */
+  width: var(--size-md); /* Custom size for the radio button */
+  height: var(--size-md);
+  background-color: var(--white);
+  border: var(--border-solid); /* Updated to use border token */
+  border-radius: 50%; /* Circular shape */
+  box-shadow: var(--shadow-default); /* Soft shadow for depth */
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.radio-input:checked {
+  background-color: var(--primary-color);
+  box-shadow: var(--shadow-raised); /* Deeper shadow for checked state */
 }
 
 .radio-label {
@@ -19,10 +35,20 @@
   color: var(--black);
 }
 
+/* Focus and hover states */
+.radio-input:focus, .radio-input:hover {
+  box-shadow: var(--shadow-overlay); /* Enhanced shadow for focus/hover */
+}
+
+/* Disabled state */
+.radio-input:disabled {
+  background-color: var(--mediumGray);
+  box-shadow: var(--shadow-sunken); /* Flat appearance when disabled */
+  cursor: not-allowed;
+}
+
 /* Notes:
-- The styling uses the achromatic design tokens for consistency.
-- Adjustments can be made via design tokens for theme consistency.
-- The radio button and label are aligned horizontally for clarity.
-- Customization in terms of colors and typography can be achieved through design tokens.
-- Consider adding custom styles for the radio indicator for a unique look.
+- The styling uses design tokens for consistent appearance.
+- The radio button's size, border, and shadow can be customized via design tokens.
+- Focus and hover states are enhanced for better interactivity and accessibility.
 */

@@ -1,6 +1,8 @@
 /* Import design tokens */
 @import '../../../utilities/design_tokens/colors';
 @import '../../../utilities/design_tokens/typography';
+@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
+@import '../../../utilities/design_tokens/border'; /* Importing border token */
 
 /* DropdownSelect styles */
 .dropdown-select-container {
@@ -12,10 +14,18 @@
   font-size: var(--base-font-size);
   color: var(--black);
   background-color: var(--offWhite);
-  border: 1px solid var(--mediumGray);
+  border: var(--border-solid); /* Updated to use border token */
   padding: var(--sm-spacing);
   width: 100%;
   box-sizing: border-box;
+  box-shadow: var(--shadow-default); /* Soft shadow for depth */
+  transition: box-shadow 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+
+/* Focus and hover states */
+.dropdown-select:focus, .dropdown-select:hover {
+  box-shadow: var(--shadow-raised); /* Enhanced shadow for focus/hover */
 }
 
 /* Notes:
