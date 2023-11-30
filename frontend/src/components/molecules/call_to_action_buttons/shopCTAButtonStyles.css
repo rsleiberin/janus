@@ -1,0 +1,25 @@
+/* ShopCTAButtonStyles.css */
+@import '../../../utilities/design_tokens/buttons.js';
+@import '../../../utilities/design_tokens/colors.js';
+@import '../../../utilities/design_tokens/typography.js';
+@import '../../../utilities/design_tokens/spacing.js';
+
+.shop-cta-button {
+  font-family: var(--typography-fonts-body);
+  font-size: var(--buttons-sizes-medium-fontSize);
+  padding: var(--buttons-sizes-medium-padding);
+  background-color: var(--colors-black);
+  color: var(--colors-white);
+  border: var(--buttons-styles-primary-border);
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.shop-cta-button:hover {
+  background-color: var(--colors-darkGray); /* Slightly lighter on hover */
+}
+
+/* Notes:
+- Styles are based on the 'buttons', 'colors', and 'typography' design tokens.
+- Hover state changes the background color for visual feedback.
+*/

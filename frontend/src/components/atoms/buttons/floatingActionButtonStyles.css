@@ -1,6 +1,7 @@
 /* Import design tokens */
 @import '../../../utilities/design_tokens/colors.js';
 @import '../../../utilities/design_tokens/spacing.js';
+@import '../../../utilities/design_tokens/shadow.js'; /* Importing shadow token for elevation */
 
 /* Floating Action Button styles */
 .fab {
@@ -18,20 +19,20 @@
   position: fixed;
   bottom: var(--spacing-xl);
   right: var(--spacing-xl);
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2); /* subtle shadow for elevation */
+  box-shadow: var(--shadow-raised); /* Using shadow token for elevation */
   transition: background-color 0.2s, box-shadow 0.2s;
 }
 
 /* Hover and active states */
 .fab:hover, .fab:active {
   background-color: var(--success); /* Color change for interactivity */
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* deeper shadow for elevation */
+  box-shadow: var(--shadow-overlay); /* Using shadow token for deeper elevation on hover/active */
 }
 
 /* Disabled state */
 .fab:disabled {
   background-color: var(--mediumGray);
-  box-shadow: none;
+  box-shadow: var(--shadow-sunken); /* Using shadow token for no elevation when disabled */
   cursor: not-allowed;
 }
 

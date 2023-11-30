@@ -1,7 +1,9 @@
-/* Correct Import design tokens */
+/* Import design tokens */
 @import '../../../utilities/design_tokens/colors.js';
 @import '../../../utilities/design_tokens/typography.js';
 @import '../../../utilities/design_tokens/spacing.js';
+@import '../../../utilities/design_tokens/shadow.js'; /* Importing shadow token */
+@import '../../../utilities/design_tokens/border.js'; /* Importing border token */
 
 /* Base icon button styles */
 .icon-btn {
@@ -12,11 +14,12 @@
   height: var(--size-md);
   background-color: var(--primary-color);
   color: var(--white);
-  border: none;
+  border: var(--border-none); /* Updated to use border token */
   border-radius: 50%;
   padding: var(--spacing-sm);
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
+  box-shadow: var(--shadow-default); /* Added shadow token */
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s; /* Updated to include box-shadow transition */
 }
 
 /* Size variations */
@@ -27,12 +30,13 @@
 .icon-btn.secondary {
   background-color: var(--white);
   color: var(--black);
-  border: 1px solid var(--black);
+  border: var(--border-solid); /* Updated to use border token */
 }
 
 /* Hover and active states */
 .icon-btn:hover, .icon-btn:active {
   background-color: var(--lightGray);
+  box-shadow: var(--shadow-raised); /* Updated to use shadow token for elevation on hover/active */
   transform: scale(1.1);
 }
 
@@ -40,6 +44,7 @@
 .icon-btn:disabled {
   background-color: var(--mediumGray);
   color: var(--darkGray);
+  box-shadow: var(--shadow-sunken); /* Updated to use shadow token for flat appearance when disabled */
   cursor: not-allowed;
 }
 
