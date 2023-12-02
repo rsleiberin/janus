@@ -1,25 +1,44 @@
-/* ShopCTAButtonStyles.css */
-@import '../../../utilities/design_tokens/buttons.js';
-@import '../../../utilities/design_tokens/colors.js';
-@import '../../../utilities/design_tokens/typography.js';
-@import '../../../utilities/design_tokens/spacing.js';
+/* Import design tokens */
+@import '../../../utilities/design_tokens/buttons';
+@import '../../../utilities/design_tokens/colors';
+@import '../../../utilities/design_tokens/typography';
+@import '../../../utilities/design_tokens/shadow';
 
+/* Shop CTA Button styles */
 .shop-cta-button {
-  font-family: var(--typography-fonts-body);
-  font-size: var(--buttons-sizes-medium-fontSize);
+  font-family: var(--fonts-body);
+  font-size: var(--buttons-sizes-medium-fontSize); /* Aligning with medium button size */
+  color: var(--white);
+  background-color: var(--colors-primary);
   padding: var(--buttons-sizes-medium-padding);
-  background-color: var(--colors-black);
-  color: var(--colors-white);
-  border: var(--buttons-styles-primary-border);
+  border: var(--border-none);
+  border-radius: var(--border-radius-md);
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
+  transition: background-color var(--animations-durations-fast), 
+              box-shadow var(--animations-durations-fast);
 
-.shop-cta-button:hover {
-  background-color: var(--colors-darkGray); /* Slightly lighter on hover */
+  /* Hover state for interaction */
+  &:hover {
+    background-color: var(--colors-hover);
+    box-shadow: var(--shadowToken-elevation-raised);
+  }
+
+  /* Active state for the button */
+  &:active {
+    background-color: var(--colors-active);
+  }
+
+  /* Responsive Design */
+  @media (max-width: var(--responsive-breakpoints-sm)) {
+    padding: var(--buttons-sizes-small-padding);
+    font-size: var(--buttons-sizes-small-fontSize);
+  }
 }
 
 /* Notes:
-- Styles are based on the 'buttons', 'colors', and 'typography' design tokens.
-- Hover state changes the background color for visual feedback.
+   - Utilize the button size tokens for consistent sizing.
+   - Color tokens are used to ensure brand alignment.
+   - Typography tokens maintain consistent font styling.
+   - Shadow tokens add depth, particularly on hover/active states.
+   - Animations tokens are used for smooth transitions.
 */
