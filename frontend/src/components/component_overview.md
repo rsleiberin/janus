@@ -93,6 +93,10 @@
 ### Molecules
 
 #### MVP
+**Call to Action Buttons**
+  - **ShopCTAButton**
+    - A dynamic and visually engaging button specifically tailored for e-commerce actions like 'Buy Now' or 'Add to Cart'. It features a design that blends modern trends with high-contrast, memorable colors for standout visibility. Responsive and optimized for mobile use, it includes subtle animations for interactive elements and is customizable through design tokens for colors, typography, and shadows.
+
 - **Social Sharing Buttons** - For sharing content on social media platforms
 - **User Ratings and Reviews** - Displaying and collecting user ratings and feedback
 - **E-commerce Product Cards** - For showcasing products with image, price, and actions

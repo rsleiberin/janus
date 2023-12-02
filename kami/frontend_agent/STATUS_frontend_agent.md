@@ -36,16 +36,18 @@
 
 - **animations/** | Status: In Progress | Contains animation tokens; expand as needed for UI animations.
 
-- **atoms/** | Status: In Progress | Basic building blocks for the UI under development.
-- **molecules/** | Status: In Progress | Composite components being developed.
-- **organisms/**
+- **atoms/** | Status: Completed | Basic building blocks for the UI, including buttons, content and media elements, input fields, lists and layout elements, navigation elements, and typography and text elements.
+
+- **molecules/** | Status: In Progress | Composite components being developed, starting with the Shop CTA button.
+
+- **organisms/** | Status: Planned | Development of more complex UI structures to commence.
 
 - **contexts/** | Status: In Progress | Contexts for managing global state.
 
 - **design_tokens/**
   - **animations.js** | Status: Verified | Contains animation durations and easing functions.
-  - **buttons.js** | Status: Verified | Defines sizes and styles for buttons; potential expansion for interactive states.
-  - **colors.js** | Status: Verified | Essential color tokens for dark and light themes.
+  - **buttons.js** | Status: Updated & Verified | Defines sizes and styles for buttons; includes new tokens for expanded interactive states.
+  - **colors.js** | Status: Updated & Verified | Enhanced color tokens for both dark and light themes.
   - **icons.js** | Status: To Be Expanded | Sizes defined; add specific icon names and styles as needed.
   - **responsive.js** | Status: Verified | Breakpoints for responsive design; could expand with more properties.
   - **spacing.js** | Status: Verified | Various sizes for consistent spacing across UI.
@@ -55,9 +57,6 @@
 
 - **layouts/**
   - **MainLayout.js** | Status: Development in Progress | Incorporates Header and Footer components for a consistent application layout.
-
-  - **Header.js** | Status: Skeleton Created | Basic structure in place. Awaiting further development for navigation and branding elements.
-  - **Footer.js** | Status: Skeleton Created | Basic structure established. Needs additional content for links and disclaimers.
 
 - **pages/**
   - **_app.js** | Status: Verified | Global settings and styles application.
@@ -70,7 +69,7 @@
 
 - **tests/** | Status: Planned | Testing strategy to be implemented.
 
-- **utilities/** | Status: In Progress | Utility functions for common tasks.
+- **utilities/** | Status: In Progress | Utility functions for common tasks, including a comprehensive design token system for animations, borders, buttons, colors, icons, responsiveness, shadows, spacing, and typography.
 
 ## Access Requirements
 - Full access to the `src/` directory for continuous development and management.
