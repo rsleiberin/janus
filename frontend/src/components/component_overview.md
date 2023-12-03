@@ -96,6 +96,10 @@
 **Call to Action Buttons**
   - **ShopCTAButton**
     - A dynamic and visually engaging button specifically tailored for e-commerce actions like 'Buy Now' or 'Add to Cart'. It features a design that blends modern trends with high-contrast, memorable colors for standout visibility. Responsive and optimized for mobile use, it includes subtle animations for interactive elements and is customizable through design tokens for colors, typography, and shadows.
+- **Navigation Elements**
+  - **MenuItem**
+    - A versatile and adaptable component designed for use in various types of navigation menus. The `MenuItem` is built to be intuitive, with support for text labels, links, optional icons, and custom click event handling. It's crafted with semantic HTML for SEO and accessibility, and uses design tokens for consistent styling. This component is responsive and designed to fit seamlessly into both simple and complex navigation systems, including horizontal bars, vertical menus, and mega menus.
+
 
 - **Social Sharing Buttons** - For sharing content on social media platforms
 - **User Ratings and Reviews** - Displaying and collecting user ratings and feedback

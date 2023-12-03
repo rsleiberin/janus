@@ -1,0 +1,42 @@
+/* Import design tokens */
+@import '../../../utilities/design_tokens/colors';
+@import '../../../utilities/design_tokens/typography';
+@import '../../../utilities/design_tokens/spacing';
+
+/* DropdownMenu styles */
+.dropdown-menu-container {
+  position: relative;
+}
+
+.dropdown-toggle {
+  background-color: var(--offWhite);
+  color: var(--black);
+  padding: var(--sm-spacing);
+  font-family: var(--body-font);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--white);
+  border: 1px solid var(--mediumGray);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 0;
+  margin: var(--xxs) 0 0 0;
+}
+
+/* Notes:
+- The dropdown menu container controls the position of the menu.
+- The toggle button is styled for clarity and usability.
+- The dropdown menu itself is positioned absolutely under the toggle button.
+- Design tokens are used for colors, typography, and spacing to maintain consistency.
+- Additional responsive adjustments can be made for better mobile experience.
+*/
+
