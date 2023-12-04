@@ -10,6 +10,8 @@
     - Developed with accessibility in mind, supporting ARIA labels and keyboard navigation. Customizable icons and styles.
   - **Floating Action Button**
     - Stands out for primary actions with a distinctive style and position. Offers interactive states and is customizable via design tokens.
+  - **Menu Toggle Button**
+    - A dynamic button that toggles its active state on click, designed for collapsible navigation. It features an 'active' class for style changes based on the state and supports iconography for a user-friendly interface. The component integrates design tokens for consistent styling, ensuring responsiveness and alignment with UI/UX best practices. This button is adaptable for various menu interfaces and user interactions.
 - **Input Fields**
   - **Text Field**
     - Versatile for various text input types. Includes customizable styles for consistency with design tokens. Features clear labeling and validation states.
@@ -97,8 +99,11 @@
   - **ShopCTAButton**
     - A dynamic and visually engaging button specifically tailored for e-commerce actions like 'Buy Now' or 'Add to Cart'. It features a design that blends modern trends with high-contrast, memorable colors for standout visibility. Responsive and optimized for mobile use, it includes subtle animations for interactive elements and is customizable through design tokens for colors, typography, and shadows.
 - **Navigation Elements**
+  - **DropdownMenu**
+    - The `DropdownMenu` is a dynamic, user-friendly component for creating dropdown navigation elements. It incorporates a toggle feature, using React's `useState` for handling the open/close state. The component includes a button with an arrow icon for visual indication and an unordered list to display menu items, populated dynamically from props. It utilizes CSS modules for styling, adhering to design token guidelines for colors, typography, and spacing, ensuring consistency and ease of customization. The dropdown menu is positioned absolutely under the toggle button, providing a seamless user experience. Additional notes include recommendations for responsive adjustments and guidelines for maintaining clarity and usability.
   - **MenuItem**
     - A versatile and adaptable component designed for use in various types of navigation menus. The `MenuItem` is built to be intuitive, with support for text labels, links, optional icons, and custom click event handling. It's crafted with semantic HTML for SEO and accessibility, and uses design tokens for consistent styling. This component is responsive and designed to fit seamlessly into both simple and complex navigation systems, including horizontal bars, vertical menus, and mega menus.
+
 
 
 - **Social Sharing Buttons** - For sharing content on social media platforms
