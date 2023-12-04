@@ -1,0 +1,55 @@
+@import '../../../utilities/design_tokens/colors';
+@import '../../../utilities/design_tokens/spacing';
+@import '../../../utilities/design_tokens/typography';
+
+/* Horizontal Navigation Bar Styles */
+.horizontal-nav {
+  background-color: var(--white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--sm-spacing);
+}
+
+.nav-list {
+  list-style-type: none;
+  display: flex;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-list li {
+  margin-right: var(--md-spacing);
+}
+
+.nav-list li:last-child {
+  margin-right: 0;
+}
+
+.nav-list a {
+  color: var(--black);
+  text-decoration: none;
+  padding: var(--xxs-spacing) var(--xs-spacing);
+}
+
+/* Responsive Design for Mobile Devices */
+@media (max-width: 768px) {
+  .horizontal-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-list {
+    flex-direction: column;
+  }
+
+  .nav-list li {
+    width: 100%;
+  }
+}
+
+/* Notes:
+- Design tokens used for consistent color, spacing, and typography.
+- Flexbox layout for dynamic spacing and alignment.
+- Mobile responsiveness with media query adjustments.
+- Accessibility considerations for all navigation elements.

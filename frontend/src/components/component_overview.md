@@ -12,6 +12,7 @@
     - Stands out for primary actions with a distinctive style and position. Offers interactive states and is customizable via design tokens.
   - **Menu Toggle Button**
     - A dynamic button that toggles its active state on click, designed for collapsible navigation. It features an 'active' class for style changes based on the state and supports iconography for a user-friendly interface. The component integrates design tokens for consistent styling, ensuring responsiveness and alignment with UI/UX best practices. This button is adaptable for various menu interfaces and user interactions.
+
 - **Input Fields**
   - **Text Field**
     - Versatile for various text input types. Includes customizable styles for consistency with design tokens. Features clear labeling and validation states.
