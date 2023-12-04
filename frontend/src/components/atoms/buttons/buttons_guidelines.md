@@ -92,3 +92,17 @@ These guidelines focus on creating accessible and user-friendly IconButton compo
 
 The Floating Action Button, while a simple element, requires detailed attention to guidelines and user experience to maximize its effectiveness in a product.
 
+## Menu Toggle Button Guidelines
+
+### Design and Functionality
+- **Recognizable Design**: Toggle buttons should have a clear On/Off visual indication, often using icons to represent the active state.
+- **Group Control**: When used for a group of settings, ensure the toggle button's design conveys its control over the entire group.
+- **Labeling**: Combine text and icons for clarity. Text for descriptive purposes and icons to show the chosen option and its alternative.
+
+### User Interface Integration
+- **Versatile Usage**: Ideal for various UI elements such as toolbars, toggles, app bars, and action buttons.
+- **Visibility and Accessibility**: Ensure toggle buttons are easily visible and accessible, providing clear feedback on their state.
+
+### Best Practices
+- **Consistent Design Language**: Maintain uniformity with the website's overall design language, using familiar icons and text.
+- **Responsive and Adaptive**: Ensure toggle buttons work well across different devices, maintaining functionality and aesthetic appeal.
