@@ -1,7 +1,7 @@
 import React from 'react';
-import colors from '../design_tokens/colors';
-import Header from '../organisms/Header'; // Assuming the Header component is in this path
-import Footer from '../organisms/Footer'; // Assuming the Footer component is in this path
+import colors from '../utilities/design_tokens/colors';
+import Header from '../components/organisms/Header'; // Assuming the Header component is in this path
+import Footer from '../components/organisms/Footer'; // Assuming the Footer component is in this path
 
 const HomePage = () => {
     return (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MenuItem from './MenuItem';
-import Icon from './Icon';
+import Icon from '../../atoms/content_and_media_elements/Icon';
 import './dropdownMenuStyles.css';
 
 // DropdownMenu Component

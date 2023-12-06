@@ -1,11 +1,16 @@
 import React from 'react';
+import HorizontalNavigationBar from './navigation_and_menu_systems/HorizontalNavigationBar';
 // Import any necessary design tokens or sub-components
 
 const Header = () => {
+    const navItems = [
+        // Define navigation items here
+    ];
+
     return (
         <header>
             {/* Brand Logo */}
-            {/* Navigation Links */}
+            <HorizontalNavigationBar navItems={navItems} ctaText="Shop Now" />
             {/* User Account Controls/Search Bar (if applicable) */}
         </header>
     );
