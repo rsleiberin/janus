@@ -1,6 +1,6 @@
 import React from 'react';
-import DropdownMenu from './DropdownMenu';
-import ShopCTAButton from './ShopCTAButton';
+import DropdownMenu from '../../molecules/navigation_elements/DropdownMenu';
+import ShopCTAButton from '../../molecules/call_to_action_buttons/ShopCTAButton';
 import './horizontalNavigationBarStyles.css'; // Ensure to link to your CSS file for the horizontal navigation bar
 
 // Horizontal Navigation Bar Component

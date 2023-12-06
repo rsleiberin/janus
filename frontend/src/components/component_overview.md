@@ -114,7 +114,6 @@
 - **Login Forms** - For user authentication with username and password fields
 - **Subscription Forms** - For user subscriptions with email input
 - **FAQ Accordions** - For frequently asked questions with collapsible answers
-- **Call to Action Buttons** - Eye-catching buttons for key user actions
 - **Newsletter Sign-Up Forms** - For collecting email addresses and subscriptions
 - **Language Selectors** - Dropdowns or menus for choosing a language
 - **Privacy Policy Links** - Links to legal or policy documents
@@ -158,8 +157,11 @@
 - **Event Cards**
 
 ### Organisms
-
 #### MVP
+- **Navigation and Menu Systems**
+  - **Horizontal Navigation Bar**
+    - A comprehensive and responsive navigation component that integrates DropdownMenus for multi-level navigation and a ShopCTAButton for prominent call-to-action features. Designed for flexibility and usability, it supports various navigation items, including both simple links and dropdown options. Adheres to best practices in usability, accessibility, and responsive design, ensuring a seamless user experience across devices. 
+
 - **Header**
   - **Status**: Skeleton Created
   - **Description**: Top-level navigation and branding component. Currently a basic structure without detailed content.
@@ -168,6 +170,7 @@
   - **Status**: Skeleton Created
   - **Description**: Contains auxiliary information like contact, legal links, and social media. Currently a basic structure.
   - **Next Steps**: Users to add footer links, social media icons, and legal disclaimers as needed.
+
 - **Bread Crumbs** - Path navigation aids for websites, showing the current page's location
 - **Contact Forms** - For user inquiries with fields like name, email, and message
 - **Subscription Forms** - For user subscriptions with email input
