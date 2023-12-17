@@ -1,30 +1,29 @@
-# Design Token System in Next.js
+# Dynamic Theming in Next.js
 
 ## Introduction
-Comprehensive guide on integrating and managing design tokens in a Next.js environment, updated to include advanced design elements and responsive design.
+Guide for implementing dynamic theming in Next.js applications, combining  CSS and custom design tokens.
 
-## Defining and Storing Design Tokens
-- Centralized JSON file as the source of truth for UI constants.
-- Inclusion of tokens for gradients, custom illustrations, and motion design.
+## Installation and Configuration
+- Use `next-themes` package for theme state management.
+- Configure `ThemeProvider` for dynamic theme switching, supporting advanced and responsive theming.
 
-## Integrating Design Tokens with CSS
-- Utilize CSS custom properties to implement design tokens.
-- Store shared values in `design_tokens.css` for global application.
-- Extend Tailwind CSS configuration to incorporate tokens as utility classes.
+##  CSS Dark Mode Setup
+- Class-based dark mode theming in 's configuration.
+- Extend for gradients, custom illustrations, and advanced typography.
 
-## Synchronizing Tokens with Backend
-- Flask API endpoint to serve design tokens.
-- Custom hook in Next.js for fetching and applying tokens in real-time.
+## Theme Switch Component
+- Develop interactive component for theme switching.
+- Include options for dynamic theming and responsive layouts.
 
-## Responsive and Minimalistic Design
-- Emphasize responsiveness using CSS properties adaptable to different screen sizes.
-- Adopt a minimalist approach in styling, focusing on essential elements.
+## Responsive and Immersive Theming
+- Use CSS custom properties for theme definition, adaptable for AR/VR environments.
+- Implement mechanisms for dynamic theme switching.
+- Ensure themes are responsive across various devices, including AR/VR hardware.
 
-## Testing and Best Practices
-- Unit tests for correct token application.
-- Naming conventions and regular reviews for system health.
-- Special attention to responsiveness and motion design tokens.
+## Performance Optimization
+- Efficient theme loading and server-side rendering in Next.js for enhanced performance.
 
 ## Conclusion
-This guide serves as a roadmap for implementing a scalable, maintainable, and cohesive design token system in Next.js, enhanced with the latest design trends and synchronized with backend services.
+This approach creates a flexible, user-centric theming system in Next.js, incorporating advanced design elements and optimized for future integrations.
 
+_Note: Regular updates will include the latest trends in dynamic theming and responsive design._

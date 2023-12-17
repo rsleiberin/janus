@@ -1,5 +1,5 @@
 import React from 'react';
-import './iconStyles.css'; // Link to your CSS file for Icons
+import styles from './iconStyles.module.css'; // Updated to use the module
 
 // Icon Component
 const Icon = ({ icon, ariaLabel, size = 'medium' }) => {
