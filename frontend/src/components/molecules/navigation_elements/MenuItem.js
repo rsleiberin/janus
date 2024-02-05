@@ -1,5 +1,5 @@
 import React from 'react';
-import './menuItemStyles.css'; // Link to your CSS file for MenuItem
+import './menuItemStyles.module.css'; // Link to your CSS file for MenuItem
 
 // MenuItem Component
 const MenuItem = ({ label, link, icon, onClick }) => {

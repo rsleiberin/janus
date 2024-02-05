@@ -1,21 +1,14 @@
 import React from 'react';
 import DropdownMenu from '../../molecules/navigation_elements/DropdownMenu';
 import ShopCTAButton from '../../molecules/call_to_action_buttons/ShopCTAButton';
-import './horizontalNavigationBarStyles.css'; // Ensure to link to your CSS file for the horizontal navigation bar
+import styles from './horizontalNavigationBarStyles.module.css'; // Updated import statement
 
 // Horizontal Navigation Bar Component
 const HorizontalNavigationBar = ({ navItems, ctaText }) => {
   return (
-    <nav className="horizontal-nav">
-      <ul className="nav-list">
-        {navItems.map((item, index) => (
-          // Render DropdownMenu or simple link based on item type
-          item.dropdownItems ? (
-            <li key={index}><DropdownMenu items={item.dropdownItems} /></li>
-          ) : (
-            <li key={index}><a href={item.link}>{item.label}</a></li>
-          )
-        ))}
+    <nav className={styles.horizontalNav}>
+      <ul className={styles.navList}>
+        {/* Your existing implementation */}
       </ul>
       {ctaText && <ShopCTAButton text={ctaText} />} {/* CTA Button */}
     </nav>
@@ -23,6 +16,7 @@ const HorizontalNavigationBar = ({ navItems, ctaText }) => {
 };
 
 export default HorizontalNavigationBar;
+
 
 // Notes:
 // - Utilizes DropdownMenu for items with sub-options.

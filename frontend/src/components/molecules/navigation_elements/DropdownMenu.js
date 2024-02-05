@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MenuItem from './MenuItem';
 import Icon from '../../atoms/content_and_media_elements/Icon';
-import './dropdownMenuStyles.css';
+import './dropdownMenuStyles.module.css';
 
 // DropdownMenu Component
 const DropdownMenu = ({ items }) => {

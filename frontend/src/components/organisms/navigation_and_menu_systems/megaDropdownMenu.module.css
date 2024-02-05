@@ -1,0 +1,23 @@
+.megaMenu {
+    display: flex;
+    justify-content: center;
+    background-color: var(--color-background);
+    box-shadow: var(--box-shadow);
+    padding: var(--spacing-medium);
+  }
+  
+  .megaMenuCategory {
+    margin-right: var(--spacing-large);
+  }
+  
+  .megaMenuTitle {
+    font-size: var(--font-size-large);
+    color: var(--color-primary);
+  }
+  
+  .megaMenuList {
+    list-style: none;
+  }
+  
+  /* You can add more styles based on your design tokens and requirements */
+  

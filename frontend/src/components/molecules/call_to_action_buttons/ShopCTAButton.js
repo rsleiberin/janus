@@ -1,18 +1,14 @@
 // ShopCTAButton.js
 import React from 'react';
-import './shopCTAButtonStyles.css'; // Link to your CSS file for this button
+import styles from './shopCTAButtonStyles.module.css'; // Correct named import for CSS module
 
 // Shop CTA Button Component
 const ShopCTAButton = ({ text }) => {
   return (
-    <button className="shop-cta-button">
+    <button className={styles.shopCtaButton}> {/* Apply the styles object here */}
       {text}
     </button>
   );
 };
 
 export default ShopCTAButton;
-
-// Notes:
-// - This component renders a button specific for the shop CTA.
-// - The text for the button is passed as a prop.
