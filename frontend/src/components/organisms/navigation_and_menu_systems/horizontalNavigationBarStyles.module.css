@@ -1,55 +1,55 @@
-@import '../../../utilities/design_tokens/colors';
-@import '../../../utilities/design_tokens/spacing';
-@import '../../../utilities/design_tokens/typography';
+/* Assuming CSS variables are defined globally and imported in _app.js */
 
 /* Horizontal Navigation Bar Styles */
-.horizontal-nav {
-  background-color: var(--white);
+.horizontalNav {
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: space-between;
+  height: 60px; /* Or set to 'auto' if you want it to adjust based on content */
   align-items: center;
-  padding: var(--sm-spacing);
+  padding: 15px 20px;;
 }
 
-.nav-list {
+.navList {
   list-style-type: none;
   display: flex;
   padding: 0;
   margin: 0;
 }
 
-.nav-list li {
+.navList li {
   margin-right: var(--md-spacing);
 }
 
-.nav-list li:last-child {
+.navList li:last-child {
   margin-right: 0;
 }
 
-.nav-list a {
-  color: var(--black);
+.navList a {
+  color: var(--white); /* Changed text color for better contrast against black background */
   text-decoration: none;
   padding: var(--xxs-spacing) var(--xs-spacing);
 }
 
 /* Responsive Design for Mobile Devices */
 @media (max-width: 768px) {
-  .horizontal-nav {
+  .horizontalNav {
     flex-direction: column;
     align-items: flex-start;
+    padding: 10px 15px;
   }
 
-  .nav-list {
+  .navList {
     flex-direction: column;
   }
 
-  .nav-list li {
+  .navList li {
     width: 100%;
   }
 }
 
 /* Notes:
-- Design tokens used for consistent color, spacing, and typography.
+- Ensure all CSS variables (--black, --sm-spacing, etc.) are defined in your global stylesheet.
 - Flexbox layout for dynamic spacing and alignment.
 - Mobile responsiveness with media query adjustments.
-- Accessibility considerations for all navigation elements.
+- Accessibility considerations for all navigation elements. */

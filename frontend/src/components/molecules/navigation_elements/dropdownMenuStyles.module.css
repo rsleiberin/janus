@@ -1,0 +1,28 @@
+/* src/components/molecules/navigation_elements/dropdownMenuStyles.module.css */
+.dropdownMenuContainer {
+  position: relative;
+}
+
+.dropdownToggle {
+  background-color: var(--offWhite); /* These will be replaced with inline styles or global CSS variables */
+  color: var(--black); /* Same here */
+  padding: 8px; /* Adjust based on your design tokens */
+  font-family: sans-serif; /* Adjust as per your design tokens */
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--white); /* Adjust these to use inline styles or global variables */
+  border: 1px solid #777; /* Example hardcoded value, replace with global CSS variable */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0 0; /* Example hardcoded value */
+}

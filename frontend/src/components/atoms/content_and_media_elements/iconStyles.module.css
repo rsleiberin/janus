@@ -1,5 +1,27 @@
-/* Custom Image styles */
-.custom-image {
+/* IconStyles.module.css */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.iconSmall {
+  width: 1em;  /* Small icons */
+  height: 1em;
+}
+
+.iconMedium {
+  width: 1.5em;  /* Medium, commonly used size */
+  height: 1.5em;
+}
+
+.iconLarge {
+  width: 2em;    /* Large icons */
+  height: 2em;
+}
+
+.customImage {
   max-width: 100%;
   height: auto;
   border: 0; /* Remove default border styles */
@@ -7,35 +29,3 @@
   margin-left: auto;
   margin-right: auto; /* Center the image horizontally */
 }
-
-/* Responsive image styles for small devices */
-@media (max-width: var(--responsive-breakpoints-sm)) {
-  .custom-image {
-    /* Example: reduce margin for small devices */
-    margin-left: var(--spacing-xs);
-    margin-right: var(--spacing-xs);
-  }
-}
-
-/* Responsive image styles for medium devices */
-@media (min-width: var(--responsive-breakpoints-md)) and (max-width: var(--responsive-breakpoints-lg)) {
-  .custom-image {
-    /* Example: adjust width for medium devices */
-    max-width: 80%;
-  }
-}
-
-/* Responsive image styles for large devices */
-@media (min-width: var(--responsive-breakpoints-lg)) {
-  .custom-image {
-    /* Example: adjust width for large devices */
-    max-width: 70%;
-  }
-}
-
-/* Notes:
-- The max-width and height properties ensure the image is responsive and scales with the container.
-- Media queries adjust image styling based on device-specific breakpoints.
-- The .custom-image class can be used directly or extended with more specific classes for further customization.
-- Remember to replace the example adjustments with actual responsive styling needed for your project.
-*/

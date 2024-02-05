@@ -3,7 +3,7 @@
 ## Overview
 - **Role**: Frontend Development and Management.
 - **Current Phase**: Active Development.
-- **Last Update**: Thu Nov 23 19:59:22 PST 2023
+- **Last Update**: Thu Jan 4 23:10:22 PST 2024
 
 ## Shared Files and Resources
 - The Frontend Agent has access to key design system files to ensure consistent implementation across the frontend. Shared files with the System Design Agent include:
@@ -27,49 +27,41 @@
 ## Directory Status Overview
 
 ### /frontend
-- **next.config.js** | Status: Verified | Configuration file for Next.js, essential for project settings.
-- **package.json & package-lock.json** | Status: Verified | Lists dependencies and scripts. Regular updates for managing dependencies.
-- **tsconfig.json** | Status: Verified | TypeScript configuration, ensuring type safety and consistency.
+- **next.config.js** | Auditing, Last Status: Verified | Configuration file for Next.js, essential for project settings.
+- **package.json & package-lock.json** | Auditing, Last Status: Verified | Lists dependencies and scripts. Regular updates for managing dependencies.
+- **tsconfig.json** | Auditing, Last Status: Verified | TypeScript configuration, ensuring type safety and consistency.
+
 
 ### /frontend/src
-- **3D_components/** | Status: In Progress | Development of 3D elements for the UI.
-
-- **animations/** | Status: In Progress | Contains animation tokens; expand as needed for UI animations.
-
-- **atoms/** | Status: Completed | Basic building blocks for the UI, including buttons, content and media elements, input fields, lists and layout elements, navigation elements, and typography and text elements.
-
-- **molecules/** | Status: In Progress | Composite components being developed, starting with the Shop CTA button.
-
-- **organisms/** | Status: Planned | Development of more complex UI structures to commence.
-
-- **contexts/** | Status: In Progress | Contexts for managing global state.
-
-- **design_tokens/**
-  - **animations.js** | Status: Verified | Contains animation durations and easing functions.
-  - **buttons.js** | Status: Updated & Verified | Defines sizes and styles for buttons; includes new tokens for expanded interactive states.
-  - **colors.js** | Status: Updated & Verified | Enhanced color tokens for both dark and light themes.
-  - **icons.js** | Status: To Be Expanded | Sizes defined; add specific icon names and styles as needed.
-  - **responsive.js** | Status: Verified | Breakpoints for responsive design; could expand with more properties.
-  - **spacing.js** | Status: Verified | Various sizes for consistent spacing across UI.
-  - **typography.js** | Status: Verified | Defines fonts, font sizes, weights, and line heights.
-
-- **hooks/** | Status: In Progress | Custom hooks for shared logic and functionalities.
-
+- **3D_components/** | Auditing, Last Status: In Progress | See `3D_component_overview.md` for details.
+- **animations/** | Auditing, Last Status: In Progress | See `animation_overview.md` for details.
+- **components/**
+  - **atoms/** | Auditing, Last Status: Completed
+    - **buttons/** | Auditing, Last Status: Completed | See `buttons_guidelines.md` for details.
+    - **content_and_media_elements/** | Auditing, Last Status: Completed | See `content_and_media_elements.md` for details.
+    - **input_fields/** | Auditing, Last Status: Completed | See `input_fields_guidelines.md` for details.
+    - **lists_and_layout_elements/** | Auditing, Last Status: Completed | See `lists_and_layout_elements_guidelines.md` for details.
+    - **navigation_elements/** | Auditing, Last Status: Completed | See `navigation_elements_guidelines.md` for details.
+    - **typography_and_text_elements/** | Auditing, Last Status: Completed | See `typography_and_text_elements_guidelines.md` for details.
+  - **component_overview.md** | Auditing, Last Status: In Progress
+  - **molecules/** | Auditing, Last Status: In Progress | Components being refined post-audit.
+  - **organisms/** | Auditing, Last Status: Planned | Upcoming development post-audit.
+- **contexts/** | Auditing, Last Status: In Progress | State management setup under review.
+- **hooks/** | Auditing, Last Status: In Progress | Custom logic hooks under review.
 - **layouts/**
-  - **MainLayout.js** | Status: Development in Progress | Incorporates Header and Footer components for a consistent application layout.
-
+  - **MainLayout.js** | Auditing, Last Status: Development in Progress | Core layout implementation under review.
 - **pages/**
-  - **_app.js** | Status: Verified | Global settings and styles application.
-  - **index.js** | Status: Verified | Basic home page setup using color tokens.
-
+  - **_app.js** | Auditing, Last Status: Verified | Global application settings under review.
+  - **design/** | Auditing, Last Status: Verified | Design-specific pages under review.
+  - **index.js** | Auditing, Last Status: Verified | Home page implementation under review.
 - **styles/**
-  - **global.css** | Status: Verified | Global styles for the application.
-
-- **templates/** | Status: In Progress | Development of page templates.
-
-- **tests/** | Status: Planned | Testing strategy to be implemented.
-
-- **utilities/** | Status: In Progress | Utility functions for common tasks, including a comprehensive design token system for animations, borders, buttons, colors, icons, responsiveness, shadows, spacing, and typography.
+  - **global.css** | Auditing, Last Status: Verified | Global styling rules under review.
+- **templates/** | Auditing, Last Status: In Progress | Template structures under review.
+- **tests/** | Auditing, Last Status: Planned | Test suite planning in progress.
+- **utilities/**
+  - **axiosInstance.js** | Auditing, Last Status: In Progress | Review of custom Axios instance setup.
+  - **design_tokens/** | Auditing, Last Status: In Progress | Design tokens being audited for component integration.
+  - **utility_overview.md** | Auditing, Last Status: In Progress | See `utility_overview.md` for utility function details.
 
 ## Access Requirements
 - Full access to the `src/` directory for continuous development and management.
