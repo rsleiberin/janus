@@ -16,4 +16,4 @@ The `janus` directory is the core repository for a Next.js web application desig
 
 ## Directories
 - `[frontend](./frontend)`: Hosts the Next.js-based frontend application and its associated files.
-- `[app](./app)`: Contains the backend Flask structure, including API logic.
+- `[backend](./backend)`: Contains the backend Flask structure, including API logic. Currently only has two functions: list and read all files in project directory.
