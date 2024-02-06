@@ -1,34 +1,29 @@
-// Border Token File
-// This file defines border tokens used across the design system.
-// Border tokens are crucial for maintaining visual consistency and clarity in the UI.
-
-const borderToken = {
-    // Border Width: Defines the thickness of the borders.
-    // Use different widths to indicate the importance or interactivity of elements.
-    borderWidth: {
-      thin: '1px',      // For subtle borders where emphasis is low.
-      medium: '2px',    // Default border width for standard UI elements.
-      thick: '3px'      // For elements that require more visual weight.
-    },
-  
-    // Border Style: Defines the style of the borders (solid, dotted, dashed, etc.).
-    // Different styles can be used for various visual cues or aesthetic preferences.
-    borderStyle: {
-      solid: 'solid',   // Most common, used for clear and defined edges.
-      dotted: 'dotted', // For a less pronounced boundary, often used for hints or secondary elements.
-      dashed: 'dashed'  // For intermediate emphasis, can indicate something editable or changeable.
-    },
-  
-    // Border Color: Aligns with the color scheme of the design system.
-    // Color choice can impact the visibility and emphasis of the borders.
-    borderColor: {
-      primary: '#007bff', // Primary brand color for emphasis.
-      secondary: '#6c757d', // Secondary color for less emphasis.
-      muted: '#ced4da' // Muted color for subtle borders.
-    }
-  };
-  
-  // Export the borderToken for consistent use across the design system.
-  // Consistency in border styles enhances the user experience by providing a clear and organized visual structure.
-  export default borderToken;
-  
+const border = {
+  width: {
+    // Refining semantic naming based on use rather than purely descriptive
+    default: '1px', // Default border width for most UI elements
+    focus: '2px', // Highlighted or focused elements, slightly thicker
+    interactive: '3px', // Borders for interactive elements like buttons or clickable cards
+  },
+  style: {
+    // Styles remain largely descriptive but are crucial for semantic usage
+    solid: 'solid', // Most common border style for clarity and emphasis
+    dashed: 'dashed', // Used for indicating boundaries that are not continuously connected or for decorative purposes
+    dotted: 'dotted', // Used for subtle separations or to indicate a less permanent boundary
+  },
+  radius: {
+    // Semantic naming reflecting potential use cases
+    none: '0px', // No radius for square borders
+    subtle: '4px', // Slightly rounded corners for a soft appearance
+    standard: '8px', // Standard border radius for moderate rounding, suitable for cards, buttons, etc.
+    pill: '16px', // Highly rounded edges for pill-shaped elements
+    circular: '50%', // Full circle for round elements like avatars or icons
+  },
+  color: {
+    // Incorporating border colors with a semantic approach, assuming color tokens are defined elsewhere
+    primary: 'var(--color-primary)', // Primary brand color for emphasis
+    secondary: 'var(--color-secondary)', // Secondary color for less emphasis
+    accent: 'var(--color-accent)', // Accent color for interactive or focus elements
+    muted: 'var(--color-mediumGray)', // Muted color for subtle borders
+  },
+};

@@ -1,31 +1,43 @@
 const buttons = {
   sizes: {
-    small: {
-      fontSize: '0.875rem',  // Smaller text
+    // Using role-based naming for button sizes
+    compact: {
+      fontSize: '0.875rem', // Slightly smaller, for less prominent actions
       padding: '0.5rem 1rem',
     },
-    medium: {
-      fontSize: '1rem',      // Standard text size
+    default: {
+      fontSize: '1rem', // The standard button size for most use cases
       padding: '0.75rem 1.5rem',
     },
-    large: {
-      fontSize: '1.25rem',   // Larger text
+    expansive: {
+      fontSize: '1.25rem', // Larger, for primary actions requiring prominence
       padding: '1rem 2rem',
     },
   },
   styles: {
-    primary: {
-      backgroundColor: '#333', // Achromatic primary color
+    // Defining button styles based on their intent
+    action: {
+      backgroundColor: '#333', // Dark for primary actions
       color: 'white',
       border: 'none',
     },
-    secondary: {
+    outline: {
       backgroundColor: 'transparent',
-      color: '#333', // Achromatic secondary color
-      border: '1px solid #333',
+      color: '#333', // Dark text for contrast on light backgrounds
+      border: '1px solid #333', // Outlined style for secondary actions
     },
-    // Add more styles as needed for specific use cases
+    muted: {
+      backgroundColor: 'transparent',
+      color: '#777', // Muted color for less important or destructive actions
+      border: 'none',
+    },
+    // Additional style for disabled buttons could be added for completeness
+    disabled: {
+      backgroundColor: '#ccc',
+      color: '#f9f9f9',
+      border: 'none',
+      opacity: '0.5',
+      cursor: 'not-allowed',
+    },
   },
 };
-
-export default buttons;
