@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MenuItem from './MenuItem';
 import Icon from '../../atoms/content_and_media_elements/Icon';
-import './dropdownMenuStyles.module.css';
+import styles from './dropdownMenuStyles.module.css';
 
 // DropdownMenu Component
 const DropdownMenu = ({ items }) => {
@@ -10,12 +10,12 @@ const DropdownMenu = ({ items }) => {
     const toggleDropdown = () => setIsOpen(!isOpen);
 
     return (
-        <div className="dropdown-menu-container">
-            <button className="dropdown-toggle" onClick={toggleDropdown}>
+        <div className={styles.dropdownMenuContainer}>
+            <button className={styles.dropdownToggle} onClick={toggleDropdown}>
                 Menu <Icon icon={'▼'} ariaLabel="Toggle dropdown" />
             </button>
             {isOpen && (
-                <ul className="dropdown-menu">
+                <ul className={styles.dropdownMenu}>
                     {items.map((item, index) => (
                         <MenuItem key={index} {...item} />
                     ))}
