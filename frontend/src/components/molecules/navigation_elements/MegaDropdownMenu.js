@@ -1,5 +1,5 @@
 import React from 'react';
-import DropdownItem from '../../atoms/navigation_elements/DropdownItem';
+import DropdownItem from '../DropdownItem';
 import styles from './megaDropdownMenu.module.css';
 
 const MegaDropdownMenu = ({ categories }) => {
