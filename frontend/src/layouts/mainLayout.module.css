@@ -1,0 +1,5 @@
+.mainLayout {
+    background-color: var(--color-background); /* Updated to use CSS custom property */
+    color: var(--color-text-primary); /* Updated to use CSS custom property */
+  }
+  
