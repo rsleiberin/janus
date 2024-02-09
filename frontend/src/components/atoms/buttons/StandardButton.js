@@ -1,10 +1,9 @@
 import React from 'react';
-import './standardButtonStyles.css'; // Ensure to link to your CSS file for buttons
+import styles from './standardButtonStyles.module.css'; // Corrected import path and switched to module.css
 
 // Standard Button Component
 const StandardButton = ({ text, size = 'medium', styleType = 'primary', onClick }) => {
-  // className combines the size and styleType to fetch the right styles
-  const className = `btn ${size} ${styleType}`;
+  const className = `${styles.btn} ${styles[size]} ${styles[styleType]}`;
 
   return (
     <button className={className} onClick={onClick}>
@@ -14,8 +13,3 @@ const StandardButton = ({ text, size = 'medium', styleType = 'primary', onClick 
 };
 
 export default StandardButton;
-
-// Notes: 
-// - This component uses CSS classes based on size and styleType for easy customization.
-// - Add more `size` and `styleType` options in the CSS file for greater variety.
-// - Ensure the CSS file uses variables from the design tokens for consistency.

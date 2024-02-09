@@ -1,19 +1,19 @@
 import React from 'react';
-import './checkboxStyles.css'; // Link to your CSS file for Checkbox
+import styles from './checkboxStyles.module.css'; // Corrected import path to CSS module
 
 // Checkbox Component
 const Checkbox = ({ label, checked, onChange, name }) => {
     return (
-        <div className="checkbox-container">
+        <div className={styles['checkbox-container']}>
             <input
                 id={`checkbox-${name}`}
-                className="checkbox-input"
+                className={styles['checkbox-input']}
                 type="checkbox"
                 checked={checked}
                 onChange={onChange}
                 name={name}
             />
-            <label htmlFor={`checkbox-${name}`} className="checkbox-label">
+            <label htmlFor={`checkbox-${name}`} className={styles['checkbox-label']}>
                 {label}
             </label>
         </div>
@@ -21,9 +21,3 @@ const Checkbox = ({ label, checked, onChange, name }) => {
 };
 
 export default Checkbox;
-
-// Notes:
-// - The component is designed for simple integration with forms and UI elements.
-// - It uses design tokens for consistent styling.
-// - Customization options include 'label', 'checked', 'onChange', and 'name' props.
-// - The checkbox provides visual feedback and accessibility features.

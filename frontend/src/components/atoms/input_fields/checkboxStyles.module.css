@@ -1,46 +1,35 @@
-/* Import design tokens */
-@import '../../../utilities/design_tokens/colors';
-@import '../../../utilities/design_tokens/typography';
-@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
-@import '../../../utilities/design_tokens/border'; /* Importing border token */
-
-/* Checkbox styles */
+/* checkboxStyles.module.css */
 .checkbox-container {
   display: flex;
   align-items: center;
 }
 
 .checkbox-input {
-  margin-right: var(--xs-spacing);
-  appearance: none; /* Removes default browser styling */
-  width: var(--size-md); /* Size of the checkbox */
-  height: var(--size-md);
-  background-color: var(--white);
-  border: var(--border-solid); /* Updated to use border token */
-  border-radius: var(--border-radius-small); /* Slightly rounded corners */
-  box-shadow: var(--shadow-default); /* Soft shadow for depth */
+  margin-right: var(--spacing-small); /* Adjusted from xs-spacing to small for consistency */
+  -webkit-appearance: none; /* Targets WebKit browsers to remove default style */
+  appearance: none;
+  width: 20px; /* Adjusted for consistency, consider using a global variable if size is standardized */
+  height: 20px;
+  background-color: var(--color-background);
+  border: 2px solid var(--color-border); /* Example adjustment */
+  border-radius: var(--border-radius-subtle);
+  box-shadow: var(--shadow-subtle);
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
 .checkbox-input:checked {
-  background-color: var(--primary-color);
-  box-shadow: var(--shadow-raised); /* Deeper shadow for checked state */
+  background-color: var(--color-primary);
+  border-color: var(--color-success); /* Example of using a success color for checked state */
+  box-shadow: var(--shadow-emphasis);
 }
 
 .checkbox-label {
-  font-family: var(--body-font);
-  font-size: var(--base-font-size);
-  color: var(--black);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
 }
 
-/* Focus and hover states */
 .checkbox-input:focus, .checkbox-input:hover {
-  box-shadow: var(--shadow-overlay); /* Enhanced shadow for focus/hover */
+  box-shadow: var(--shadow-focus);
 }
-
-/* Notes:
-- The styling uses design tokens for consistent appearance.
-- The checkbox's size, border, and shadow can be customized via design tokens.
-- Focus and hover states are enhanced for better interactivity and accessibility.
-*/

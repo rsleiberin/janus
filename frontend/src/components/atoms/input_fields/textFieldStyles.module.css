@@ -1,30 +1,18 @@
-/* Import design tokens */
-@import '../../../utilities/design_tokens/colors';
-@import '../../../utilities/design_tokens/typography';
-@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
-@import '../../../utilities/design_tokens/border'; /* Importing border token */
-
-/* Text Field styles */
+/* textFieldStyles.module.css */
 .text-field {
-  font-family: var(--body-font);
-  font-size: var(--base-font-size);
-  color: var(--black);
-  background-color: var(--offWhite);
-  border: var(--border-solid); /* Updated to use border token */
-  padding: var(--sm-spacing);
-  border-radius: var(--xs-spacing);
-  box-shadow: var(--shadow-default); /* Soft shadow for depth */
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+  background-color: var(--color-input-background);
+  border: var(--border-width-default) var(--border-style-solid) var(--color-border);
+  padding: var(--spacing-small);
+  border-radius: var(--border-radius-subtle);
+  box-shadow: var(--shadow-default);
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .text-field:focus {
-  border-color: var(--primary-color); /* Highlighting focus with primary color */
-  box-shadow: var(--shadow-raised); /* Enhanced shadow for focus */
+  outline: none;
+  border-color: var(--color-focus);
+  box-shadow: var(--shadow-focus);
 }
-
-/* Notes:
-- The styling is based on the achromatic design tokens.
-- Adjustments can be made via design tokens for theme consistency.
-- Focus state includes a box-shadow for enhanced visual feedback.
-- Border and shadow tokens ensure consistency in appearance and interactivity.
-*/

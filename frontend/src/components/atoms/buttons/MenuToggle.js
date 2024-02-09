@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import './menuToggleButtonStyles.css'; // Link to the CSS file for the menu toggle button
+import styles from './menuToggleStyles.module.css'; // Corrected import path
 
 // Menu Toggle Button Component
 const MenuToggleButton = ({ icon, ariaLabel, onToggle }) => {
   const [isActive, setIsActive] = useState(false);
 
-  // Toggles the active state of the button
   const handleToggle = () => {
     setIsActive(!isActive);
     if (onToggle) {
@@ -15,7 +14,7 @@ const MenuToggleButton = ({ icon, ariaLabel, onToggle }) => {
 
   return (
     <button
-      className={`menu-toggle-button ${isActive ? 'active' : ''}`}
+      className={`${styles['menu-toggle-button']} ${isActive ? styles.active : ''}`}
       aria-label={ariaLabel}
       onClick={handleToggle}
     >
@@ -25,9 +24,3 @@ const MenuToggleButton = ({ icon, ariaLabel, onToggle }) => {
 };
 
 export default MenuToggleButton;
-
-// Notes:
-// - This component toggles its active state on click and executes the onToggle callback.
-// - The 'active' class is applied based on the button's state for styling purposes.
-// - Include iconography and aria-label for accessibility and intuitive design.
-// - Leverages design tokens for consistent styling and responsiveness.

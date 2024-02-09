@@ -1,54 +1,48 @@
-/* Import design tokens */
-@import '../../../utilities/design_tokens/colors.js';
-@import '../../../utilities/design_tokens/typography.js';
-@import '../../../utilities/design_tokens/spacing.js';
-@import '../../../utilities/design_tokens/shadow.js'; /* Importing shadow token */
-@import '../../../utilities/design_tokens/border.js'; /* Importing border token */
-
 /* Base icon button styles */
 .icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--size-md); /* Using design token for medium size */
-  height: var(--size-md);
-  background-color: var(--primary-color);
-  color: var(--white);
-  border: var(--border-none); /* Updated to use border token */
+  width: var(--icon-size-default); /* Utilizing icon-size for dynamic sizing */
+  height: var(--icon-size-default);
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  border: none;
   border-radius: 50%;
-  padding: var(--spacing-sm);
+  padding: var(--spacing-small);
   cursor: pointer;
-  box-shadow: var(--shadow-default); /* Added shadow token */
-  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s; /* Updated to include box-shadow transition */
+  box-shadow: var(--shadow-default);
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 /* Size variations */
-.icon-btn.small { width: var(--size-sm); height: var(--size-sm); }
-.icon-btn.large { width: var(--size-lg); height: var(--size-lg); }
+.icon-btn.small { 
+  width: var(--icon-size-compact); 
+  height: var(--icon-size-compact); 
+}
+.icon-btn.large { 
+  width: var(--icon-size-prominent); 
+  height: var(--icon-size-prominent); 
+}
 
 /* Style variations */
 .icon-btn.secondary {
-  background-color: var(--white);
-  color: var(--black);
-  border: var(--border-solid); /* Updated to use border token */
+  background-color: var(--color-secondary); /* Opting for secondary color for contrast */
+  color: var(--color-text-primary); 
+  border: 1px solid var(--color-border); /* Utilizing global border color */
 }
 
 /* Hover and active states */
 .icon-btn:hover, .icon-btn:active {
-  background-color: var(--lightGray);
-  box-shadow: var(--shadow-raised); /* Updated to use shadow token for elevation on hover/active */
-  transform: scale(1.1);
+  background-color: var(--color-hover); /* Utilizing hover color for interactive feedback */
+  box-shadow: var(--shadow-emphasis); /* Enhanced shadow for depth */
+  transform: scale(1.1); /* Interactive feedback */
 }
 
 /* Disabled state */
 .icon-btn:disabled {
-  background-color: var(--mediumGray);
-  color: var(--darkGray);
-  box-shadow: var(--shadow-sunken); /* Updated to use shadow token for flat appearance when disabled */
+  background-color: var(--color-disabled);
+  color: var(--color-text-secondary);
+  box-shadow: none;
   cursor: not-allowed;
 }
-
-/* Notes:
-- These styles leverage the design tokens provided.
-- Adjustments can be made by changing design token values or adding new classes.
-*/

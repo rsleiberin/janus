@@ -1,32 +1,24 @@
-/* Import design tokens */
-@import '../../../utilities/design_tokens/colors';
-@import '../../../utilities/design_tokens/typography';
-@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
-@import '../../../utilities/design_tokens/border'; /* Importing border token */
+/* tabStyles.module.css */
+@import url('../../../styles/globals.css');
 
-/* Tab styles */
 .tab-item {
   cursor: pointer;
-  padding: var(--sm-spacing) var(--md-spacing);
+  padding: var(--spacing-small) var(--spacing-medium);
   display: inline-block;
-  font-family: var(--body-font);
-  font-size: var(--base-font-size);
-  color: var(--mediumGray);
-  border-bottom: var(--border-solid); /* Using border token for consistent styling */
-  box-shadow: var(--shadow-default); /* Applying a soft shadow for depth */
-  transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+  border-bottom: 3px solid transparent; /* Styling adjustment for a clean look */
+  transition: color 0.3s, border-color 0.3s;
 }
 
 .tab-item.active {
-  color: var(--black);
-  border-bottom-color: var(--primary-color); /* Highlighting the active tab */
-  box-shadow: var(--shadow-raised); /* Enhanced shadow for active tab */
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-primary); /* Highlighting the active tab */
 }
 
-/* Notes:
-- The styling uses design tokens for consistent, responsive design.
-- Hover and active states provide visual feedback.
-- Adjustments to the styling can be made via the design tokens to match the theme.
-- Consider adding animations or transitions for a smoother user experience.
-- Shadow and border tokens add depth and clarity to the tab items.
-*/
+/* Enhancing the focus and hover states for better interactivity */
+.tab-item:focus, .tab-item:hover {
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-accent); /* Subtle indication for hover/focus */
+}

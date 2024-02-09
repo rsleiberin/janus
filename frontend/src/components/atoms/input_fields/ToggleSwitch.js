@@ -1,30 +1,23 @@
 import React from 'react';
-import './toggleSwitchStyles.css'; // Link to your CSS file for ToggleSwitch
+import styles from './toggleSwitchStyles.module.css'; // Corrected import path to CSS module
 
-// ToggleSwitch Component
 const ToggleSwitch = ({ checked, onChange, name, label }) => {
     return (
-        <div className="toggle-switch-container">
-            {label && <label htmlFor={`toggle-${name}`}>{label}</label>}
-            <div className="toggle-switch">
+        <div className={styles['toggle-switch-container']}>
+            {label && <label htmlFor={`toggle-${name}`} className={styles.label}>{label}</label>}
+            <div className={styles['toggle-switch']}>
                 <input
                     id={`toggle-${name}`}
-                    className="toggle-input"
+                    className={styles['toggle-input']}
                     type="checkbox"
                     checked={checked}
                     onChange={onChange}
                     name={name}
                 />
-                <span className="slider"></span>
+                <span className={styles.slider}></span>
             </div>
         </div>
     );
 };
 
 export default ToggleSwitch;
-
-// Notes:
-// - The component functions as a switch between two states, typically 'on' and 'off'.
-// - It utilizes design tokens for consistent and responsive styling.
-// - Customization options include 'checked', 'onChange', 'name', and optional 'label' props.
-// - Visual feedback is provided for interaction states.

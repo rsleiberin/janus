@@ -1,41 +1,26 @@
-@import '../../../utilities/design_tokens/colors';
-@import '../../../utilities/design_tokens/spacing';
-@import '../../../utilities/design_tokens/typography';
-@import '../../../utilities/design_tokens/icons';
-@import '../../../utilities/design_tokens/shadow';
-@import '../../../utilities/design_tokens/border';
-
 /* Menu Toggle Button styles */
 .menu-toggle-button {
-  background-color: var(--offWhite);
-  color: var(--black);
-  padding: var(--sm-spacing);
-  font-family: var(--body-font);
-  font-size: var(--base-font-size);
-  border: var(--borderWidth-thin) var(--borderStyle-solid) var(--borderColor-muted);
-  box-shadow: var(--default-shadow);
+  background-color: var(--color-background); /* Assuming default background color */
+  color: var(--color-text-primary); /* Text color for better visibility */
+  padding: var(--spacing-small); /* Adjusted padding */
+  font-family: var(--font-family-primary); /* Primary font family */
+  font-size: var(--font-size-body); /* Body font size for consistency */
+  border: var(--border-width-default) solid var(--color-border); /* Default border styling */
+  box-shadow: var(--shadow-default); /* Default shadow for depth */
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* Adding transition for interactive feedback */
   transition: background-color 0.3s, color 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
 
 .menu-toggle-button.active {
-  background-color: var(--primary); /* Active state color change */
-  color: var(--white);
-  box-shadow: var(--raised-shadow); /* Elevated shadow for active state */
+  background-color: var(--color-primary); /* Highlighted background color for active state */
+  color: var(--color-text-on-primary); /* Ensuring text is visible on active state background */
+  box-shadow: var(--shadow-emphasis); /* More pronounced shadow for active state */
 }
 
-/* Adjust icon size within the button */
+/* Icon size adjustment */
 .menu-toggle-button > i {
-  font-size: var(--icons-medium);
+  font-size: var(--icon-size-default); /* Adjusted icon size for visibility */
 }
-
-/* Notes:
-- Use design tokens to maintain consistency with the website's design language.
-- The '.active' class styles the button when it's in the active state.
-- Ensure button sizes and spacing are responsive and align with UI/UX best practices.
-- Modify or extend styles for additional states (hover, focus, disabled) as needed.
-*/

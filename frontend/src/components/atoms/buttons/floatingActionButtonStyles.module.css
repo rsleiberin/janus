@@ -1,43 +1,32 @@
-/* Import design tokens */
-@import '../../../utilities/design_tokens/colors.js';
-@import '../../../utilities/design_tokens/spacing.js';
-@import '../../../utilities/design_tokens/shadow.js'; /* Importing shadow token for elevation */
-
 /* Floating Action Button styles */
 .fab {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--size-lg);
-  height: var(--size-lg);
-  background-color: var(--danger); /* Highlighting the FAB for primary action */
-  color: var(--white);
+  width: 56px; /* Adjusted to a fixed size for demonstration, consider using a size token if available */
+  height: 56px; /* Adjusted to a fixed size for demonstration, consider using a size token if available */
+  background-color: var(--color-error); /* Using the error color for emphasis, adjust as needed */
+  color: var(--color-text-on-primary);
   border: none;
-  border-radius: 50%;
-  padding: var(--spacing-md);
+  border-radius: var(--border-radius-circular); /* Using circular border-radius for a rounded shape */
+  padding: var(--spacing-small); /* Adjust padding based on your design system */
   cursor: pointer;
   position: fixed;
-  bottom: var(--spacing-xl);
-  right: var(--spacing-xl);
-  box-shadow: var(--shadow-raised); /* Using shadow token for elevation */
-  transition: background-color 0.2s, box-shadow 0.2s;
+  bottom: var(--spacing-extra-large); /* Positioning the button, adjust as needed */
+  right: var(--spacing-extra-large); /* Positioning the button, adjust as needed */
+  box-shadow: var(--shadow-emphasis); /* Applying emphasis shadow for depth */
+  transition: background-color var(--animation-duration-fast), box-shadow var(--animation-duration-fast);
 }
 
 /* Hover and active states */
 .fab:hover, .fab:active {
-  background-color: var(--success); /* Color change for interactivity */
-  box-shadow: var(--shadow-overlay); /* Using shadow token for deeper elevation on hover/active */
+  background-color: var(--color-success); /* Changing color on hover/active for interactivity */
+  box-shadow: var(--shadow-ambient); /* Deeper shadow for active state */
 }
 
 /* Disabled state */
 .fab:disabled {
-  background-color: var(--mediumGray);
-  box-shadow: var(--shadow-sunken); /* Using shadow token for no elevation when disabled */
+  background-color: var(--color-disabled); /* Using disabled color for background */
+  box-shadow: none; /* Removing shadow for disabled state */
   cursor: not-allowed;
 }
-
-/* Notes:
-- The FAB uses larger size tokens to stand out for primary actions.
-- The shadow adds a sense of elevation, typical for FABs.
-- Colors and sizes are easily customizable via design tokens.
-*/

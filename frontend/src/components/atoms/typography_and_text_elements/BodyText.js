@@ -1,13 +1,8 @@
 import React from 'react';
-import './bodyTextStyles.css';
+import styles from './bodyTextStyles.module.css'; // Corrected import path to CSS module
 
-// BodyText component for rendering paragraph text.
-// 'text' prop for the content and 'className' for additional styling.
-const BodyText = ({ text, className }) => {
-  return <p className={`body-text ${className}`}>{text}</p>;
+const BodyText = ({ text, className = '' }) => {
+  return <p className={`${styles['body-text']} ${className}`}>{text}</p>;
 };
 
 export default BodyText;
-
-// Usage:
-// <BodyText text="Your text here" className="custom-style" />

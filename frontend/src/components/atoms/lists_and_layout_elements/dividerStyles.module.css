@@ -1,16 +1,6 @@
-/* Import design tokens */
-@import '../../../utilities/design_tokens/colors';
-@import '../../../utilities/design_tokens/spacing';
-@import '../../../utilities/design_tokens/border'; /* Importing border token */
-
+/* dividerStyles.module.css */
 .divider {
-  border-bottom: var(--border-solid); /* Using border token for consistent styling */
-  margin: var(--md-spacing); /* Based on the medium spacing token */
-  opacity: 0.12; /* Adjusting opacity to match the original style */
+  border-bottom: var(--border-width-default) var(--border-style-solid) var(--color-divider);
+  margin: var(--spacing-medium) 0; /* Adjusting based on the global spacing variables */
+  opacity: 0.5; /* Adjust opacity for better visibility */
 }
-
-/* Notes:
-- The thickness and color of the divider can be adjusted as per design requirements.
-- The margin ensures appropriate spacing around the divider, enhancing visual separation.
-- For darker themes, change the border color to a lighter shade for better visibility.
-*/

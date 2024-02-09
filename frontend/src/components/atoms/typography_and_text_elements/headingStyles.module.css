@@ -1,27 +1,28 @@
+/* Using design tokens from globals.css for consistent heading styles */
 .heading {
-    color: #333; /* Default color, can be customized */
-    margin-top: 0;
-    margin-bottom: 1em;
-  }
-  
-  /* Example sizes based on standard practices */
+  color: var(--color-text-primary); /* Default heading color */
+  margin-top: 0;
+  margin-bottom: var(--spacing-medium); /* Using spacing token for consistent spacing */
+}
+
+/* Applying global typography tokens for heading sizes */
+.heading.h1 {
+  font-size: var(--font-size-heading-large); /* Size for H1 */
+}
+
+.heading.h2 {
+  font-size: var(--font-size-heading-medium); /* Size for H2 */
+}
+
+/* Additional heading levels can follow the same pattern */
+
+/* Responsive Design adjustments using global breakpoints */
+@media (max-width: var(--breakpoint-sm)) {
   .heading.h1 {
-    font-size: 32px; /* Larger size for H1 */
+      font-size: var(--font-size-heading-medium); /* Adjusted size for H1 on mobile */
   }
-  
   .heading.h2 {
-    font-size: 24px; /* Smaller size for H2 */
+      font-size: var(--font-size-heading-small); /* Adjusted size for H2 on mobile */
   }
-  
-  /* Add more sizes for h3, h4, etc., as needed */
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .heading.h1 {
-      font-size: 28px; /* Slightly smaller for mobile */
-    }
-    .heading.h2 {
-      font-size: 20px;
-    }
-  }
-  
+  /* Continue adjustments for other heading levels as needed */
+}

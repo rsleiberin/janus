@@ -1,35 +1,23 @@
-/* Import design tokens */
-@import '../../../utilities/design_tokens/responsive.js';
-@import '../../../utilities/design_tokens/spacing.js';
-@import '../../../utilities/design_tokens/shadow.js'; /* Importing shadow token for depth */
-@import '../../../utilities/design_tokens/border.js'; /* Importing border token for clear delineation */
-
+/* gridLayoutStyles.module.css */
 .grid-layout {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--md-spacing); /* Medium spacing */
-  padding: var(--lg-spacing); /* Large spacing */
-  box-shadow: var(--shadow-default); /* Applying a soft shadow for depth */
-  border: var(--border-solid); /* Applying a consistent border */
+  gap: var(--spacing-medium); /* Utilizing global spacing variable */
+  padding: var(--spacing-large); /* Utilizing global spacing variable */
+  box-shadow: var(--shadow-default); /* Utilizing global shadow variable */
+  border: var(--border-width-default) var(--border-style-solid) var(--color-border); /* Utilizing global border and color variables */
 }
 
-/* Responsive breakpoints */
-@media (max-width: var(--sm-breakpoint)) {
+/* Responsive breakpoints using global variables */
+@media (max-width: var(--breakpoint-sm)) {
   .grid-layout {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 }
 
-@media (max-width: var(--xs-breakpoint)) {
+@media (max-width: var(--breakpoint-xs)) {
   .grid-layout {
     grid-template-columns: 1fr;
-    padding: var(--sm-spacing); /* Small spacing */
+    padding: var(--spacing-small); /* Adjusted to use global spacing variable */
   }
 }
-
-/* Notes:
-- This CSS file uses design tokens from the 'responsive', 'spacing', 'shadow', and 'border' modules.
-- Adjust the 'minmax' values, shadows, borders, and breakpoints as needed for custom layouts.
-- The grid's gap, padding, shadow, and border are set using design tokens for consistency.
-- Add additional media queries for finer control over responsive behavior.
-*/

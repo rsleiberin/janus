@@ -1,24 +1,22 @@
-/* Default styles for body text. Customize as needed. */
+/* Aligning with globals.css design tokens for consistent styling */
 .body-text {
-    font-family: 'Open Sans', sans-serif; /* Example font. Replace with your preferred font. */
-    font-size: 16px; /* Base font size. Adjust as needed for your design. */
-    line-height: 1.3; /* Line height as 130% of the font size. Modify for desired readability. */
-    color: #333; /* Default text color. Change according to your color scheme. */
-    max-width: 100ch; /* Controls maximum line length for readability. Adjust as needed. */
-    margin-bottom: 1em; /* Spacing after paragraphs. Customize based on layout requirements. */
+  font-family: var(--font-family-primary); /* Using the primary font */
+  font-size: var(--font-size-body); /* Default body text size */
+  line-height: var(--line-height-normal); /* Standard line height for body text */
+  color: var(--color-text-primary); /* Primary text color */
+  max-width: 100ch; /* Keeping maximum line length for readability */
+  margin-bottom: var(--spacing-medium); /* Standard spacing after paragraphs */
+}
+
+/* Responsive design adjustments for smaller screens */
+@media (max-width: var(--breakpoint-sm)) {
+  .body-text {
+    font-size: var(--font-size-small); /* Adjusted font size for mobile devices */
   }
-  
-  /* Responsive design adjustments for smaller screens. */
-  @media (max-width: 768px) {
-    .body-text {
-      font-size: 14px; /* Smaller font size for mobile devices. Adjust based on your mobile design. */
-    }
-  }
-  
-  /* Additional custom styles can be added here. Example:
-  .body-text.custom-style {
-    font-style: italic;
-    color: blue;
-  }
-  */
-  
+}
+
+/* Example of additional custom styles using global variables */
+.body-text.custom-style {
+  font-style: italic;
+  color: var(--color-accent); /* Using accent color for custom style */
+}

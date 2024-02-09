@@ -1,22 +1,18 @@
-/* Import design tokens */
-@import '../../../utilities/design_tokens/colors';
-@import '../../../utilities/design_tokens/typography';
-@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
-@import '../../../utilities/design_tokens/border'; /* Importing border token */
-
-/* ToggleSwitch styles */
+/* toggleSwitchStyles.module.css */
 .toggle-switch-container {
   display: flex;
   align-items: center;
-  margin-bottom: var(--sm-spacing);
+  margin-bottom: var(--spacing-small);
 }
 
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
-  box-shadow: var(--shadow-default); /* Soft shadow for depth */
+  width: 60px; /* Adjust size as needed or use a variable */
+  height: 34px; /* Adjust size as needed or use a variable */
+  background-color: var(--color-background); /* Default background */
+  border-radius: 34px;
+  transition: background-color 0.4s;
 }
 
 .toggle-input {
@@ -32,10 +28,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--mediumGray);
-  transition: .4s;
+  background-color: var(--color-disabled); /* Default slider background */
+  transition: background-color 0.4s;
   border-radius: 34px;
-  border: var(--border-none); /* No border for the slider */
 }
 
 .slider:before {
@@ -45,27 +40,20 @@
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: var(--white);
-  transition: .4s;
+  background-color: var(--color-primary); /* Knob color */
+  transition: transform 0.4s;
   border-radius: 50%;
-  box-shadow: var(--shadow-raised); /* Raised shadow for the knob */
+  box-shadow: var(--shadow-subtle); /* Subtle shadow for the knob */
 }
 
 .toggle-input:checked + .slider {
-  background-color: var(--success);
+  background-color: var(--color-success); /* Slider background when checked */
 }
 
 .toggle-input:focus + .slider {
-  box-shadow: 0 0 1px var(--success), var(--shadow-overlay); /* Enhanced shadow for focus */
+  box-shadow: 0 0 1px var(--color-focus), var(--shadow-focus); /* Enhanced shadow for focus */
 }
 
 .toggle-input:checked + .slider:before {
-  transform: translateX(26px);
+  transform: translateX(26px); /* Move knob to the right when checked */
 }
-
-/* Notes:
-- The styling uses design tokens for consistent, responsive, and accessible design.
-- The toggle switch offers a smooth transition for state changes.
-- Adjustments can be made via design tokens to match the theme of the application.
-- Additional styles or customizations can be applied for unique appearance.
-*/

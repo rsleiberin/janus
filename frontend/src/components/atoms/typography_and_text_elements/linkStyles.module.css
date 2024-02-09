@@ -1,28 +1,27 @@
-/* Achromatic link styles - Customize as per design requirements */
+/* Leveraging globals.css design tokens for consistent link styles */
 .achromatic-link {
-    font-family: Arial, sans-serif; /* Change font family as needed */
-    font-size: 16px; /* Adjust font size as required */
-    text-decoration: none; /* No underline for normal state */
-    color: black; /* Text color for normal state - change for different achromatic shades */
-    transition: all 0.3s ease-in-out; /* Transition for hover and active effects */
-  }
-  
-  /* Hover state with animated underline */
-  .achromatic-link:hover {
-    border-bottom: 1px solid black; /* Animated underline - modify color and thickness */
-    text-decoration: none;
-  }
-  
-  /* Active state with micro-animation */
-  .achromatic-link:active {
-    animation: clickAnimation 0.5s ease; /* Click animation - adjust timing and easing */
-    text-decoration: none;
-  }
-  
-  /* Keyframes for click animation - Customize the animation as needed */
-  @keyframes clickAnimation {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); } /* Scale can be adjusted for different effects */
-    100% { transform: scale(1); }
-  }
-  
+  font-family: var(--font-family-primary); /* Using primary font family */
+  font-size: var(--font-size-body); /* Applying body font size */
+  text-decoration: none; /* No underline for a cleaner look */
+  color: var(--color-text-primary); /* Default text color for links */
+  transition: all var(--animation-duration-fast) var(--animation-ease-in-out); /* Smooth transition for hover and active states */
+}
+
+/* Hover state with animated underline using global color tokens */
+.achromatic-link:hover {
+  border-bottom: 1px solid var(--color-accent); /* Underline color from global tokens */
+  text-decoration: none; /* Ensuring no text decoration on hover */
+}
+
+/* Active state with micro-animation utilizing global animation tokens */
+.achromatic-link:active {
+  animation: clickAnimation var(--animation-duration-fast) var(--animation-ease-in-out); /* Referencing global animation duration and easing */
+  text-decoration: none; /* Consistent no text decoration rule for active state */
+}
+
+/* Keyframes for click animation - aligned with design system's animation approach */
+@keyframes clickAnimation {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); } /* Slight reduction for a tactile feel */
+  100% { transform: scale(1); }
+}
