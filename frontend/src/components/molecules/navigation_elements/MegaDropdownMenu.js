@@ -1,6 +1,6 @@
 import React from 'react';
-import DropdownItem from '../DropdownItem';
-import styles from './megaDropdownMenu.module.css';
+import DropdownItem from '../DropdownItem'; // Adjust the import path as needed
+import styles from './megaDropdownMenu.module.css'; // Ensure this is the correct path to your CSS module
 
 const MegaDropdownMenu = ({ categories }) => {
   return (

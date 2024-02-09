@@ -1,23 +1,24 @@
 .megaMenu {
-    display: flex;
-    justify-content: center;
-    background-color: var(--color-background);
-    box-shadow: var(--box-shadow);
-    padding: var(--spacing-medium);
-  }
-  
-  .megaMenuCategory {
-    margin-right: var(--spacing-large);
-  }
-  
-  .megaMenuTitle {
-    font-size: var(--font-size-large);
-    color: var(--color-primary);
-  }
-  
-  .megaMenuList {
-    list-style: none;
-  }
-  
-  /* You can add more styles based on your design tokens and requirements */
-  
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-surface); /* Use surface color for background */
+  box-shadow: var(--shadow-default); /* Use default shadow */
+  padding: var(--spacing-medium); /* Medium spacing */
+}
+
+.megaMenuCategory {
+  margin-right: var(--spacing-large); /* Large spacing on the right */
+}
+
+.megaMenuTitle {
+  font-size: var(--font-size-heading-medium); /* Medium heading font size */
+  color: var(--color-text-primary); /* Primary text color */
+}
+
+.megaMenuList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Add additional styles as needed based on your design tokens */

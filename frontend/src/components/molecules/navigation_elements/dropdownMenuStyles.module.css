@@ -3,10 +3,10 @@
 }
 
 .dropdownToggle {
-  background-color: var(--color-offWhite);
-  color: var(--color-black);
-  padding: var(--spacing-xs);
-  font-family: var(--font-family-body);
+  background-color: var(--color-surface); /* Adjusted to use surface color */
+  color: var(--color-text-primary); /* Adjusted for primary text color */
+  padding: var(--spacing-small); /* Standard small spacing */
+  font-family: var(--font-family-primary); /* Primary font family */
   border: none;
   cursor: pointer;
   display: flex;
@@ -18,10 +18,10 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: var(--color-white);
-  border: var(--border-width-thin) solid var(--color-mediumGray);
-  box-shadow: var(--shadow-elevation-low);
+  background-color: var(--color-background); /* Use background color for consistency */
+  border: var(--border-width-default) solid var(--color-border); /* Default border styling */
+  box-shadow: var(--shadow-default); /* Default shadow for depth */
   list-style: none;
   padding: 0;
-  margin: var(--spacing-xxs) 0 0 0;
+  margin: var(--spacing-micro) 0 0 0; /* Micro spacing for slight offset */
 }

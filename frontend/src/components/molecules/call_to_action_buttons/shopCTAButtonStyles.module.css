@@ -1,36 +1,28 @@
-/* shopCTAButtonStyles.module.css */
 .shopCtaButton {
-  font-family: 'Roboto', sans-serif; /* Roboto font */
-  font-weight: 900; /* Black weight for Roboto, which is the heaviest */
-  font-size: 16px; /* Adjust based on your design */
-  color: #333; /* Dark text for contrast */
-  background-color: #E6E6E6; /* Light grey for a subtle look */
-  padding: 12px 24px; /* Adjust padding for a larger touch target */
-  border: 1px solid #CCC; /* Slight border for definition */
-  border-radius: 50px; /* Pill shape */
+  font-family: var(--font-family-primary); /* Using global font family */
+  font-weight: var(--font-weight-extra-bold); /* Utilizing the global font weight for emphasis */
+  font-size: var(--font-size-body); /* Standard body font size from globals */
+  color: var(--color-text-primary); /* Primary text color */
+  background-color: var(--color-accent); /* Accent color for button background */
+  padding: var(--spacing-small) var(--spacing-medium); /* Using global spacing tokens */
+  border: var(--border-width-default) solid var(--color-border); /* Standard border using global color */
+  border-radius: var(--border-radius-pill); /* Pill-shaped border radius */
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color var(--animation-duration-fast), box-shadow var(--animation-duration-fast);
   text-transform: uppercase; /* Uppercase text for emphasis */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  box-shadow: var(--shadow-default); /* Default shadow from global tokens */
 }
 
 .shopCtaButton:hover,
 .shopCtaButton:focus {
-  background-color: #CCC; /* A medium grey for interaction */
-  border-color: #AAA; /* Darker border on hover/focus */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow for hover effect */
+  background-color: var(--color-hover); /* Hover state background color */
+  border-color: var(--color-highlight); /* Highlight color for border on hover/focus */
+  box-shadow: var(--shadow-emphasis); /* Enhanced shadow for hover effect */
   transform: translateY(-2px); /* Lift effect */
 }
 
 .shopCtaButton:active {
-  background-color: #AAA; /* Dark grey for a clicked effect */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Smaller shadow to simulate pressing down */
+  background-color: var(--color-active); /* Active state background color */
+  box-shadow: var(--shadow-inset); /* Inset shadow to simulate pressing down */
   transform: translateY(0); /* Return to original position */
 }
-
-/* Notes:
-   - The achromatic color scheme is sophisticated and modern.
-   - Hover and active states provide visual feedback and enhance user interaction.
-   - The design is clean and minimalistic, with a focus on functionality and usability.
-   - Update the font family to match the one used in your Figma design.
-*/
