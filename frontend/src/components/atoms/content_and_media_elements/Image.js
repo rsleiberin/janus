@@ -1,22 +1,16 @@
 import React from 'react';
-import './imageStyles.css'; // Link to your CSS file for Images
+import styles from './imageStyles.module.css'; // Correctly import the new CSS module
 
-// Image Component
-const Image = ({ src, alt, className, onClick }) => {
+const Image = ({ src, alt, className = '', onClick }) => {
   return (
     <img 
       src={src} 
       alt={alt} 
-      className={`custom-image ${className}`} 
+      className={`${styles.customImage} ${className}`} // Use styles from the module, and allow additional className props
       onClick={onClick} 
-      loading="lazy" // Enables lazy loading for performance
+      loading="lazy" // Enables lazy loading for images
     />
   );
 };
 
 export default Image;
-
-// Notes:
-// - The 'alt' attribute is essential for accessibility and SEO.
-// - Use 'loading="lazy"' for lazy loading of off-screen images.
-// - Customize the image's appearance and behavior using CSS and the 'className' prop.

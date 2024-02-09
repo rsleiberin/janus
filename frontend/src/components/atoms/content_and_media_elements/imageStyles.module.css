@@ -1,0 +1,10 @@
+/* imageStyles.module.css */
+.customImage {
+    max-width: 100%;
+    height: auto;
+    border: none; /* Ensures images don't have an unwanted border */
+    display: block; /* Block display removes extra space around images */
+    margin-left: auto;
+    margin-right: auto; /* Center the image horizontally within its container */
+  }
+  

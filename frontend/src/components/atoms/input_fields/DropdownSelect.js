@@ -1,14 +1,14 @@
 import React from 'react';
-import './dropdownSelectStyles.css'; // Link to your CSS file for DropdownSelect
+import styles from './dropdownSelectStyles.module.css'; // Corrected import path to CSS module
 
 // DropdownSelect Component
 const DropdownSelect = ({ label, options, onChange, value, name }) => {
     return (
-        <div className="dropdown-select-container">
-            {label && <label htmlFor={`dropdown-select-${name}`}>{label}</label>}
+        <div className={styles['dropdown-select-container']}>
+            {label && <label htmlFor={`dropdown-select-${name}`} className={styles.label}>{label}</label>}
             <select
                 id={`dropdown-select-${name}`}
-                className="dropdown-select"
+                className={styles['dropdown-select']}
                 onChange={onChange}
                 value={value}
                 name={name}
@@ -24,11 +24,3 @@ const DropdownSelect = ({ label, options, onChange, value, name }) => {
 };
 
 export default DropdownSelect;
-
-// Notes:
-// - The component provides a dropdown for selecting a single option from a list.
-// - It supports a label, which can be omitted if not needed.
-// - Options are passed as an array of objects with 'label' and 'value' properties.
-// - Customization options include 'onChange', 'value', and 'name' props.
-// - The dropdown uses design tokens for consistent styling with the application.
-// - Accessibility and responsive design are considered in its implementation.

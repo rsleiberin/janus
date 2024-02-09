@@ -1,21 +1,15 @@
-/* Import design tokens */
-@import '../../../utilities/design_tokens/colors';
-@import '../../../utilities/design_tokens/typography';
-@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
-@import '../../../utilities/design_tokens/border'; /* Importing border token */
-
-/* DropdownSelect styles */
+/* dropdownSelectStyles.module.css */
 .dropdown-select-container {
-  margin-bottom: var(--md-spacing);
+  margin-bottom: var(--spacing-medium); /* Adjusted for consistency */
 }
 
 .dropdown-select {
-  font-family: var(--body-font);
-  font-size: var(--base-font-size);
-  color: var(--black);
-  background-color: var(--offWhite);
-  border: var(--border-solid); /* Updated to use border token */
-  padding: var(--sm-spacing);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  border: var(--border-width-default) solid var(--color-border); /* Adjusted for global consistency */
+  padding: var(--spacing-small);
   width: 100%;
   box-sizing: border-box;
   box-shadow: var(--shadow-default); /* Soft shadow for depth */
@@ -23,15 +17,6 @@
   cursor: pointer;
 }
 
-/* Focus and hover states */
 .dropdown-select:focus, .dropdown-select:hover {
-  box-shadow: var(--shadow-raised); /* Enhanced shadow for focus/hover */
+  box-shadow: var(--shadow-focus); /* Enhanced shadow for focus/hover */
 }
-
-/* Notes:
-- The styling is based on the achromatic design tokens for consistency.
-- The dropdown is fully styled to align with the overall design system.
-- Adjustments to the styling can be made via the design tokens for theme consistency.
-- Consider adding custom styles or icons for the dropdown arrow for a unique look.
-- Ensure that the dropdown is responsive and accessible in its design.
-*/

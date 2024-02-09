@@ -1,47 +1,35 @@
-/* Import design tokens */
-@import '../../../utilities/design_tokens/colors';
-@import '../../../utilities/design_tokens/typography';
-@import '../../../utilities/design_tokens/shadow'; /* Importing shadow token */
-@import '../../../utilities/design_tokens/border'; /* Importing border token */
+/* breadcrumbStyles.module.css */
+@import url('../../../styles/globals.css');
 
-/* Breadcrumbs styles */
 .breadcrumb {
   list-style: none;
   padding: 0;
   display: flex;
   align-items: center;
-  box-shadow: var(--shadow-default); /* Soft shadow for depth */
-  border: var(--border-none); /* No border needed for breadcrumb */
+  /* Removing box-shadow as it's not defined in globals.css for breadcrumbs */
 }
 
 .breadcrumb-item {
-  font-family: var(--body-font);
-  font-size: var(--base-font-size);
-  color: var(--color-mediumGray);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
 }
 
 .breadcrumb-item a {
-  color: var(--color-darkGray);
+  color: var(--color-link);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .breadcrumb-item a:hover {
-  color: var(--primary-color); /* Color change on hover */
+  color: var(--color-link-visited); /* Using global color for hover state */
 }
 
 .breadcrumb-item.active {
-  color: var(--color-black);
+  color: var(--color-text-primary); /* Active item uses primary text color */
 }
 
 .breadcrumb-item:not(:last-child)::after {
   content: '/';
-  margin: 0 var(--spacing-xs);
+  margin: 0 var(--spacing-small);
 }
-
-/* Notes:
-- The styling uses design tokens for consistent, accessible design.
-- Breadcrumbs are flexibly styled to adapt to different screen sizes.
-- Separator styling and hover effects can be adjusted via CSS.
-- Shadow adds a subtle depth to the breadcrumb navigation.
-*/

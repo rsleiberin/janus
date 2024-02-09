@@ -1,9 +1,9 @@
 import React from 'react';
-import './iconButtonStyles.css'; // Link to your CSS file for IconButtons
+import styles from './iconButtonStyles.module.css'; // Corrected import path
 
 // IconButton Component
 const IconButton = ({ icon, onClick, ariaLabel, size = 'medium', styleType = 'primary' }) => {
-  const className = `icon-btn ${size} ${styleType}`;
+  const className = `${styles['icon-btn']} ${styles[size]} ${styles[styleType]}`;
 
   return (
     <button className={className} onClick={onClick} aria-label={ariaLabel}>
@@ -13,8 +13,3 @@ const IconButton = ({ icon, onClick, ariaLabel, size = 'medium', styleType = 'pr
 };
 
 export default IconButton;
-
-// Notes:
-// - Ensure icons are SVGs for scalability and accessibility.
-// - Utilize aria-label for screen reader accessibility.
-// - CSS classes allow for customization of size and style.

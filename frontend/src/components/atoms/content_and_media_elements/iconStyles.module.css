@@ -1,24 +1,27 @@
-/* IconStyles.module.css */
+/* iconStyles.module.css */
 .icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   vertical-align: middle;
+  fill: currentColor; /* Ensures icon color matches the current font color */
+  stroke: currentColor; /* Ensures icon stroke matches the current font color */
 }
 
-.iconSmall {
-  width: 1em;  /* Small icons */
-  height: 1em;
+/* Size variations based on the global design system */
+.icon-small {
+  width: var(--icon-size-compact);  /* Small icons */
+  height: var(--icon-size-compact);
 }
 
-.iconMedium {
-  width: 1.5em;  /* Medium, commonly used size */
-  height: 1.5em;
+.icon-medium {
+  width: var(--icon-size-default);  /* Medium, commonly used size */
+  height: var(--icon-size-default);
 }
 
-.iconLarge {
-  width: 2em;    /* Large icons */
-  height: 2em;
+.icon-large {
+  width: var(--icon-size-prominent);    /* Large icons */
+  height: var(--icon-size-prominent);
 }
 
 .customImage {
