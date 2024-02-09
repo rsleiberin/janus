@@ -5,20 +5,20 @@
 
 .menuItemLink {
   text-decoration: none; /* Removes default underline from links */
-  color: var(--black); /* Adjusted to use CSS variable */
-  padding: 8px; /* This value should be updated according to your design tokens */
+  color: var(--color-text-primary); /* Use global text primary color */
+  padding: var(--spacing-small); /* Use small spacing token */
   display: flex;
   align-items: center;
   transition: color 0.2s, background-color 0.2s;
 }
 
 .menuItemIcon {
-  margin-right: 4px; /* This value should be updated according to your design tokens */
+  margin-right: var(--spacing-micro); /* Use micro spacing token */
   display: flex; /* To align icon properly */
 }
 
 /* Hover and active states */
 .menuItemLink:hover, .menuItemLink:active {
-  color: var(--darkGray); /* Adjusted to use CSS variable */
-  background-color: var(--offWhite); /* Adjusted to use CSS variable */
+  color: var(--color-accent); /* Use accent color for hover */
+  background-color: var(--color-hover); /* Use hover background color */
 }
