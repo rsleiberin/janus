@@ -1,5 +1,5 @@
 import React from 'react';
-import HorizontalNavigationBar from './navigation_and_menu_systems/HorizontalNavigationBar';
+import HorizontalNavigationBar from '../../components/organisms/navigation_and_menu_systems/HorizontalNavigationBar';
 // Import any necessary design tokens or sub-components
 
 const Header = () => {

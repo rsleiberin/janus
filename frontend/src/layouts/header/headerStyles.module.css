@@ -1,0 +1,35 @@
+.header {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    padding: var(--spacing-medium) var(--spacing-large);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-subtle);
+  }
+  
+  .headerLogo {
+    font-family: var(--font-family-secondary);
+    font-size: var(--font-size-large);
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  
+  .navLinks {
+    list-style: none;
+    display: flex;
+    gap: var(--spacing-medium);
+  }
+  
+  .navLink {
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-size: var(--font-size-body);
+    transition: color var(--animation-duration-fast) var(--animation-ease-in-out);
+  }
+  
+  .navLink:hover,
+  .navLink:focus {
+    color: var(--color-highlight);
+  }
+  

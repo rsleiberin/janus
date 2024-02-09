@@ -1,13 +1,11 @@
-/* Assuming CSS variables are defined globally and imported in _app.js */
-
-/* Horizontal Navigation Bar Styles */
+/* horizontalNavigationBarStyles.module.css */
 .horizontalNav {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: var(--color-background); /* Use the global background color */
   display: flex;
   justify-content: space-between;
-  height: 60px; /* Or set to 'auto' if you want it to adjust based on content */
+  height: 60px; /* Adjust based on design tokens or keep as is */
   align-items: center;
-  padding: 15px 20px;;
+  padding: var(--spacing-small); /* Use small spacing token */
 }
 
 .navList {
@@ -18,7 +16,7 @@
 }
 
 .navList li {
-  margin-right: var(--md-spacing);
+  margin-right: var(--spacing-medium); /* Use medium spacing token */
 }
 
 .navList li:last-child {
@@ -26,17 +24,17 @@
 }
 
 .navList a {
-  color: var(--white); /* Changed text color for better contrast against black background */
+  color: var(--color-text-primary); /* Use text primary color */
   text-decoration: none;
-  padding: var(--xxs-spacing) var(--xs-spacing);
+  padding: var(--spacing-xs) var(--spacing-small); /* Use extra small and small spacing tokens */
 }
 
 /* Responsive Design for Mobile Devices */
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-sm)) {
   .horizontalNav {
     flex-direction: column;
     align-items: flex-start;
-    padding: 10px 15px;
+    padding: var(--spacing-small); /* Adjust padding for mobile */
   }
 
   .navList {
@@ -47,9 +45,3 @@
     width: 100%;
   }
 }
-
-/* Notes:
-- Ensure all CSS variables (--black, --sm-spacing, etc.) are defined in your global stylesheet.
-- Flexbox layout for dynamic spacing and alignment.
-- Mobile responsiveness with media query adjustments.
-- Accessibility considerations for all navigation elements. */
