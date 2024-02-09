@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './mainLayout.module.css'; // Adjust the import path as necessary
-import Header from '../components/organisms/Header';
-import Footer from '../components/organisms/Footer';
+import Header from './header/Header';
+import Footer from './footer/Footer';
 
 const MainLayout = ({ children }) => {
   return (
