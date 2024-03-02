@@ -2,7 +2,7 @@
   font-family: var(--font-family-primary); /* Using global font family */
   font-weight: var(--font-weight-extra-bold); /* Utilizing the global font weight for emphasis */
   font-size: var(--font-size-body); /* Standard body font size from globals */
-  color: var(--color-text-primary); /* Primary text color */
+  color: var(--color-secondary); /* Updated to use a darker text color for better readability */
   background-color: var(--color-accent); /* Accent color for button background */
   padding: var(--spacing-small) var(--spacing-medium); /* Using global spacing tokens */
   border: var(--border-width-default) solid var(--color-border); /* Standard border using global color */
