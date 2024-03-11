@@ -9,7 +9,7 @@ const HorizontalNavigationBar = ({ navItems, ctaText }) => {
   return (
     <nav className={styles.horizontalNav}>
       <Link href="/" passHref>
-        <a><LogoPlaceholder /></a> {/* Logo acting as a home button */}
+        <LogoPlaceholder />
       </Link>
       <ul className={styles.navList}>
         {/* Iterate over navItems to render each as either a DropdownMenu or a direct link */}
