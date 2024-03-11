@@ -1,18 +1,9 @@
-/* logoStyles.module.css */
 .logoPlaceholder {
-    width: var(--spacing-large); /* 32px based on the global spacing */
-    height: var(--spacing-large); /* 32px based on the global spacing */
-    background-color: var(--color-accent); /* A contrast color */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: var(--border-radius-subtle); /* Slight rounded corners */
-    box-shadow: var(--shadow-default); /* Default shadow for depth */
-    transition: background-color var(--animation-duration-fast) ease-in-out;
-  }
-  
-  .logoPlaceholder:hover {
-    background-color: var(--color-hover); /* Change on hover */
-    box-shadow: var(--shadow-emphasis); /* More pronounced shadow on hover */
-  }
-  
+  width: 50px; /* Or your preferred size */
+  height: 50px; /* Or your preferred size */
+  background-color: var(--color-accent); /* Or any color from your global styles */
+  cursor: pointer;
+  /* Add more styling as per your design requirements */
+  border-radius: var(--border-radius-standard); /* Example usage of a global variable */
+  box-shadow: var(--shadow-default); /* Example usage of a global variable */
+}
