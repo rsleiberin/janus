@@ -8,9 +8,7 @@ import styles from './horizontalNavigationBarStyles.module.css'; // Corrected im
 const HorizontalNavigationBar = ({ navItems, ctaText }) => {
   return (
     <nav className={styles.horizontalNav}>
-      <Link href="/" passHref>
-        <LogoPlaceholder />
-      </Link>
+      <LogoPlaceholder />
       <ul className={styles.navList}>
         {/* Iterate over navItems to render each as either a DropdownMenu or a direct link */}
         {/* Placeholder for nav items */}
