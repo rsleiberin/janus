@@ -1,19 +1,22 @@
+// HorizontalNavigationBar.js
 import React from 'react';
-import Link from 'next/link'; // Import Link for routing
 import ShopCTAButton from '../../molecules/call_to_action_buttons/ShopCTAButton';
-import LogoPlaceholder from '../../atoms/navigation_elements/LogoPlaceholder'; // Updated import path
-import styles from './horizontalNavigationBarStyles.module.css'; // Corrected import statement
+import LogoPlaceholder from '../../atoms/navigation_elements/LogoPlaceholder';
+import NavLinksCollection from '../../molecules/navigation_elements/NavLinksCollection';
+import styles from './horizontalNavigationBarStyles.module.css';
 
-// Horizontal Navigation Bar Component
-const HorizontalNavigationBar = ({ navItems, ctaText }) => {
+const HorizontalNavigationBar = ({ currentPage }) => {
+  const links = [
+    { href: '/design', label: 'Design', active: currentPage === 'design' },
+    { href: '/art', label: 'Art', active: currentPage === 'art' },
+    { href: '/philosophy', label: 'Philosophy', active: currentPage === 'philosophy' },
+  ];
+
   return (
     <nav className={styles.horizontalNav}>
       <LogoPlaceholder />
-      <ul className={styles.navList}>
-        {/* Iterate over navItems to render each as either a DropdownMenu or a direct link */}
-        {/* Placeholder for nav items */}
-      </ul>
-      {ctaText && <ShopCTAButton text={ctaText} />} {/* CTA Button utilizing global design tokens */}
+      <NavLinksCollection links={links} />
+      <ShopCTAButton text="Shop" />
     </nav>
   );
 };

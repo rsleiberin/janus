@@ -3,9 +3,7 @@ import styles from './logoPlaceholderStyles.module.css';
 
 const LogoPlaceholder = () => {
     return (
-        <Link href="/" className={styles.logoPlaceholder}>
-            
-        </Link>
+        <Link href="/" className={styles.logoPlaceholder}></Link>
     );
 };
 
