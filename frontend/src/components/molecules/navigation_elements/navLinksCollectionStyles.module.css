@@ -1,9 +1,6 @@
 .navList {
-    display: flex;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  /* Add additional styling as necessary, such as aligning items, setting a margin or padding, etc. */
-  
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
