@@ -9,9 +9,8 @@ const Header = () => {
 
     return (
         <header>
-            {/* Brand Logo */}
             <HorizontalNavigationBar navItems={navItems} ctaText="Shop" />
-            {/* User Account Controls/Search Bar (if applicable) */}
+            {/* breadcrumb bar */}
         </header>
     );
 };

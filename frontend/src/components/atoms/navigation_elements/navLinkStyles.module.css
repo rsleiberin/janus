@@ -1,24 +1,29 @@
-.navItem {
-    margin-right: 20px; /* Adjust the margin as needed */
-  }
-  
-  .navLink {
-    color: var(--color-text-primary); /* Use your global text color */
-    text-decoration: none; /* Removes the underline from links */
-    padding: 10px 0; /* Add some padding for clickable area */
-  }
-  
-  .activeDesign {
-    border-bottom: 2px solid blue; /* Example color for the Design section */
-  }
-  
-  .activeArt {
-    border-bottom: 2px solid purple; /* Example color for the Art section */
-  }
-  
-  .activePhilosophy {
-    border-bottom: 2px solid red; /* Example color for the Philosophy section */
-  }
-  
-  /* Adjust the colors as per your theme's design tokens */
-  
+.navLink {
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-extra-bold);
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+  background-color: transparent; /* No background color for the idle state */
+  padding: var(--spacing-small) var(--spacing-medium);
+  border: none; /* No border for the idle state */
+  border-radius: var(--border-radius-pill);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color var(--animation-duration-fast), box-shadow var(--animation-duration-fast), border-color var(--animation-duration-fast), transform var(--animation-duration-fast);
+}
+
+.navLink:hover,
+.navLink:focus {
+  background-color: var(--color-hover); /* Hover state background color */
+  border-color: var(--color-highlight); /* Highlight color for border on hover/focus */
+  box-shadow: var(--shadow-emphasis); /* Enhanced shadow for hover effect */
+  transform: translateY(-2px); /* Lift effect */
+  border: var(--border-width-default) solid var(--color-border); /* Standard border using global color */
+  border-radius: var(--border-radius-pill); /* Pill-shaped border radius */
+}
+
+.navLink:active {
+  background-color: var(--color-primary);
+  box-shadow: var(--shadow-inset);
+  transform: translateY(0);
+}
