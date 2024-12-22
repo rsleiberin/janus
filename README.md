@@ -1,19 +1,8 @@
 # Project Janus - Next.js Web Application
 
 ## Introduction
-The `janus` directory is the core repository for a Next.js web application designed to showcase an amalgamation of UX design, artistry, and a strong personal branding platform online. The application is built with an emphasis on modularity and interactivity, anticipating future integration with AGI capabilities.
+Over time, this project became about personal empowerment. I started coding by just asking the agent to do all of it for me and working through everything while I taught myself more advanced concepts and tried to understand workflow. My problem was that I needed a design system, so now I'm working on that and getting my portfolio up with the research.
 
-## Status
-- `Completed`: Next.js frontend initialization and setup.
-- `Completed`: Integration of Tailwind CSS for frontend styling.
-- `Planned`: Development of UI components in Next.js using atomic design principles.
-- `Planned`: Implementation of API endpoints for dynamic backend interactions.
-- `Planned`: Incorporation of AI-powered features and interactive user experiences.
+### Research:
+The files found in /image_processing are research programs designed to define a mathematically researched basis on human perception so that autonomous agents have a framework for generating content for users and have the means to adapt to the large array of multi-style rich media.
 
-## Files
-- `app.py`: The current entry point for Flask app execution, primarily for API services.
-- `config.py`: Reserved for future Flask configuration settings.
-
-## Directories
-- `[frontend](./frontend)`: Hosts the Next.js-based frontend application and its associated files.
-- `[backend](./backend)`: Contains the backend Flask structure, including API logic. Currently only has two functions: list and read all files in project directory.
