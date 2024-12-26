@@ -33,7 +33,6 @@ This project bridges the gap between exploratory image processing and real-world
 
 ## Implementation Stages
 
-- **[✔️ Completed]**: Fully implemented and functional.
 - **[🚧 In Progress]**: Currently being developed or partially implemented.
 - **[❌ Pending]**: Planned but not yet started.
 
@@ -48,8 +47,8 @@ This project bridges the gap between exploratory image processing and real-world
 
 ### **scripts/**: Processing and analysis scripts
 #### **preprocessing/**: Preprocessing and extraction
-- `extract_metadata.py`: Extracts metadata (dimensions, bit depth, etc.) **[✔️ Completed]**
-- `extract_pixels.py`: Extracts pixel data (LAB, RGB, and spatial coordinates) **[✔️ Completed]**
+- `extract_metadata.py`: Extracts metadata (dimensions, bit depth, etc.) **[🚧 In Progress]**
+- `extract_pixels.py`: Extracts pixel data (LAB, RGB, and spatial coordinates) **[🚧 In Progress]**
 - `extract_alpha.py`: (Future) Extracts alpha channel data for images with transparency **[❌ Pending]**
 
 #### **analysis/**: Analysis and clustering
@@ -65,7 +64,7 @@ This project bridges the gap between exploratory image processing and real-world
 - `export_data.py`: Exports data (e.g., JSON or CSV) for external use **[❌ Pending]**
 
 #### **visualization/**: Visualizations and outputs
-- `visualize_clusters.py`: Visualizes DBSCAN clusters **[✔️ Completed]**
+- `visualize_clusters.py`: Visualizes DBSCAN clusters **[🚧 In Progress]**
 - `visualize_histogram.py`: Visualizes color histograms **[❌ Pending]**
 - `visualize_shapes.py`: Overlays shape boundaries on the original image **[❌ Pending]**
 - `visualize_layers.py`: Visualizes luminosity layers **[❌ Pending]**
@@ -81,7 +80,7 @@ This project bridges the gap between exploratory image processing and real-world
 
 ### **tests/**: Test cases for each script **[❌ Pending]**
 
-### `README.md`: This document **[✔️ Completed]**
+### `README.md`: This document **[🚧 In Progress]**
 
 ---
 
@@ -157,7 +156,3 @@ This project bridges the gap between exploratory image processing and real-world
 3. **Issues and Pull Requests**:
    - Create issues for tracking tasks or bugs.
    - Link pull requests to issues for clarity.
-
----
-
-This revised README fully matches your format while including all enhancements and additional details for clarity and completeness.
