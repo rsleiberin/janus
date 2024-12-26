@@ -19,38 +19,39 @@ This directory is part of the exploratory phase of the design system, focusing o
 ## Directory Structure
 
 image_processing/
-├── data/                      # Input images, intermediate files, and results
-│   ├── images/                # Raw input images
-│   ├── intermediate/          # Temporary files (e.g., LAB arrays)
-│   ├── results/               # Final outputs (e.g., clustered images)
-├── scripts/                   # Processing and analysis scripts
-│   ├── preprocessing/         # Preprocessing and extraction
-│   │   ├── extract_metadata.py      # Extracts metadata (dimensions, bit depth, etc.)
-│   │   ├── extract_pixels.py        # Extracts pixel data (LAB, RGB, and spatial coordinates)
-│   │   ├── extract_alpha.py         # (Future) Extracts alpha channel data for images with transparency
-│   ├── analysis/              # Analysis and clustering
-│   │   ├── compute_histogram.py     # Computes color histograms for global and regional color distributions
-│   │   ├── dbscan_clustering.py     # Performs DBSCAN clustering on LAB and spatial data
-│   │   ├── edge_detection.py        # Detects edges in images for shape and feature analysis
-│   │   ├── analyze_layers.py        # Analyzes layers and micro-layers based on clustering results
-│   │   ├── analyze_alpha.py         # (Future) Processes alpha data for transparency-based analysis
-│   ├── storage/               # Storing and managing data
-│   │   ├── create_db.py             # Sets up the SQLite database schema
-│   │   ├── insert_data.py           # Inserts extracted data into the database
-│   │   ├── export_data.py           # Exports data (e.g., JSON or CSV) for external use
-│   ├── visualization/         # Visualizations and outputs
-│       ├── visualize_clusters.py    # Visualizes DBSCAN clusters
-│       ├── visualize_histogram.py   # Visualizes color histograms
-│       ├── visualize_shapes.py      # Overlays shape boundaries on original image
-│       ├── visualize_layers.py      # Visualizes luminosity layers
-├── server/                    # (Future) Server-side API scripts
-│   ├── db_api.py                    # API for querying the database
-│   ├── image_api.py                 # API for image uploads and retrievals
-├── archive/                   # Obsolete or exploratory scripts
-├── utils/                     # Helper functions (e.g., file I/O, math operations)
-│   ├── file_loader.py               # Loads and validates input image files
-├── tests/                     # Test cases for each script
-└── README.md                  # This document
+  data/                      # Input images, intermediate files, and results
+    images/                  # Raw input images
+    intermediate/            # Temporary files (e.g., LAB arrays)
+    results/                 # Final outputs (e.g., clustered images)
+  scripts/                   # Processing and analysis scripts
+    preprocessing/           # Preprocessing and extraction
+      extract_metadata.py      # Extracts metadata (dimensions, bit depth, etc.)
+      extract_pixels.py        # Extracts pixel data (LAB, RGB, and spatial coordinates)
+      extract_alpha.py         # (Future) Extracts alpha channel data for images with transparency
+    analysis/                 # Analysis and clustering
+      compute_histogram.py     # Computes color histograms for global and regional color distributions
+      dbscan_clustering.py     # Performs DBSCAN clustering on LAB and spatial data
+      edge_detection.py        # Detects edges in images for shape and feature analysis
+      analyze_layers.py        # Analyzes layers and micro-layers based on clustering results
+      analyze_alpha.py         # (Future) Processes alpha data for transparency-based analysis
+    storage/                  # Storing and managing data
+      create_db.py             # Sets up the SQLite database schema
+      insert_data.py           # Inserts extracted data into the database
+      export_data.py           # Exports data (e.g., JSON or CSV) for external use
+    visualization/            # Visualizations and outputs
+      visualize_clusters.py    # Visualizes DBSCAN clusters
+      visualize_histogram.py   # Visualizes color histograms
+      visualize_shapes.py      # Overlays shape boundaries on original image
+      visualize_layers.py      # Visualizes luminosity layers
+  server/                    # (Future) Server-side API scripts
+    db_api.py                 # API for querying the database
+    image_api.py              # API for image uploads and retrievals
+  archive/                   # Obsolete or exploratory scripts
+  utils/                     # Helper functions (e.g., file I/O, math operations)
+    file_loader.py             # Loads and validates input image files
+  tests/                     # Test cases for each script
+  README.md                  # This document
+
 
 ## Current Focus
 - **Clustering:** Validating DBSCAN using LAB + spatial data.
