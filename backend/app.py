@@ -1,8 +1,24 @@
 import os
 from flask import Flask, jsonify, request
+from routes.status_routes import status_bp  # Import the status blueprint
+from models import db  # Import the SQLAlchemy instance
 
 # Initialize the Flask app
 app = Flask(__name__)
+
+# Resolve the absolute path to the database file, relative to this file's location
+base_dir = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(base_dir, "instance/image_processing.db")
+
+# Database configuration
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"  # Absolute path for SQLite
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Initialize the database
+db.init_app(app)
+
+# Register blueprints
+app.register_blueprint(status_bp)
 
 # Root route for health checks and basic connectivity
 @app.route('/')
@@ -23,6 +39,9 @@ def list_files():
 
     Returns:
         JSON: {"files": [<list of file paths>]}
+
+    Raises:
+        - 500: If an unexpected error occurs during directory traversal.
     """
     base_directory = "/home/tank/janus"  # Base directory for file access
     files_list = []
@@ -47,6 +66,11 @@ def read_file():
         JSON:
             {"content": "<file content>"} (on success)
             {"error": "<error message>"} (on failure)
+
+    Raises:
+        - 403: If the requested file path is outside the base directory.
+        - 404: If the file does not exist.
+        - 500: If an unexpected error occurs during file reading.
     """
     base_directory = "/home/tank/janus"
     relative_path = request.json.get('path', '')  # Relative path input from the request
