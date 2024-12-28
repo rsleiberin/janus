@@ -23,15 +23,15 @@ This directory contains the Flask backend for the Janus project, responsible for
 ## Directory Structure with Implementation Stages
 
 ### **backend/**
-- **app.py**: Main Flask application entry point **[🚧 In Progress | Ticket #001]**
+- **app.py**: Main Flask application entry point **[✅ Completed | Ticket #001]**
 - **config.py**: Backend configuration settings **[🚧 In Progress | Ticket #002]**
-- **models.py**: SQLAlchemy models for database schema **[🚧 In Progress | Ticket #003]**
+- **models.py**: SQLAlchemy models for database schema **[✅ Completed | Ticket #003]**
 - **routes/**: Modularized Flask routes
   - **image_routes.py**: Handles API requests for image-related operations **[🚧 In Progress | Ticket #004]**
-  - **status_routes.py**: Provides basic health checks for monitoring **[🚧 In Progress | Ticket #005]**
+  - **status_routes.py**: Provides basic health checks for monitoring **[🚧 In Progress | Ticket #006]**
   - **user_routes.py**: Placeholder for user-specific routes **[❌ Pending | Phase 2]**
   - **admin_routes.py**: Placeholder for admin-specific routes **[❌ Pending | Phase 3]**
-  - **README.md**: Documents all routes and their functionality **[🚧 In Progress | Ticket #006]**
+  - **README.md**: Documents all routes and their functionality **[🚧 In Progress | Ticket #007]**
 - **templates/**: Flask templates for rendering views **[❌ Pending | Phase 3]**
 - **static/**: Static files for serving assets **[❌ Pending | Phase 3]**
 - **extensions/**: Placeholder for future capabilities
@@ -39,15 +39,15 @@ This directory contains the Flask backend for the Janus project, responsible for
   - **data_analytics.py**: Tools for analyzing processed data **[❌ Pending | Post-MVP]**
   - **integrations.py**: Handles third-party integrations **[❌ Pending | Phase 4]**
 - **tests/**: Test cases for backend modules
-  - **test_image_routes.py**: Tests for image-related API endpoints **[❌ Pending | Ticket #007]**
-  - **test_status_routes.py**: Tests for status-related endpoints **[❌ Pending | Ticket #008]**
-  - **README.md**: Documents the testing strategy and process **[❌ Pending | Ticket #009]**
+  - **test_image_routes.py**: Tests for image-related API endpoints **[❌ Pending | Ticket #008]**
+  - **test_status_routes.py**: Tests for status-related endpoints **[❌ Pending | Ticket #009]**
+  - **README.md**: Documents the testing strategy and process **[❌ Pending | Ticket #010]**
 - **utils/**: Shared utility scripts
-  - **file_handler.py**: Utility functions for file operations **[🚧 In Progress | Ticket #010]**
-  - **logger.py**: Logging configuration for the backend **[🚧 In Progress | Ticket #011]**
+  - **file_handler.py**: Utility functions for file operations **[🚧 In Progress | Ticket #011]**
+  - **logger.py**: Logging configuration for the backend **[🚧 In Progress | Ticket #012]**
   - **security.py**: Security utilities (e.g., input validation, sanitization) **[❌ Pending | Phase 2]**
 - **db/**: Database-specific scripts and helpers
-  - **db_setup.py**: Sets up the database schema **[🚧 In Progress | Ticket #012]**
+  - **db_setup.py**: Sets up the database schema **[✅ Completed | Ticket #001]**
   - **db_helpers.py**: Common database operations **[❌ Pending | Phase 2]**
   - **seed_data.py**: Script to populate the database with initial data **[❌ Pending | Phase 2]**
 - **api/**: API-related extensions
@@ -61,7 +61,8 @@ This directory contains the Flask backend for the Janus project, responsible for
 
 ### **Phase 1: Business Logic (Current Phase)**
 - Focus on proof-of-concept API endpoints and database integration.
-- Files In Progress: `app.py`, `config.py`, `models.py`, `image_routes.py`, `status_routes.py`.
+- Completed: `app.py`, `models.py`, `db_setup.py`.
+- Files In Progress: `config.py`, `image_routes.py`, `status_routes.py`.
 
 ### **Phase 2: Research and User Features**
 - Expand database capabilities and introduce user management.
@@ -75,19 +76,12 @@ This directory contains the Flask backend for the Janus project, responsible for
 - Add advanced features like ML, analytics, and third-party integrations.
 - Files Pending: `machine_learning.py`, `data_analytics.py`, `integrations.py`, `openapi_spec.yaml`, `api_auth.py`, `api_throttling.py`.
 
-
 ---
 
-## How to Contribute
-1. Follow the modular structure for adding new routes or functionality.
-2. Ensure all routes are documented in `routes/README.md`.
-3. Write test cases for new routes or database models.
+## Workflow: Development from Root Directory
 
----
-
-## GitHub Workflow
-1. Use feature branches for new functionality (e.g., `feature/api-upload`).
-2. Submit pull requests with detailed descriptions and link them to relevant issues.
-3. Ensure all tests pass before merging into the `main` branch.
-
----
+### **Working Context**
+All commands should be executed from the project root (`janus/`):
+```bash
+cd ~/janus
+python3 backend/app.py

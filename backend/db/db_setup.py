@@ -38,6 +38,7 @@ if __name__ == "__main__":
     with app.app_context():
         print("Creating database schema...")
         db.create_all()
+        print("Database schema created.")
         db.session.commit()  # Ensure changes are flushed
         print("Schema creation completed.")
 
