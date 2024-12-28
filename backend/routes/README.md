@@ -9,22 +9,22 @@ This directory contains modularized Flask routes for the backend. Each file corr
 
 ### **routes/**
 - **image_routes.py**: API routes for image-related operations **[❌ Pending]**
-- **status_routes.py**: General routes for health checks and status updates **[❌ Pending]**
-- **README.md**: Documents each route and its purpose **[🚧 In Progress]**
+- **status_routes.py**: General routes for health checks and status updates **[✅ Completed]**
+- **README.md**: Documents each route and its purpose **[✅ Completed]**
 
 ---
 
 ## Walkthrough of Routes
 
 ### **image_routes.py**
-- **Endpoints**:
-  - `/api/upload` [POST]: Upload an image file and process metadata **[❌ Pending]**
-  - `/api/metadata/<image_id>` [GET]: Retrieve metadata for a specific image **[❌ Pending]**
-  - `/api/images` [GET]: List all images and their metadata **[❌ Pending]**
+**Endpoints**:
+- `/api/upload` (POST): Upload an image file and process metadata **[❌ Pending]**
+- `/api/metadata/<image_id>` (GET): Retrieve metadata for a specific image **[❌ Pending]**
+- `/api/images` (GET): List all images and their metadata **[❌ Pending]**
 
 ### **status_routes.py**
-- **Endpoints**:
-  - `/status` [GET]: Returns a "healthy" status message for monitoring **[❌ Pending]**
+**Endpoints**:
+- `/status` (GET): Returns a "healthy" status message for monitoring **[✅ Completed]**
 
 ---
 

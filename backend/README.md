@@ -28,7 +28,8 @@ This directory contains the Flask backend for the Janus project, responsible for
 - **models.py**: SQLAlchemy models for database schema **[✅ Completed | Ticket #003]**
 - **routes/**: Modularized Flask routes
   - **image_routes.py**: Handles API requests for image-related operations **[🚧 In Progress | Ticket #004]**
-  - **status_routes.py**: Provides basic health checks for monitoring **[🚧 In Progress | Ticket #006]**
+  - **status_routes.py**: Provides basic health checks for monitoring **[✅ Completed | Ticket #006]**
+  - **file_routes.py**: Provides routes to list and retrieve file contents **[✅ Completed | Ticket #008]**
   - **user_routes.py**: Placeholder for user-specific routes **[❌ Pending | Phase 2]**
   - **admin_routes.py**: Placeholder for admin-specific routes **[❌ Pending | Phase 3]**
   - **README.md**: Documents all routes and their functionality **[🚧 In Progress | Ticket #007]**
@@ -39,12 +40,13 @@ This directory contains the Flask backend for the Janus project, responsible for
   - **data_analytics.py**: Tools for analyzing processed data **[❌ Pending | Post-MVP]**
   - **integrations.py**: Handles third-party integrations **[❌ Pending | Phase 4]**
 - **tests/**: Test cases for backend modules
-  - **test_image_routes.py**: Tests for image-related API endpoints **[❌ Pending | Ticket #008]**
-  - **test_status_routes.py**: Tests for status-related endpoints **[❌ Pending | Ticket #009]**
-  - **README.md**: Documents the testing strategy and process **[❌ Pending | Ticket #010]**
+  - **test_image_routes.py**: Tests for image-related API endpoints **[❌ Pending | Ticket #009]**
+  - **test_status_routes.py**: Tests for status-related endpoints **[✅ Completed | Ticket #010]**
+  - **test_file_routes.py**: Tests for file-related API endpoints **[✅ Completed | Ticket #011]**
+  - **README.md**: Documents the testing strategy and process **[🚧 In Progress | Ticket #012]**
 - **utils/**: Shared utility scripts
-  - **file_handler.py**: Utility functions for file operations **[🚧 In Progress | Ticket #011]**
-  - **logger.py**: Logging configuration for the backend **[🚧 In Progress | Ticket #012]**
+  - **file_handler.py**: Utility functions for file operations **[🚧 In Progress | Ticket #013]**
+  - **logger.py**: Logging configuration for the backend **[🚧 In Progress | Ticket #014]**
   - **security.py**: Security utilities (e.g., input validation, sanitization) **[❌ Pending | Phase 2]**
 - **db/**: Database-specific scripts and helpers
   - **db_setup.py**: Sets up the database schema **[✅ Completed | Ticket #001]**
@@ -61,8 +63,8 @@ This directory contains the Flask backend for the Janus project, responsible for
 
 ### **Phase 1: Business Logic (Current Phase)**
 - Focus on proof-of-concept API endpoints and database integration.
-- Completed: `app.py`, `models.py`, `db_setup.py`.
-- Files In Progress: `config.py`, `image_routes.py`, `status_routes.py`.
+- Completed: `app.py`, `models.py`, `db_setup.py`, `status_routes.py`, `file_routes.py`.
+- Files In Progress: `config.py`, `image_routes.py`.
 
 ### **Phase 2: Research and User Features**
 - Expand database capabilities and introduce user management.
