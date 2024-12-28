@@ -1,0 +1,93 @@
+# Backend Directory
+
+## Overview
+This directory contains the Flask backend for the Janus project, responsible for handling API requests, database operations, and backend logic. It integrates seamlessly with the `image_processing` module and the Next.js frontend. The backend is designed to be modular, scalable, and ready for future extensions.
+
+---
+
+## Goals
+
+### Current Goals (MVP)
+1. Provide a modular structure for handling API routes and database operations.
+2. Facilitate interaction between the frontend and backend via RESTful API endpoints.
+3. Enable integration with `image_processing` scripts for metadata extraction and analysis.
+
+### Future Goals (Post-MVP)
+1. Add API authentication and security mechanisms.
+2. Integrate advanced features like machine learning and data analytics.
+3. Scale database operations to handle larger datasets and real-time queries.
+4. Support admin and user-specific functionalities.
+
+---
+
+## Directory Structure with Implementation Stages
+
+### **backend/**
+- **app.py**: Main Flask application entry point **[🚧 In Progress | Ticket #001]**
+- **config.py**: Backend configuration settings **[🚧 In Progress | Ticket #002]**
+- **models.py**: SQLAlchemy models for database schema **[🚧 In Progress | Ticket #003]**
+- **routes/**: Modularized Flask routes
+  - **image_routes.py**: Handles API requests for image-related operations **[🚧 In Progress | Ticket #004]**
+  - **status_routes.py**: Provides basic health checks for monitoring **[🚧 In Progress | Ticket #005]**
+  - **user_routes.py**: Placeholder for user-specific routes **[❌ Pending | Phase 2]**
+  - **admin_routes.py**: Placeholder for admin-specific routes **[❌ Pending | Phase 3]**
+  - **README.md**: Documents all routes and their functionality **[🚧 In Progress | Ticket #006]**
+- **templates/**: Flask templates for rendering views **[❌ Pending | Phase 3]**
+- **static/**: Static files for serving assets **[❌ Pending | Phase 3]**
+- **extensions/**: Placeholder for future capabilities
+  - **machine_learning.py**: ML-based functionality for advanced features **[❌ Pending | Post-MVP]**
+  - **data_analytics.py**: Tools for analyzing processed data **[❌ Pending | Post-MVP]**
+  - **integrations.py**: Handles third-party integrations **[❌ Pending | Phase 4]**
+- **tests/**: Test cases for backend modules
+  - **test_image_routes.py**: Tests for image-related API endpoints **[❌ Pending | Ticket #007]**
+  - **test_status_routes.py**: Tests for status-related endpoints **[❌ Pending | Ticket #008]**
+  - **README.md**: Documents the testing strategy and process **[❌ Pending | Ticket #009]**
+- **utils/**: Shared utility scripts
+  - **file_handler.py**: Utility functions for file operations **[🚧 In Progress | Ticket #010]**
+  - **logger.py**: Logging configuration for the backend **[🚧 In Progress | Ticket #011]**
+  - **security.py**: Security utilities (e.g., input validation, sanitization) **[❌ Pending | Phase 2]**
+- **db/**: Database-specific scripts and helpers
+  - **db_setup.py**: Sets up the database schema **[🚧 In Progress | Ticket #012]**
+  - **db_helpers.py**: Common database operations **[❌ Pending | Phase 2]**
+  - **seed_data.py**: Script to populate the database with initial data **[❌ Pending | Phase 2]**
+- **api/**: API-related extensions
+  - **openapi_spec.yaml**: OpenAPI specification for documenting the API **[❌ Pending | Phase 4]**
+  - **api_auth.py**: Handles API authentication **[❌ Pending | Phase 4]**
+  - **api_throttling.py**: Manages API rate limiting **[❌ Pending | Phase 4]**
+
+---
+
+## Phases and Rationale
+
+### **Phase 1: Business Logic (Current Phase)**
+- Focus on proof-of-concept API endpoints and database integration.
+- Files In Progress: `app.py`, `config.py`, `models.py`, `image_routes.py`, `status_routes.py`.
+
+### **Phase 2: Research and User Features**
+- Expand database capabilities and introduce user management.
+- Files Pending: `user_routes.py`, `security.py`, `db_helpers.py`, `seed_data.py`.
+
+### **Phase 3: Frontend Integration**
+- Connect the backend with the Next.js frontend and support rendered views.
+- Files Pending: `templates/`, `static/`, `admin_routes.py`.
+
+### **Phase 4: Extensions**
+- Add advanced features like ML, analytics, and third-party integrations.
+- Files Pending: `machine_learning.py`, `data_analytics.py`, `integrations.py`, `openapi_spec.yaml`, `api_auth.py`, `api_throttling.py`.
+
+
+---
+
+## How to Contribute
+1. Follow the modular structure for adding new routes or functionality.
+2. Ensure all routes are documented in `routes/README.md`.
+3. Write test cases for new routes or database models.
+
+---
+
+## GitHub Workflow
+1. Use feature branches for new functionality (e.g., `feature/api-upload`).
+2. Submit pull requests with detailed descriptions and link them to relevant issues.
+3. Ensure all tests pass before merging into the `main` branch.
+
+---
