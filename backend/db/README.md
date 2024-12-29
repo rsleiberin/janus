@@ -8,7 +8,7 @@ This directory contains database-related scripts for the Janus project. It handl
 ## Files and their Purpose
 
 ### **db/**
-- **db_setup.py**: Script for setting up the database schema. It creates the necessary tables for the application to interact with, including `images` for storing metadata. **[✅ Completed | Ticket #001]**
+- **db_setup.py**: Script for setting up the database schema. It creates the necessary tables for the application to interact with, including `images` for storing metadata. **[✅ Completed | Ticket #001, #010]**
 - **db_helpers.py**: Contains common database operations, such as queries and utilities for interacting with the `images` table. **[❌ Pending | Phase 2]**
 - **seed_data.py**: Script for populating the database with initial data, useful for testing or seeding the application with necessary content. **[❌ Pending | Phase 2]**
 
@@ -16,7 +16,13 @@ This directory contains database-related scripts for the Janus project. It handl
 
 ## Database Schema
 
-The database schema is defined using SQLAlchemy models in `models.py`. Currently, the only table is `images`, which holds metadata about uploaded images.
+The database schema is defined using SQLAlchemy models in `models.py`. Currently, the only table is `images`, which holds metadata about uploaded images. Future tables are planned for users, admins, logs, and analytics.
+
+### Best Practices Considerations:
+- **Normalization**: The schema follows normalization best practices with foreign key relationships.
+- **Indexes**: For performance, especially with searches, indexes should be added on frequently queried columns, such as `email` in the `users` table and `timestamp` in the `logs` table.
+- **Data Integrity**: All foreign key constraints are set up to ensure referential integrity between related tables.
+- **Scalability**: The schema is designed to scale by adding more tables in a structured way, preparing for future database migrations (e.g., PostgreSQL or MySQL).
 
 ---
 

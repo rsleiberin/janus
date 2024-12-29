@@ -80,6 +80,24 @@ This directory contains the Flask backend for the Janus project, responsible for
 
 ---
 
+## Database Schema
+
+The database schema is defined using SQLAlchemy models in `models.py`. Currently, the following tables are defined:
+
+- **images**: Stores metadata for uploaded images. Contains columns like `filename`, `width`, `height`, `bit_depth`, and `image_metadata`.
+
+- **users**: Stores user information, including `username`, `email`, and `password_hash`.
+
+- **admins**: Stores administrative user information and their associated roles. Connected to the `users` table.
+
+- **logs**: Stores logs of user actions, including the type of action and the associated user.
+
+- **analytics**: Stores analytical and research data, with a `data` field of type JSON for flexible storage. This also serves as the table for storing research data with an optional `research_topic` column.
+
+- **security**: Stores security-related actions, including user activities that are tracked for security purposes.
+
+---
+
 ## Workflow: Development from Root Directory
 
 ### **Working Context**
@@ -87,3 +105,4 @@ All commands should be executed from the project root (`janus/`):
 ```bash
 cd ~/janus
 python3 backend/app.py
+

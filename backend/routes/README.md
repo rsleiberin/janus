@@ -10,7 +10,7 @@ This directory contains modularized Flask routes for the backend. Each file corr
 ### **routes/**
 - **image_routes.py**: API routes for image-related operations **[❌ Pending]**
 - **status_routes.py**: General routes for health checks and status updates **[✅ Completed]**
-- **README.md**: Documents each route and its purpose **[✅ Completed]**
+- **README.md**: Documents each route and its purpose **[✅ Completed|Ticket #007]**
 
 ---
 
