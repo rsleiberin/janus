@@ -39,6 +39,8 @@ Test files are located in the `backend/tests/` directory and follow the naming c
 - **test_utils.py**: Tests for utility functions **[🚧 In Progress | Ticket #33]**
 - **test_db_helpers.py**: Tests for database helper functions **[🚧 In Progress | Ticket #13]**
 - **test_seed_data.py**: Tests for database seeding **[🚧 In Progress | Ticket #14]**
+- **test_error_handling.py**: Tests for error handling functions **[🚧 In Progress | Ticket #46]**
+- **test_logging.py**: Tests for logging functions **[🚧 In Progress | Ticket #46]**
 
 ### Test Fixtures
 Common setup and teardown logic is defined in `conftest.py`. Key fixtures include:
@@ -60,6 +62,7 @@ Common setup and teardown logic is defined in `conftest.py`. Key fixtures includ
 - **Utilities**:
   - File handler utilities **[🚧 In Progress | Ticket #30]**
   - Logging configuration tests **[🚧 In Progress | Ticket #31]**
+  - Error handling and logging helpers **[🚧 In Progress | Ticket #46]**
 
 ### Future Coverage Goals
 - Authentication and security testing **[🚧 In Progress | Ticket #32]**
