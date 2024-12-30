@@ -17,6 +17,7 @@ def create_app():
     logger.debug(f"Using database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
     # Initialize the database
+    print(f"Using Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
     db.init_app(app)
     return app
 
