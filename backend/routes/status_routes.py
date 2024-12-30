@@ -1,5 +1,4 @@
 from flask import Blueprint, jsonify
-from models import db
 from sqlalchemy.sql import text
 from backend.models import db
 
