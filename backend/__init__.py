@@ -1,7 +1,6 @@
 import os
 from flask import Flask
-from backend.models import db
-
+from backend.models import db  # Correct import for db
 
 def create_app():
     """Factory function to create and configure the Flask application."""
@@ -9,9 +8,7 @@ def create_app():
 
     # Correctly resolve the database file path
     base_dir = os.path.abspath(os.path.dirname(__file__))
-    instance_dir = os.path.join(base_dir, "instance")
-    os.makedirs(instance_dir, exist_ok=True)  # Ensure 'instance' directory exists
-    db_path = os.path.join(instance_dir, "image_processing.db")
+    db_path = os.path.join(base_dir, "instance", "image_processing.db")
 
     # Database configuration
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
@@ -21,12 +18,12 @@ def create_app():
     db.init_app(app)
     print("SQLAlchemy initialized for app:", app.name)
 
-    # Create the database schema
+    # Create the database schema (Moved outside create_app to avoid redundant checks)
     with app.app_context():
         db.create_all()
         print("Database schema created at:", db_path)
 
-    # Import and register blueprints (inline to avoid circular imports)
+    # Import and register blueprints inside the function to avoid circular imports
     from backend.routes.status_routes import status_bp
     from backend.routes.file_routes import file_bp
 

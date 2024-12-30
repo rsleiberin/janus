@@ -11,6 +11,7 @@ This directory contains database-related scripts for the Janus project. It handl
 - **db_setup.py**: Script for setting up the database schema. It creates the necessary tables for the application to interact with, including `images` for storing metadata. **[✅ Completed | Ticket #001, #010]**
 - **db_helpers.py**: Contains common database operations, such as queries and utilities for interacting with the `images` table. **[🚧 In Progress | Ticket #13]**
 - **seed_data.py**: Script for populating the database with initial data, useful for testing or seeding the application with necessary content. **[🚧 In Progress | Ticket #14]**
+- **db_schema_creation.py**: Refactored script to create the database schema separately from `db_setup.py`, ensuring the database creation logic is modular and reusable. **[🚧 In Progress | Ticket #15]**
 
 ---
 
@@ -28,10 +29,11 @@ The database schema is defined using SQLAlchemy models in `models.py`. Currently
 
 ## Database Setup
 
-1. **Initialization**: The database schema is set up by running `db_setup.py`.
+1. **Initialization**: The database schema is set up by running `db_schema_creation.py`.
 2. **Database URI**: The application is configured to use SQLite by default with the URI pointing to `instance/image_processing.db`.
 
 ---
+
 ## Database Schema Design
 
 ### Overview
@@ -111,10 +113,3 @@ Here we describe each model in the schema, their relationships, and their purpos
 ## Future Improvements
 - **Support for other databases**: The current implementation uses SQLite for simplicity and development. Future plans involve migrating to more robust systems like PostgreSQL or MySQL, as outlined in the [future issues](#).
 - **Data seeding**: We'll enhance the seeding script to populate the database with more comprehensive data for testing and development.
-
----
-
-## Testing the Database
-Database-related tests should be written to ensure that the schema is properly created and that the database performs as expected. Tests should be added to the `tests` folder, specifically for database queries and functionality.
-
----
