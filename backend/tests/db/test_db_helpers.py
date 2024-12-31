@@ -130,6 +130,8 @@ def test_delete_image(init_db):
     deleted_image = Image.query.get(image.id)
     assert deleted_image is None  # Ensure the image is deleted
 
+# Test UserHelpers class
+
 # Test for creating a new user
 def test_create_user(init_db):
     user_data = {
@@ -223,6 +225,7 @@ def test_exists_user(init_db):
     user = UserHelpers.create(user_data)
     user_exists = UserHelpers.exists(user.id)
     assert user_exists is True  # Ensure the user exists
+
 # Admin Model Helpers Tests
 
 # Test for creating an admin
