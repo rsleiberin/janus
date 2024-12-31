@@ -1,7 +1,9 @@
 import pytest
 import logging
-from backend import create_app, db
+from backend import create_app
+from backend.db import db  # Correct import for db
 from sqlalchemy import create_engine
+from flask import Flask
 
 # Setup console logging
 logging.basicConfig(level=logging.DEBUG,
@@ -32,22 +34,25 @@ def setup_and_teardown_db():
         return  # If the connection fails, we should stop further execution.
 
     # Set up the application context and log the process
-    with app.app_context():
+    with app.app_context():  # Ensure that we are within the app context for db operations
         try:
             logger.debug("Attempting to create all tables...")
+            print("Attempting to create all tables...")  # Added for more visibility
             db.create_all()  # Create all tables
             logger.debug("Database initialized for testing.")
             print("Database initialized for testing.")
         except Exception as e:
             logger.error(f"Error during database setup: {e}")
             print(f"Error during database setup: {e}")
+            raise  # Reraise the exception to ensure the test fails
 
     yield
 
     # Cleanup: Drop all tables after tests have run
-    with app.app_context():
+    with app.app_context():  # Ensure that we are within the app context for cleanup
         try:
             logger.debug("Cleaning up the database...")
+            print("Cleaning up the database...")
             db.session.remove()
             db.drop_all()  # Remove all tables
             logger.debug("Database cleaned up after tests.")
@@ -55,3 +60,4 @@ def setup_and_teardown_db():
         except Exception as e:
             logger.error(f"Error during database cleanup: {e}")
             print(f"Error during database cleanup: {e}")
+            raise  # Reraise the exception to ensure the test fails

@@ -1,5 +1,6 @@
 # Importing necessary modules
-from backend.models import db, Image, User, Admin, Log, Analytics, Security
+from backend.db import db
+from backend.models import Image, User, Admin, Log, Analytics, Security
 from datetime import datetime
 
 # Image Model Helpers

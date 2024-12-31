@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from sqlalchemy.sql import text
-from backend.models import db
+from backend.db import db
 
 
 # Create a blueprint for status routes

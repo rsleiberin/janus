@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 from backend import create_app
-from backend.models import db, Image, User, Admin, Log, Analytics, Security
+from backend.db import db
+from backend.models import Image, User, Admin, Log, Analytics, Security
 from datetime import datetime
 
 # Create Flask app context

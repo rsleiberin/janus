@@ -1,24 +1,64 @@
-# Consolidated imports for all tests
 import pytest
-from backend.models import db, Image, User, Admin, Log, Analytics, Security
+import logging
 from datetime import datetime
+from backend import create_app
+from backend.db import db
+from backend.models import Image, User, Admin, Log, Analytics, Security
 from backend.db.db_helpers import ImageHelpers, UserHelpers, AdminHelpers, LogHelpers, AnalyticsHelpers, SecurityHelpers
+
+# Setup console logging
+logging.basicConfig(level=logging.DEBUG,
+                    format="%(asctime)s - %(levelname)s - %(message)s",
+                    handlers=[logging.StreamHandler()])  # Log only to console
+logger = logging.getLogger("test_logger")
+
 
 # Setup a test database
 @pytest.fixture(scope="function")
 def init_db():
     """Fixture to setup a clean test database for each test."""
-    db.create_all()
-    yield db
-    db.session.remove()
-    db.drop_all()
+    app = create_app()
+
+    logger.debug("Creating app and setting up the database...")
+    
+    with app.app_context():
+        # Verify if app context is properly set
+        logger.debug(f"App context set: {app.app_context() is not None}")
+        
+        # Check if db is correctly initialized and if the tables exist
+        logger.debug("Attempting to create all tables in the database.")
+        try:
+            db.create_all()  # Ensure tables are created within the app context
+            logger.debug("Database initialized for testing.")
+            print("Database initialized for testing.")
+        except Exception as e:
+            logger.error(f"Error during database setup: {e}")
+            print(f"Error during database setup: {e}")
+            raise  # Reraise exception to ensure the test fails
+
+    yield
+    
+    # Cleanup after the test
+    with app.app_context():
+        try:
+            logger.debug("Cleaning up the database...")
+            print("Cleaning up the database...")
+            db.session.remove()
+            db.drop_all()  # Drop all tables after test
+            logger.debug("Database cleaned up after test.")
+            print("Database cleaned up after test.")
+        except Exception as e:
+            logger.error(f"Error during database cleanup: {e}")
+            print(f"Error during database cleanup: {e}")
+            raise  # Reraise exception to ensure the test fails
+
 
 # Test ImageHelpers class
 
 # Test for creating a new image
 def test_create_image(init_db):
     image_data = {
-        "filename": "test_image.jpg",
+        "filename": "test_image_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=8)) + ".jpg",  # Ensure unique filename
         "width": 800,
         "height": 600,
         "bit_depth": 24,
@@ -28,9 +68,13 @@ def test_create_image(init_db):
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow(),
     }
-    image = ImageHelpers.create(image_data)
+    
+    # Wrapping helper function inside app context
+    with create_app().app_context():
+        image = ImageHelpers.create(image_data)
+    
     assert image.id is not None  # Ensure the image has been created with an ID
-    assert image.filename == "test_image.jpg"  # Ensure the filename is correct
+    assert image.filename.startswith("test_image_")  # Ensure the filename is correct
 
 # Test for retrieving an image by ID
 def test_get_by_id(init_db):

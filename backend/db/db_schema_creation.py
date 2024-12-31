@@ -1,5 +1,5 @@
 from backend import create_app
-from backend.models import db
+from backend.db import db
 import logging
 
 # Set up logging

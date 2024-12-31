@@ -1,4 +1,5 @@
-from backend import create_app, db
+from backend import create_app
+from backend.db import db
 
 def test_create_app():
     print("Testing app creation manually...")
