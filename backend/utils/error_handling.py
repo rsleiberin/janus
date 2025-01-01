@@ -1,4 +1,5 @@
 # This module will handle standardized error handling across the backend, ensuring that error responses are consistent and meaningful.
+import logging
 
 def handle_db_error(error):
     """
@@ -29,3 +30,13 @@ def handle_general_error(error):
         dict: The error message for general errors.
     """
     return {"error": "An unexpected error occurred", "details": str(error)}, 500
+
+def log_error(error):
+    """
+    Logs an error message using Python's logging module.
+    
+    Args:
+        error (Exception): The exception to log.
+    """
+    logger = logging.getLogger(__name__)
+    logger.error(f"An error occurred: {error}")
