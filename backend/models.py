@@ -1,7 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from backend.db import db
 
-db = SQLAlchemy()
+
 
 class Image(db.Model):
     """Model for storing image metadata."""
@@ -45,7 +46,9 @@ class Admin(db.Model):
     user = db.relationship('User', backref=db.backref('admins', lazy=True))
 
     def __repr__(self):
-        return f"<Admin {self.user.username} - Level {self.admin_level}>"
+        # Avoid triggering a lazy-load after the session has closed.
+        return f"<Admin id={self.id}, user_id={self.user_id}, level={self.admin_level}>"
+
 
 class Log(db.Model):
     """Model for storing logs of user actions."""

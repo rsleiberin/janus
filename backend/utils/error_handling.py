@@ -1,33 +1,31 @@
-# error_handling.py
-# Helpers to manage errors and logging in the system.
+# This module will handle standardized error handling across the backend, ensuring that error responses are consistent and meaningful.
 
-import logging
-from flask import jsonify
+def handle_db_error(error):
+    """
+    Standardizes database error responses.
+    Args:
+        error (Exception): The exception raised during the database operation.
+    Returns:
+        dict: The error message and a specific error code.
+    """
+    return {"error": "Database operation failed", "details": str(error)}, 500
 
-# Setting up logging configuration
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+def handle_not_found_error(resource_name):
+    """
+    Standardizes 'not found' error responses.
+    Args:
+        resource_name (str): The name of the resource that was not found.
+    Returns:
+        dict: The error message indicating resource was not found.
+    """
+    return {"error": f"{resource_name} not found"}, 404
 
-def handle_error(error):
-    """Helper function to handle errors and send standardized error messages."""
-    logging.error(f"Error occurred: {error}")
-    response = {
-        'status': 'error',
-        'message': str(error)
-    }
-    return jsonify(response), 500
-
-def log_error(message):
-    """Helper function to log errors."""
-    logging.error(message)
-
-def log_warning(message):
-    """Helper function to log warnings."""
-    logging.warning(message)
-
-def log_info(message):
-    """Helper function to log informational messages."""
-    logging.info(message)
-
-def log_debug(message):
-    """Helper function to log debugging messages."""
-    logging.debug(message)
+def handle_general_error(error):
+    """
+    Standardizes general error responses.
+    Args:
+        error (Exception): The exception raised during the operation.
+    Returns:
+        dict: The error message for general errors.
+    """
+    return {"error": "An unexpected error occurred", "details": str(error)}, 500

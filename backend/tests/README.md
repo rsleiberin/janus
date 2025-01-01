@@ -1,93 +1,155 @@
 # Backend Tests
 
 ## Overview
-This document outlines the testing strategy for the Janus backend, ensuring the robustness and reliability of the API, database, and other backend components.
+This document outlines the **test strategy** for Janus’ backend, covering API endpoints, database interactions, and utility functions. Our approach includes **unit**, **integration**, and **end-to-end** tests to ensure the robustness and reliability of the backend components.
 
 ---
 
 ## Testing Strategy
-- **Unit Tests**: Test individual components (e.g., functions, routes) in isolation.
-- **Integration Tests**: Verify the interaction between multiple components (e.g., API + database).
-- **End-to-End Tests**: Simulate real-world user workflows across the entire backend system.
+
+1. **Unit Tests**: Focus on individual components (e.g., a single helper method).  
+2. **Integration Tests**: Verify the interaction between multiple components (e.g., Flask routes + Database).  
+3. **End-to-End Tests**: Simulate real user workflows across the entire backend system.  
 
 ---
 
 ## Running Tests
 
 ### Prerequisites
-1. Install all dependencies listed in `requirements.txt` using pip.
-2. Install additional testing dependencies: pytest and pytest-flask.
+1. **Install Dependencies**  
+   - Ensure all dependencies listed in `requirements.txt` are installed using pip:
+     ```
+     pip install -r requirements.txt
+     ```
+2. **Install Additional Testing Dependencies**  
+   - Ensure `pytest` and `pytest-flask` are installed:
+     ```
+     pip install pytest pytest-flask
+     ```
 
 ### Running All Tests
-Run `pytest` from the project root to execute all test cases.
+Run `pytest` from the project root to execute all test cases:
+
 
 ### Running Specific Test Files
-Provide the path to the specific test file, for example: `pytest backend/tests/test_status_routes.py`.
+Provide the path to the specific test file. For example:
+`pytest backend/tests/db/test_db_schema_creation.py`
+
 
 ### Running Specific Test Functions
-Use the `::` syntax to run a specific test function, for example: `pytest backend/tests/test_status_routes.py::test_status_route`.
+Use the `::` syntax to run a specific test function. For example:
+`pytest backend/tests/db/test_seed_data.py::test_create_seed_data`
+
 
 ---
 
 ## Testing Organization
 
-### Test Files
-Test files are located in the `backend/tests/` directory and follow the naming convention `test_<module_name>.py`. Current test files:
-- **test_file_routes.py**: Tests for file-related routes **[✅ Completed | Ticket #30]**
-- **test_status_routes.py**: Tests for status-related routes **[✅ Completed | Ticket #31]**
-- **test_image_routes.py**: Tests for image-related routes **[🚧 In Progress | Ticket #34]**
-- **test_utils.py**: Tests for utility functions **[🚧 In Progress | Ticket #33]**
-- **test_db_helpers.py**: Tests for database helper functions **[🚧 In Progress | Ticket #13]**
-- **test_seed_data.py**: Tests for database seeding **[🚧 In Progress | Ticket #14]**
-- **test_error_handling.py**: Tests for error handling functions **[🚧 In Progress | Ticket #46]**
-- **test_logging.py**: Tests for logging functions **[🚧 In Progress | Ticket #46]**
+- **`tests/`** folder under `backend/`  
+- **Common Fixtures** live in `conftest.py` (session & function-level DB setup).  
+- **Helpers** are tested in `test_<model>_helpers.py` files.  
+- **Routes** are tested in `test_<route>_routes.py` files.  
 
-### Test Fixtures
-Common setup and teardown logic is defined in `conftest.py`. Key fixtures include:
-- **client**: A Flask test client for simulating API requests.
-- **setup_and_teardown_db**: Handles database setup and cleanup for each test session.
+### Example Test Files
+1. **`test_db_setup.py`**  
+   - **Purpose**: Verifies that `create_app` works and the DB engine is initialized correctly.  
+   - **Status**: **[✅ Completed | Ticket #020]**
+2. **`test_db_schema_creation.py`**  
+   - **Purpose**: Checks that `db_schema_creation.py` successfully creates the schema.  
+   - **Status**: **[✅ Completed | Ticket #021]**
+3. **`test_seed_data.py`**  
+   - **Purpose**: Confirms `seed_data.py` properly inserts initial records.  
+   - **Status**: **[✅ Completed | Ticket #022]**
+4. **`test_user_helpers.py`**, **`test_admin_helpers.py`**, etc.  
+   - **Purpose**: Ensures CRUD logic in each helper is correct.  
+   - **Status**: **[✅ Completed across multiple tickets | Tickets #023, #024, ...]**
+
+---
+
+## Test Fixtures
+
+**`conftest.py`** offers:
+- **`app()`** fixture: Creates a Flask app with the **in-memory** DB override.  
+- **`session_db_setup`**: Validates DB connectivity once per session.  
+- **`function_db_setup`**: Creates/drops tables for each test function, ensuring isolation.
+
+### Fixture Details
+- **`app`**  
+  - **Scope**: `session`  
+  - **Purpose**: Sets up the Flask application with a testing configuration, overriding the database URI to use an in-memory SQLite database for tests.
+
+- **`session_db_setup`**  
+  - **Scope**: `session`  
+  - **Purpose**: Performs a one-time check to ensure the database connection is successful before running tests.
+
+- **`function_db_setup`**  
+  - **Scope**: `function`  
+  - **Purpose**: Ensures each test function has a clean database state by creating all tables before a test and dropping them after.
 
 ---
 
 ## Test Coverage
 
+- **Database**:  
+  - `db_setup.py` and `db_schema_creation.py` are tested by `test_db_setup.py` and `test_db_schema_creation.py`.  
+  - Seed data validated by `test_seed_data.py`.  
+  - Helper methods tested in various `test_*_helpers.py` files.  
+- **Routes**:  
+  - `test_status_routes.py`, `test_file_routes.py`, `test_image_routes.py` cover essential endpoints.  
+- **Utilities**:  
+  - `test_utils.py` checks custom utility functions.
+
 ### Current Coverage
 - **Routes**:
-  - Status routes: Health check endpoint **[✅ Completed | Ticket #6]**
-  - File routes: File listing and content retrieval **[✅ Completed | Ticket #7]**
-  - Image routes: Placeholder for image-related routes **[🚧 In Progress | Ticket #34]**
+  - Status routes: Health check endpoint **[🚧 In Progress | Ticket #006]**
+  - File routes: File listing and content retrieval **[🚧 In Progress | Ticket #007]**
+  - Image routes: Image-related operations **[🚧 In Progress | Ticket #034]**
 - **Database**:
-  - Database schema validation **[✅ Completed | Ticket #10]**
-  - Data seeding and helper operations **[🚧 In Progress | Ticket #13, Ticket #14]**
+  - Database schema validation **[✅ Completed | Ticket #010]**
+  - Data seeding and helper operations **[✅ Completed | Ticket #013, Ticket #014]**
 - **Utilities**:
-  - File handler utilities **[🚧 In Progress | Ticket #30]**
-  - Logging configuration tests **[🚧 In Progress | Ticket #31]**
-  - Error handling and logging helpers **[🚧 In Progress | Ticket #46]**
+  - File handler utilities **[🚧 In Progress | Ticket #030]**
+  - Logging configuration tests **[🚧 In Progress | Ticket #031]**
 
 ### Future Coverage Goals
-- Authentication and security testing **[🚧 In Progress | Ticket #32]**
-- Data analytics and machine learning workflow validation **[🚧 In Progress | Ticket #33]**
-- Admin and user management endpoints **[🚧 In Progress | Ticket #11]**
+- **Authentication and Security Testing** **[🚧 In Progress | Ticket #032]**
+- **Data Analytics and Machine Learning Workflow Validation** **[🚧 In Progress | Ticket #033]**
+- **Admin and User Management Endpoints** **[🚧 In Progress | Ticket #011]**
 
 ---
 
 ## Debugging Tips
 
-1. **Run with Verbose Output**:
-   Use the `-s` flag with pytest to display print statements and logs during the test run.
+1. **Check Logging**  
+   - Use `pytest -s` to see log messages during the test run.
 
-2. **Check Python Path**:
-   Ensure that all required directories are added to the Python path to resolve imports properly.
+2. **Verify Python Path**  
+   - Ensure that all required directories are added to the Python path to resolve imports properly.
 
-3. **Database Issues**:
+3. **Database Issues**  
    - Ensure the database schema is initialized before running tests.
-   - If issues persist, delete the database file and recreate it.
+   - If issues persist, delete the database file and recreate it or ensure the in-memory DB is correctly configured.
+
+4. **Permissions & Paths**  
+   - If using file-based DBs, confirm that the target directories exist and have appropriate permissions.
 
 ---
 
 ## Example Test Output
-Tests should produce output similar to the following:
 
-Test session starts, with the platform and pytest version information. The test results are listed, showing passed or failed tests, and a summary with the total time taken.
+```plaintext
+================================== test session starts ===================================
+platform linux -- Python 3.8.10, pytest-8.3.4, pluggy-1.5.0
+rootdir: /home/tank/janus
+plugins: flask-1.3.0
+collected 5 items
 
----
+backend/tests/db/test_db_setup.py .                                               [ 20%]
+backend/tests/db/test_db_schema_creation.py .                                     [ 40%]
+backend/tests/db/test_seed_data.py .                                              [ 60%]
+backend/tests/db/helpers/test_user_helpers.py .                                   [ 80%]
+backend/tests/db/helpers/test_admin_helpers.py .                                  [100%]
+
+=================================== 5 passed in 0.87s =====================================
+All tests have passed successfully.
+[✅ All tests completed and verified | Total: 5 Passed]```

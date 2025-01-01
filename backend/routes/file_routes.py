@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 import os
-from backend.models import db
+from backend.db import db
 
 
 file_bp = Blueprint("file", __name__)

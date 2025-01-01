@@ -1,35 +1,96 @@
 # Database Directory
 
 ## Overview
-This directory contains database-related scripts for the Janus project. It handles the database schema, helpers, and seed data required for the application to function properly. The database is designed to work with SQLAlchemy and SQLite (for development purposes), with future support for more scalable databases planned.
+This directory contains all database-related scripts and files for the Janus project. It manages the database schema creation, helper functions, and seed data. By default, the application uses **SQLite** in development mode, but we maintain patterns that allow straightforward migration to more robust databases (e.g., PostgreSQL) in the future.
 
 ---
 
-## Files and their Purpose
+## Files and Their Purpose
 
-### **db/**
-- **db_setup.py**: Script for setting up the database schema. It creates the necessary tables for the application to interact with, including `images` for storing metadata. **[✅ Completed | Ticket #001, #010]**
-- **db_helpers.py**: Contains common database operations, such as queries and utilities for interacting with the `images` table. **[🚧 In Progress | Ticket #13]**
-- **seed_data.py**: Script for populating the database with initial data, useful for testing or seeding the application with necessary content. **[🚧 In Progress | Ticket #14]**
+
+
+
+
+
+
+### **db_setup.py**  
+- **Purpose**: Creates and configures the Flask application’s database connections using the **DevelopmentConfig** (in `config.py`).  
+- **Status**: **[✅ Completed | Ticket #001, #010]**  
+- **Notes**:  
+  - References an **absolute path** for the SQLite file in dev.  
+  - Fully tested via `test_db_setup.py`.
+
+### **db_schema_creation.py**  
+- **Purpose**: A standalone script to create the database schema. Runs `db.create_all()` within the Flask app context.  
+- **Status**: **[✅ Completed | Ticket #015]**  
+- **Notes**:  
+  - Decouples schema creation from `db_setup.py`.  
+  - Tested by `test_db_schema_creation.py`.
+
+### **helpers/**  
+- **Description**: Contains sub-modules (e.g., `admin_helpers.py`, `user_helpers.py`) that encapsulate CRUD and domain logic for each model.  
+- **Status**: **[✅ Completed across multiple tickets]**  
+- **Notes**:  
+  - Each file is tested in dedicated `test_<model>_helpers.py` files.  
+
+### **seed_data.py**  
+- **Purpose**: Seeds the database with initial data (users, images, logs, etc.).  
+- **Status**: **[✅ Completed | Ticket #014]**  
+- **Notes**:  
+  - Tested in `test_seed_data.py`.  
+  - Typically used for local development or demo environments.
+
 
 ---
 
 ## Database Schema
 
-The database schema is defined using SQLAlchemy models in `models.py`. Currently, the tables include `images`, `users`, `admins`, `logs`, `analytics`, and `security`. These tables store metadata and other relevant information for the backend to function efficiently.
 
-### Best Practices Considerations:
-- **Normalization**: The schema follows normalization best practices with foreign key relationships.
-- **Indexes**: For performance, especially with searches, indexes should be added on frequently queried columns, such as `email` in the `users` table and `timestamp` in the `logs` table.
-- **Data Integrity**: All foreign key constraints are set up to ensure referential integrity between related tables.
-- **Scalability**: The schema is designed to scale by adding more tables in a structured way, preparing for future database migrations (e.g., PostgreSQL or MySQL).
+
+
+The schema is defined in `models.py` using **SQLAlchemy**. It includes tables for:
+- **`users`** (basic user info)
+- **`admins`** (extended admin privileges)
+- **`images`** (metadata for uploaded images)
+- **`logs`** (audit logs, user actions)
+- **`analytics`** (storing analytical data/research info)
+- **`security`** (records of security-related actions)
+
+
+### Best Practices Considerations
+1. **Absolute Paths for Dev**: The dev config references an absolute path in `backend/instance/image_processing.db` to avoid `sqlite3.OperationalError`.
+2. **In-Memory DB for Tests**: Our `conftest.py` fixture overrides the database URI with `sqlite:///:memory:` for faster, isolated test runs.
+3. **Normalization & Indexes**: Foreign keys ensure data integrity. Indexes (e.g., on `email`, `timestamp`) speed up queries.
+4. **Scalability**: Migration to PostgreSQL or MySQL is straightforward thanks to SQLAlchemy’s ORM abstractions.
 
 ---
 
 ## Database Setup
 
-1. **Initialization**: The database schema is set up by running `db_setup.py`.
-2. **Database URI**: The application is configured to use SQLite by default with the URI pointing to `instance/image_processing.db`.
+1. **Initialization**  
+   - Run `db_schema_creation.py` to create all tables. This ensures a fresh schema if you are working locally in dev mode.  
+2. **Seeding**  
+   - Run `seed_data.py` (optionally) to populate the DB with sample data (e.g., default admin user, images).  
+3. **Testing**  
+   - Tests automatically use **in-memory SQLite**. When you run `pytest`, tables are created/dropped per test via the `function_db_setup` fixture.
+
+---
+
+## Database Schema Design
+
+Below is a summary of core models (see `models.py` for implementation details):
+
+- **`Image`**: Stores metadata for images (`filename`, `dimensions`, `color_type`, etc.).  
+- **`User`**: Stores basic user data (`email`, `password_hash`, `role`).  
+- **`Admin`**: Extends `User` for admin privileges (`admin_level`).  
+- **`Log`**: Records user actions (`action`, `timestamp`).  
+- **`Analytics`**: Holds research/analytical data (JSON-based).  
+- **`Security`**: Documents security events (`user_id`, `action`).
+
+### Relationships:
+- **`User` : `Log`** (one-to-many)  
+- **`User` : `Admin`** (one-to-one)  
+- **`User` : `Security`** (one-to-many)
 
 ---
 ## Database Schema Design
@@ -109,12 +170,8 @@ Here we describe each model in the schema, their relationships, and their purpos
 ---
 
 ## Future Improvements
-- **Support for other databases**: The current implementation uses SQLite for simplicity and development. Future plans involve migrating to more robust systems like PostgreSQL or MySQL, as outlined in the [future issues](#).
-- **Data seeding**: We'll enhance the seeding script to populate the database with more comprehensive data for testing and development.
-
----
-
-## Testing the Database
-Database-related tests should be written to ensure that the schema is properly created and that the database performs as expected. Tests should be added to the `tests` folder, specifically for database queries and functionality.
+- **Migration Tools**: We may integrate Alembic or Flask-Migrate to handle more advanced schema changes.  
+- **Advanced Seed Data**: Expand the default seed script for broader use cases (multi-user scenarios, more robust logs).  
+- **Sharding / Partitioning**: For very large data sets, consider Postgres or MySQL with partitioning strategies.
 
 ---
