@@ -7,12 +7,16 @@ class Config:
 
 class DevelopmentConfig(Config):
     """Development configuration."""
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///backend/instance/image_processing.db'  # SQLite for local dev
     DEBUG = True
-    print(f"Database URI: {SQLALCHEMY_DATABASE_URI}")
 
+    # Build an absolute path for the SQLite file, ensuring no relative path issues
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    DB_PATH = os.path.join(BASE_DIR, "instance", "image_processing.db")
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{DB_PATH}"
+
+    print(f"Development DB URI: {SQLALCHEMY_DATABASE_URI}")
 
 class ProductionConfig(Config):
     """Production configuration."""
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')  # Production DB URL from env var
     DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')  # Production DB URL from env var
