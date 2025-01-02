@@ -1,5 +1,3 @@
-# test_analytics_helpers.py
-
 import pytest
 import logging
 from backend.db import db
@@ -23,7 +21,7 @@ def test_create_analytics():
     logger.debug("Starting test_create_analytics...")
 
     sample_data = {"field": "value", "nested": {"key": 123}}
-    analytics = AnalyticsHelpers.create_analytics(sample_data)
+    analytics = AnalyticsHelpers.create_analytics(session=db.session, data=sample_data)
     logger.debug("[CREATE_ANALYTICS] Analytics created: %s", analytics)
 
     assert analytics.id is not None, "Analytics entry was not assigned an ID."
@@ -39,10 +37,10 @@ def test_get_by_id():
     logger.debug("Starting test_get_by_id...")
 
     sample_data = {"test": "get_by_id"}
-    analytics = AnalyticsHelpers.create_analytics(sample_data)
+    analytics = AnalyticsHelpers.create_analytics(session=db.session, data=sample_data)
     db.session.flush()  # Ensure the new analytics is written to DB
 
-    fetched_analytics = AnalyticsHelpers.get_by_id(analytics.id)
+    fetched_analytics = AnalyticsHelpers.get_by_id(session=db.session, analytics_id=analytics.id)
     logger.debug("[GET_BY_ID] Fetched analytics: %s", fetched_analytics)
 
     assert fetched_analytics is not None, "Fetched analytics is None, expected a valid record."
@@ -59,10 +57,10 @@ def test_get_all_analytics():
 
     sample_data_1 = {"field1": "abc"}
     sample_data_2 = {"field2": "xyz"}
-    AnalyticsHelpers.create_analytics(sample_data_1)
-    AnalyticsHelpers.create_analytics(sample_data_2)
+    AnalyticsHelpers.create_analytics(session=db.session, data=sample_data_1)
+    AnalyticsHelpers.create_analytics(session=db.session, data=sample_data_2)
 
-    all_analytics = AnalyticsHelpers.get_all_analytics()
+    all_analytics = AnalyticsHelpers.get_all_analytics(session=db.session)
     logger.debug("[GET_ALL_ANALYTICS] Fetched analytics list: %s", all_analytics)
 
     assert len(all_analytics) == 2, f"Expected 2 analytics entries, found {len(all_analytics)}."
@@ -78,10 +76,10 @@ def test_get_recent_analytics():
 
     # Create multiple entries
     for i in range(5):
-        AnalyticsHelpers.create_analytics({"index": i})
+        AnalyticsHelpers.create_analytics(session=db.session, data={"index": i})
 
     # We ask for the 3 most recent
-    recent_entries = AnalyticsHelpers.get_recent_analytics(limit=3)
+    recent_entries = AnalyticsHelpers.get_recent_analytics(session=db.session, limit=3)
     logger.debug("[GET_RECENT_ANALYTICS] Recent entries: %s", recent_entries)
 
     assert len(recent_entries) == 3, f"Expected 3 most recent entries, found {len(recent_entries)}."
@@ -96,13 +94,13 @@ def test_delete_analytics():
     logger.debug("Starting test_delete_analytics...")
 
     sample_data = {"delete": True}
-    analytics = AnalyticsHelpers.create_analytics(sample_data)
+    analytics = AnalyticsHelpers.create_analytics(session=db.session, data=sample_data)
     logger.debug("[DELETE_ANALYTICS] Created analytics: %s", analytics)
 
-    AnalyticsHelpers.delete_analytics(analytics.id)
+    AnalyticsHelpers.delete_analytics(session=db.session, analytics_id=analytics.id)
     logger.debug("[DELETE_ANALYTICS] Analytics deleted.")
 
-    deleted_entry = Analytics.query.get(analytics.id)
+    deleted_entry = AnalyticsHelpers.get_by_id(session=db.session, analytics_id=analytics.id)
     logger.debug("[DELETE_ANALYTICS] Deleted entry: %s", deleted_entry)
 
     assert deleted_entry is None, "Analytics record still present after deletion."
@@ -118,10 +116,10 @@ def test_count_analytics():
 
     data1 = {"test": "count1"}
     data2 = {"test": "count2"}
-    AnalyticsHelpers.create_analytics(data1)
-    AnalyticsHelpers.create_analytics(data2)
+    AnalyticsHelpers.create_analytics(session=db.session, data=data1)
+    AnalyticsHelpers.create_analytics(session=db.session, data=data2)
 
-    count = AnalyticsHelpers.count()
+    count = AnalyticsHelpers.count(session=db.session)
     logger.debug("[COUNT_ANALYTICS] Count: %d", count)
 
     assert count == 2, f"Expected 2 analytics records, found {count}"
@@ -136,10 +134,10 @@ def test_exists_analytics():
     logger.debug("Starting test_exists_analytics...")
 
     sample_data = {"exists_check": True}
-    analytics = AnalyticsHelpers.create_analytics(sample_data)
+    analytics = AnalyticsHelpers.create_analytics(session=db.session, data=sample_data)
     logger.debug("[EXISTS_ANALYTICS] Created analytics: %s", analytics)
 
-    exists = AnalyticsHelpers.exists(analytics.id)
+    exists = AnalyticsHelpers.exists(session=db.session, analytics_id=analytics.id)
     logger.debug("[EXISTS_ANALYTICS] Exists result: %s", exists)
 
     assert exists is True, "Expected analytics to exist, but got False."

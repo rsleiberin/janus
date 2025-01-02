@@ -1,5 +1,3 @@
-# db_setup.py
-
 import os
 import logging
 from flask import Flask
@@ -15,14 +13,14 @@ def create_app():
     app = Flask(__name__)
 
     # Apply configuration
-    app.config.from_object(DevelopmentConfig)  # or ProductionConfig in production
+    config = DevelopmentConfig()  # Explicitly instantiate the config class
+    app.config.from_object(config)
+    app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
     logger.debug(f"Using database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
     # Initialize the database
-    print(f"Using Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
     db.init_app(app)
     return app
-
 
 if __name__ == "__main__":
     app = create_app()

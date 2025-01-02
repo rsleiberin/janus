@@ -7,12 +7,6 @@ This directory contains all database-related scripts and files for the Janus pro
 
 ## Files and Their Purpose
 
-
-
-
-
-
-
 ### **db_setup.py**  
 - **Purpose**: Creates and configures the Flask application’s database connections using the **DevelopmentConfig** (in `config.py`).  
 - **Status**: **[✅ Completed | Ticket #001, #010]**  

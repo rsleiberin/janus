@@ -1,48 +1,51 @@
-# analytics_helpers.py
 from backend.db import db
 from backend.models import Analytics
-from datetime import datetime
+from sqlalchemy.orm import Session
 
 # Analytics Model Helpers
 class AnalyticsHelpers:
 
     @staticmethod
-    def create_analytics(data):
+    def create_analytics(data, session: Session = None):
         """Create new analytics entry with the provided data."""
+        session = session or db.session  # Use the provided session or fallback to db.session
         analytics = Analytics(data=data)
-        db.session.add(analytics)
-        db.session.commit()
+        session.add(analytics)
+        session.commit()
         return analytics
 
     @staticmethod
-    def get_by_id(analytics_id):
+    def get_by_id(session: Session, analytics_id: int):
         """Get analytics by its ID."""
-        return Analytics.query.get(analytics_id)
+        return session.get(Analytics, analytics_id)
 
     @staticmethod
-    def get_all_analytics():
+    def get_all_analytics(session: Session = None):
         """Get all analytics entries."""
-        return Analytics.query.all()
+        session = session or db.session
+        return session.query(Analytics).all()
 
     @staticmethod
-    def get_recent_analytics(limit=10):
+    def get_recent_analytics(session: Session = None, limit=10):
         """Get the most recent analytics entries."""
-        return Analytics.query.order_by(Analytics.created_at.desc()).limit(limit).all()
+        session = session or db.session
+        return session.query(Analytics).order_by(Analytics.created_at.desc()).limit(limit).all()
 
     @staticmethod
-    def delete_analytics(analytics_id):
+    def delete_analytics(session: Session, analytics_id: int):
         """Delete an analytics entry by its ID."""
-        analytics = Analytics.query.get(analytics_id)
+        analytics = session.get(Analytics, analytics_id)
         if analytics:
-            db.session.delete(analytics)
-            db.session.commit()
+            session.delete(analytics)
+            session.commit()
 
     @staticmethod
-    def count():
+    def count(session: Session = None):
         """Get the total number of analytics entries."""
-        return Analytics.query.count()
+        session = session or db.session
+        return session.query(Analytics).count()
 
     @staticmethod
-    def exists(analytics_id):
+    def exists(session: Session, analytics_id: int):
         """Check if an analytics entry exists."""
-        return Analytics.query.filter_by(id=analytics_id).first() is not None
+        return session.query(Analytics).filter_by(id=analytics_id).first() is not None
