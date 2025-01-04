@@ -59,24 +59,62 @@ This directory contains the Flask backend for the Janus project, responsible for
 
 ---
 
-## Phases and Rationale
+## Workflow Phases and Rationale
 
-### **Phase 1: Business Logic (Current Phase)**
-- Focus on proof-of-concept API endpoints and database integration.
-- Completed: `app.py`, `models.py`, `db_setup.py`, `status_routes.py`, `file_routes.py`.
-- Files In Progress: `config.py`, `image_routes.py`.
+### **Phase 1: Core Backend Implementation (Completed)**
+- Focus: Establish the foundation for the backend, including database setup, basic routing, and initial file handling utilities.
+- **Completed**:
+  - `app.py`: Main Flask application setup.
+  - `models.py`: SQLAlchemy models for the database.
+  - `db/`: Database scripts and helpers.
+  - Basic route setup (`status_routes.py`, `file_routes.py`).
+- **In Progress**:
+  - `image_routes.py`: API for image-related operations **[🚧 In Progress | Ticket #5]**.
+  - Utilities: File handler and logging utilities **[🚧 In Progress | Tickets #8, #9]**.
 
-### **Phase 2: Research and User Features**
-- Expand database capabilities and introduce user management.
-- Files Pending: `user_routes.py`, `security.py`, `db_helpers.py`, `seed_data.py`.
+---
 
-### **Phase 3: Frontend Integration**
-- Connect the backend with the Next.js frontend and support rendered views.
-- Files Pending: `templates/`, `static/`, `admin_routes.py`.
+### **Phase 2: Utility Refinement and Integration**
+- Focus: Finalize utility scripts, test them, and ensure consistent usage across the backend.
+- **Current Goals**:
+  - Finalize and test `utils/` **[🚧 In Progress | Tickets #8, #9, #30]**.
+  - Ensure all existing routes and database helpers integrate with finalized utilities.
+  - Begin testing for database and utility scripts **[🚧 In Progress | Ticket #40]**.
+- **Pending**:
+  - Security utilities (`security.py`) **[❌ Pending | Ticket #32]**.
+  - User management (`user_routes.py`) **[❌ Pending | Ticket #11]**.
 
-### **Phase 4: Extensions**
-- Add advanced features like ML, analytics, and third-party integrations.
-- Files Pending: `machine_learning.py`, `data_analytics.py`, `integrations.py`, `openapi_spec.yaml`, `api_auth.py`, `api_throttling.py`.
+---
+
+### **Phase 3: Frontend Integration and Advanced Routing**
+- Focus: Add frontend rendering support and advanced routes for user and admin functionalities.
+- **Planned Goals**:
+  - Integrate `templates/` and `static/` directories for frontend rendering **[❌ Pending | Tickets #15, #17, #16]**.
+  - Implement `admin_routes.py` and finalize `user_routes.py` **[❌ Pending | Tickets #15, #11]**.
+
+---
+
+### **Phase 4: Scalability and Extensions**
+- Focus: Prepare the backend for advanced use cases, scalability, and external integrations.
+- **Planned Goals**:
+  - API enhancements:
+    - API authentication **[❌ Pending | Ticket #18]**.
+    - API throttling **[❌ Pending | Ticket #19]**.
+    - OpenAPI documentation **[❌ Pending | Ticket #20]**.
+  - Extensions:
+    - Machine learning utilities **[❌ Pending | Ticket #21]**.
+    - Data analytics tools **[❌ Pending | Ticket #22]**.
+    - Third-party integrations **[❌ Pending | Ticket #23]**.
+  - Database scalability enhancements (e.g., PostgreSQL migration) **[❌ Pending | Ticket #24]**.
+
+---
+
+### Updated Rationale
+1. **Foundation First**: The foundational components (database, models, basic routes) are completed, providing a stable backend core.
+2. **Utility Refinement**: Utilities are actively being refined and tested to standardize backend operations.
+3. **Frontend Readiness**: Once utilities are stable, efforts will shift toward integrating frontend rendering capabilities and user/admin routes.
+4. **Advanced Features**: Scalability, security, and advanced analytics will be addressed in later phases after core functionality is finalized.
+
 
 ---
 
