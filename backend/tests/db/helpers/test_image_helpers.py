@@ -5,7 +5,6 @@ import logging
 from datetime import datetime, timedelta
 from backend.db import db
 from backend.db.helpers.image_helpers import ImageHelpers
-from backend.models import Image
 
 # Configure console logging
 logging.basicConfig(

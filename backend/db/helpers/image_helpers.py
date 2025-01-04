@@ -2,7 +2,7 @@
 
 from backend.db import db
 from backend.models import Image
-from datetime import datetime
+
 
 class ImageHelpers:
     @staticmethod

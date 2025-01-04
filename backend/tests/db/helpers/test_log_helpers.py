@@ -4,7 +4,6 @@ import pytest
 import logging
 from backend.db import db
 from backend.db.helpers.log_helpers import LogHelpers
-from backend.models import Log
 
 logging.basicConfig(
     level=logging.DEBUG,

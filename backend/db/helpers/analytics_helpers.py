@@ -1,8 +1,9 @@
+# analytics_helpers.py
+
 from backend.db import db
 from backend.models import Analytics
 from sqlalchemy.orm import Session
 
-# Analytics Model Helpers
 class AnalyticsHelpers:
 
     @staticmethod

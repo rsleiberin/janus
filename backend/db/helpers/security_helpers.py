@@ -2,7 +2,6 @@
 
 from backend.db import db
 from backend.models import Security
-from datetime import datetime
 
 class SecurityHelpers:
     @staticmethod

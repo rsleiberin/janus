@@ -4,7 +4,7 @@ import pytest
 import logging
 from backend.db import db
 from backend.db.helpers.user_helpers import UserHelpers
-from backend.models import User
+
 
 logging.basicConfig(
     level=logging.DEBUG,

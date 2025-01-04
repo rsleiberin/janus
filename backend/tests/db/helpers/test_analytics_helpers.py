@@ -2,7 +2,6 @@ import pytest
 import logging
 from backend.db import db
 from backend.db.helpers.analytics_helpers import AnalyticsHelpers
-from backend.models import Analytics
 
 # Configure console logging for test suite
 logging.basicConfig(

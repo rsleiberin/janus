@@ -2,7 +2,7 @@
 
 from backend.db import db
 from backend.models import Log
-from datetime import datetime
+
 
 class LogHelpers:
     @staticmethod
