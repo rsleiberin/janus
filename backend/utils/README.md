@@ -24,6 +24,19 @@ The current focus is on refactoring and enhancing the `logger.py` module to adhe
 
 ---
 
+## Logger Module (`logger.py`)
+
+### Overview
+The `logger.py` module provides centralized logging functionality for the backend, supporting both console and database logging. It ensures all logs are consistent, structured, and enriched with contextual metadata.
+
+### Key Features
+- **Console Logging**: Logs messages to the console with optional metadata.
+- **Database Logging**: Stores logs in the database for searchability and auditing.
+- **Structured Format**: Formats logs in a machine-readable JSON structure.
+- **Extensibility**: Prepared for integration with real-time monitoring tools.
+
+---
+
 ## Current Work: Logger Refactor
 
 ### **Why Refactor the Logger?**
@@ -38,26 +51,6 @@ The existing `logger.py` implementation is functional but does not adhere to bes
 3. Implement log levels and metadata for context-rich logging (e.g., module, user ID, and timestamp).
 4. Unify logs to support both agents and human users with a machine-parsable yet human-readable format.
 5. Ensure compatibility with real-time log monitoring in future development phases.
-
-### **Best Practices Followed**
-1. **Centralized Logging**: Use a single logger configuration shared across the application.
-2. **Granular Metadata**: Include fields such as user ID, module name, and custom metadata for detailed insights.
-3. **Database Integration**: Write logs to the database for searchability and auditing.
-4. **Format Consistency**: Ensure logs are formatted in a human-readable yet machine-parsable structure.
-5. **Security**: Protect sensitive log data by adhering to secure coding practices, such as hashing or access control.
-6. **Extensibility**: Keep the implementation flexible to support future integration with external logging services.
-
-### **Additional Considerations**
-1. **Log Storage and Retention**:
-   - Implement policies for log retention and archiving to manage database size.
-   - Prepare for migration to external storage services when scaling demands increase.
-2. **Error Handling Integration**:
-   - Ensure error handling modules write all relevant error logs via `logger.py`.
-   - Centralize error logging to maintain consistency and traceability.
-3. **Real-Time Monitoring**:
-   - Design the logger to integrate with real-time monitoring tools in the future.
-4. **Agent Integration**:
-   - Ensure agent-specific logs are tagged with appropriate user IDs and metadata for differentiation.
 
 ---
 

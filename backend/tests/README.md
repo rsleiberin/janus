@@ -36,7 +36,7 @@ backend/tests/
 ├── utils/
 │   ├── __init__.py                       Module Initialization
 │   ├── test_error_handling.py           ✔️ Complete
-│   ├── test_logging.py                  🚧 In Progress | Ticket Pending
+│   ├── test_logger.py                  🚧 In Progress | Ticket Pending
 ├── extensions/
 │   ├── __init__.py                       Module Initialization
 ├── models/
