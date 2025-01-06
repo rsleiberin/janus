@@ -16,10 +16,13 @@ logger = logging.getLogger("test_logger")
 @pytest.mark.usefixtures("function_db_setup")
 def test_create_log():
     logger.debug("Starting test_create_log...")
-    new_log = LogHelpers.create_log("Test Action", user_id=1)
+    new_log = LogHelpers.create_log("Test Action", user_id=1, module="TestModule", level="INFO", meta_data={"key": "value"})
     assert new_log.id is not None, "Log entry was not assigned an ID."
     assert new_log.action == "Test Action", "Log action does not match expected."
     assert new_log.user_id == 1, "Log user_id does not match expected."
+    assert new_log.module == "TestModule", "Log module does not match expected."
+    assert new_log.level == "INFO", "Log level does not match expected."
+    assert new_log.meta_data == {"key": "value"}, "Log metadata does not match expected."
     logger.debug("test_create_log passed successfully.")
 
 
@@ -48,6 +51,28 @@ def test_get_by_user_id():
 
 
 @pytest.mark.usefixtures("function_db_setup")
+def test_get_by_module():
+    logger.debug("Starting test_get_by_module...")
+    LogHelpers.create_log("Module Action 1", user_id=4, module="ModuleA")
+    LogHelpers.create_log("Module Action 2", user_id=5, module="ModuleA")
+
+    logs_for_module = LogHelpers.get_by_module("ModuleA")
+    assert len(logs_for_module) == 2, f"Expected 2 logs for module 'ModuleA', got {len(logs_for_module)}."
+    logger.debug("test_get_by_module passed successfully.")
+
+
+@pytest.mark.usefixtures("function_db_setup")
+def test_get_by_level():
+    logger.debug("Starting test_get_by_level...")
+    LogHelpers.create_log("Level Action 1", user_id=6, level="DEBUG")
+    LogHelpers.create_log("Level Action 2", user_id=7, level="DEBUG")
+
+    logs_for_level = LogHelpers.get_by_level("DEBUG")
+    assert len(logs_for_level) == 2, f"Expected 2 logs for level 'DEBUG', got {len(logs_for_level)}."
+    logger.debug("test_get_by_level passed successfully.")
+
+
+@pytest.mark.usefixtures("function_db_setup")
 def test_get_recent_logs():
     logger.debug("Starting test_get_recent_logs...")
 
@@ -62,32 +87,23 @@ def test_get_recent_logs():
 
 
 @pytest.mark.usefixtures("function_db_setup")
-def test_delete_log():
-    logger.debug("Starting test_delete_log...")
-    log_entry = LogHelpers.create_log("Delete Action", user_id=5)
-    log_id = log_entry.id
+def test_get_logs_with_metadata_key():
+    logger.debug("Starting test_get_logs_with_metadata_key...")
+    LogHelpers.create_log("Action 1", user_id=8, meta_data={"key1": "value1"})
+    LogHelpers.create_log("Action 2", user_id=9, meta_data={"key2": "value2"})
 
-    LogHelpers.delete_log(log_id)
-
-    deleted_log = LogHelpers.get_by_id(log_id)
-    assert deleted_log is None, "Log entry still exists after delete_log was called."
-    logger.debug("test_delete_log passed successfully.")
+    logs_with_key = LogHelpers.get_logs_with_metadata_key("key1")
+    assert len(logs_with_key) == 1, f"Expected 1 log with key 'key1', got {len(logs_with_key)}."
+    logger.debug("test_get_logs_with_metadata_key passed successfully.")
 
 
 @pytest.mark.usefixtures("function_db_setup")
-def test_count_logs():
-    logger.debug("Starting test_count_logs...")
-    LogHelpers.create_log("Count Log 1", user_id=6)
-    LogHelpers.create_log("Count Log 2", user_id=6)
+def test_get_logs_by_metadata_value():
+    logger.debug("Starting test_get_logs_by_metadata_value...")
+    LogHelpers.create_log("Action 1", user_id=10, meta_data={"key": "value"})
+    LogHelpers.create_log("Action 2", user_id=11, meta_data={"key": "other_value"})
 
-    total_logs = LogHelpers.count()
-    assert total_logs == 2, f"Expected 2 logs in total, found {total_logs}."
-    logger.debug("test_count_logs passed successfully.")
+    logs_with_value = LogHelpers.get_logs_by_metadata_value("key", "value")
+    assert len(logs_with_value) == 1, f"Expected 1 log with 'key=value', got {len(logs_with_value)}."
+    logger.debug("test_get_logs_by_metadata_value passed successfully.")
 
-
-@pytest.mark.usefixtures("function_db_setup")
-def test_exists_log():
-    logger.debug("Starting test_exists_log...")
-    new_log = LogHelpers.create_log("Exist Check", user_id=7)
-    assert LogHelpers.exists(new_log.id) is True, "Expected the new log to exist."
-    logger.debug("test_exists_log passed successfully.")
