@@ -49,7 +49,6 @@ class Admin(db.Model):
         # Avoid triggering a lazy-load after the session has closed.
         return f"<Admin id={self.id}, user_id={self.user_id}, level={self.admin_level}>"
 
-
 class Log(db.Model):
     """Model for storing logs of user actions."""
     __tablename__ = 'logs'
@@ -58,11 +57,18 @@ class Log(db.Model):
     action = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    module = db.Column(db.String(100), nullable=True)  # Optional module name
+    level = db.Column(db.String(50), nullable=True)  # Log level (INFO, DEBUG, etc.)
+    meta_data = db.Column(db.JSON, nullable=True)  # Renamed to avoid conflict
 
     user = db.relationship('User', backref=db.backref('logs', lazy=True))
 
     def __repr__(self):
-        return f"<Log {self.action} - User {self.user.username} at {self.timestamp}>"
+        return (
+            f"<Log {self.action} - User {self.user.username} "
+            f"at {self.timestamp} (Level: {self.level}, Module: {self.module})>"
+        )
+
 
 class Analytics(db.Model):
     """Model for storing research and analytical data."""

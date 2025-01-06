@@ -2,6 +2,8 @@ import os
 from flask import Flask
 from backend.db import db  # Correct import for db
 from backend.config import DevelopmentConfig  # Or ProductionConfig for production
+from backend.models import *  # Centralized import for all models
+
 
 def create_app():
     """Factory function to create and configure the Flask application."""

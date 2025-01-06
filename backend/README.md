@@ -22,8 +22,6 @@ This directory contains the Flask backend for the Janus project, responsible for
 
 ## Directory Structure with Implementation Stages
 
-## Directory Structure with Implementation Stages
-
 ### **backend/**
 - **app.py**: Main Flask application entry point **[✅ Completed]**
 - **config.py**: Backend configuration settings **[✅ Completed]**
@@ -35,7 +33,89 @@ This directory contains the Flask backend for the Janus project, responsible for
 - **tests/**: Test cases for backend modules **[✅ Completed]**
 - **utils/**: Shared utility scripts **[🚧 In Progress]**
 - **db/**: Database-specific scripts and helpers **[✅ Completed]**
+- **migrations/**: Tracks database schema changes using Flask-Migrate **[🔄 Managed | Flask-Migrate]**
 - **api/**: API-related extensions **[❌ Pending | Phase 4]**
+
+---
+
+## Database Schema
+
+The database schema is defined using SQLAlchemy models in `models.py`. Below is a high-level overview of the tables:
+
+### **images Table**
+- **Purpose**: Stores metadata for uploaded images.
+- **Key Columns**:
+  - `id`: Unique identifier for each image.
+  - `filename`: Name of the image file, must be unique.
+  - `width`, `height`: Dimensions of the image.
+  - `image_metadata`: Additional metadata stored in JSON format.
+- **Relationships**: None.
+
+### **users Table**
+- **Purpose**: Stores user information.
+- **Key Columns**:
+  - `id`: Unique identifier for each user.
+  - `username`: Unique username for the user.
+  - `email`: Unique email address.
+  - `password_hash`: Hashed password for authentication.
+  - `role`: Role of the user (e.g., admin, user).
+- **Relationships**: Referenced by `logs`, `admins`, and `security` tables.
+
+### **admins Table**
+- **Purpose**: Stores administrative user information.
+- **Key Columns**:
+  - `id`: Unique identifier for each admin.
+  - `user_id`: References the user this admin entry is associated with.
+  - `admin_level`: The level of admin privileges (e.g., superadmin, moderator).
+- **Relationships**: Linked to `users` table via `user_id`.
+
+### **logs Table**
+- **Purpose**: Stores logs of user actions.
+- **Key Columns**:
+  - `id`: Unique identifier for each log entry.
+  - `user_id`: References the user who performed the action.
+  - `action`: Description of the action performed.
+  - `module`: The system module where the action originated.
+  - `level`: Log level (e.g., INFO, DEBUG).
+  - `meta_data`: Additional metadata about the action (stored in JSON format).
+  - `timestamp`: Timestamp of the log entry.
+- **Relationships**: Linked to `users` table via `user_id`.
+
+### **analytics Table**
+- **Purpose**: Stores analytical and research data.
+- **Key Columns**:
+  - `id`: Unique identifier for each analytics entry.
+  - `data`: JSON data containing the analytics or research information.
+  - `research_topic`: Optional field for categorizing the research topic.
+  - `created_at`: Timestamp for when the entry was created.
+- **Relationships**: None.
+
+### **security Table**
+- **Purpose**: Tracks security-related actions for users.
+- **Key Columns**:
+  - `id`: Unique identifier for each security action.
+  - `user_id`: References the user who triggered the security action.
+  - `action`: Description of the security event.
+  - `timestamp`: Timestamp of the security action.
+- **Relationships**: Linked to `users` table via `user_id`.
+
+## Managed Schemas
+
+### **alembic_version Table**
+
+- **Purpose**: Tracks the current state of database migrations managed by Alembic.
+- **Key Columns**:
+  - `version_num`: Unique identifier for the current migration applied to the database.
+- **Relationships**: None (managed automatically by Alembic).
+
+
+---
+
+### **Notes on Changes**
+- Added the `migrations/` directory with a new status symbol **[🔄 Managed | Flask-Migrate]**, reflecting its automatic and tool-driven nature.
+- Updated the `logs` schema to include `module`, `level`, and `meta_data` fields as discussed and implemented.
+- Maintained other schema details as they were confirmed to be accurate.
+
 
 ---
 
@@ -94,25 +174,6 @@ This directory contains the Flask backend for the Janus project, responsible for
 2. **Utility Refinement**: Utilities are actively being refined and tested to standardize backend operations.
 3. **Frontend Readiness**: Once utilities are stable, efforts will shift toward integrating frontend rendering capabilities and user/admin routes.
 4. **Advanced Features**: Scalability, security, and advanced analytics will be addressed in later phases after core functionality is finalized.
-
-
----
-
-## Database Schema
-
-The database schema is defined using SQLAlchemy models in `models.py`. Currently, the following tables are defined:
-
-- **images**: Stores metadata for uploaded images. Contains columns like `filename`, `width`, `height`, `bit_depth`, and `image_metadata`.
-
-- **users**: Stores user information, including `username`, `email`, and `password_hash`.
-
-- **admins**: Stores administrative user information and their associated roles. Connected to the `users` table.
-
-- **logs**: Stores logs of user actions, including the type of action and the associated user.
-
-- **analytics**: Stores analytical and research data, with a `data` field of type JSON for flexible storage. This also serves as the table for storing research data with an optional `research_topic` column.
-
-- **security**: Stores security-related actions, including user activities that are tracked for security purposes.
 
 ---
 
