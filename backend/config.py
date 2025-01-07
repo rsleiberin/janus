@@ -24,11 +24,17 @@ class DevelopmentConfig(Config):
         super().__init__()
         self.DEBUG = True
 
-        # Build an absolute path for the SQLite file, ensuring no relative path issues
-        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-        db_path = os.path.join(base_dir, "instance", "image_processing.db")
+        # Always resolve base_dir relative to the backend module
+        base_dir = os.path.abspath(os.path.dirname(__file__))  # Current directory of config.py
+        backend_dir = os.path.abspath(os.path.join(base_dir, "."))  # Parent directory of config.py (backend)
+        db_path = os.path.join(backend_dir, "instance", "image_processing.db")
         self.SQLALCHEMY_DATABASE_URI = f"sqlite:///{db_path}"
+
+        # Log the resolved DB path
         logger.log_to_console("DEBUG", "Development DB URI set.", db_uri=self.SQLALCHEMY_DATABASE_URI)
+
+
+
 
 class TestingConfig(Config):
     """Testing configuration."""
