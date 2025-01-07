@@ -9,7 +9,7 @@ This directory contains utility scripts for the Janus backend. These utilities p
 
 ### **utils/**
 - **file_handler.py**: Utility functions for file operations **[🚧 In Progress | Ticket #30]**
-- **logger.py**: Centralized logging configuration for the backend **[✅ Completed | Ticket #9]**
+- **logger.py**: Centralized logging configuration for the backend **[✅ Completed]**
 - **security.py**: Security utilities (e.g., input validation, sanitization) **[🚧 In Progress | Ticket #32]**
 - **error_handling/**:
   - **api/errors.py**: Error handling for API-related operations **[🚧 In Progress | Ticket #58]**
