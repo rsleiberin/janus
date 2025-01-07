@@ -1,12 +1,11 @@
+# db_setup.py
 import os
-import logging
 from flask import Flask
 from backend.models import db  # The shared SQLAlchemy instance
 from backend.config import DevelopmentConfig  # Or ProductionConfig for production
+from backend.utils.logger import CentralizedLogger
 
-# Set up logging
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = CentralizedLogger()
 
 def create_app():
     """Factory function to create and configure the Flask application."""
@@ -16,7 +15,10 @@ def create_app():
     config = DevelopmentConfig()  # Explicitly instantiate the config class
     app.config.from_object(config)
     app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
-    logger.debug(f"Using database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
+    logger.log_to_console(
+        "DEBUG",
+        f"Using database URI: {app.config['SQLALCHEMY_DATABASE_URI']}"
+    )
 
     # Initialize the database
     db.init_app(app)
@@ -30,7 +32,22 @@ if __name__ == "__main__":
         os.path.join(os.path.dirname(__file__), "..", "instance", "image_processing.db")
     )
     if os.path.exists(db_path):
-        logger.debug(f"Database file created successfully at {db_path}")
-        logger.debug(f"File size: {os.path.getsize(db_path)} bytes")
+        logger.log_to_console(
+            "DEBUG",
+            f"Database file created successfully at {db_path}"
+        )
+        logger.log_to_console(
+            "DEBUG",
+            f"File size: {os.path.getsize(db_path)} bytes"
+        )
     else:
-        logger.error("ERROR: Database file not created!")
+        logger.log_to_console(
+            "ERROR",
+            "ERROR: Database file not created!"
+        )
+        logger.log_to_db(
+            level="ERROR",
+            message="Database file not created",
+            module="db_setup",
+            meta_data={"db_path": db_path}
+        )

@@ -7,76 +7,75 @@ from sqlalchemy import create_engine
 from backend import create_app
 from backend.db import db  # SQLAlchemy instance
 
-# Configure console logging
+# Configure test logger
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[logging.StreamHandler()]
 )
-logger = logging.getLogger("test_logger")
+test_logger = logging.getLogger("test_logger")
 
 
 @pytest.fixture(scope="session")
 def app():
     """
     Creates a Flask application for testing.
-    Overrides the DB URI with in-memory SQLite so file path issues are avoided.
+    Overrides the DB URI with in-memory SQLite to ensure isolated test environments.
     """
-    logger.debug("[SESSION] Creating the Flask application for the test session...")
+    test_logger.debug("[SESSION] Initializing Flask application for testing...")
     application = create_app()
 
-    # Override to in-memory DB for tests
+    # Set in-memory SQLite for tests
     application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
-    logger.debug("[SESSION] Overriding DB URI to in-memory: sqlite:///:memory:")
+    test_logger.debug("[SESSION] Using in-memory SQLite database for testing.")
 
-    logger.debug("[SESSION] Flask application created.")
+    test_logger.debug("[SESSION] Flask application initialization complete.")
     return application
 
 
 @pytest.fixture(scope="session")
 def session_db_setup(app):
     """
-    Performs a one-time check of the database connection at session scope.
-    Does NOT create or drop tables; that happens at function scope.
+    Performs one-time database connection checks at the session scope.
     """
-    logger.debug("[SESSION] Checking database connectivity...")
+    test_logger.debug("[SESSION] Verifying database connectivity...")
     db_uri = app.config.get("SQLALCHEMY_DATABASE_URI")
-    if not db_uri:
-        logger.error("[SESSION] No SQLALCHEMY_DATABASE_URI found in app config.")
-        pytest.exit("Cannot proceed without a valid database URI.")
 
-    logger.debug(f"[SESSION] Database URI: {db_uri}")
+    if not db_uri:
+        test_logger.error("[SESSION] No SQLALCHEMY_DATABASE_URI defined in app config.")
+        pytest.exit("A valid database URI is required for tests.")
+
+    test_logger.debug(f"[SESSION] Using database URI: {db_uri}")
     try:
         engine = create_engine(db_uri)
         connection = engine.connect()
-        logger.debug("[SESSION] Database connection succeeded.")
+        test_logger.debug("[SESSION] Successfully connected to the database.")
         connection.close()
     except Exception as e:
-        logger.error(f"[SESSION] Database connection failed: {e}")
-        pytest.exit("Terminating test session due to DB connection error.")
+        test_logger.error(f"[SESSION] Database connection error: {e}")
+        pytest.exit("Database connectivity check failed.")
 
-    # Yield for the rest of the test session
+    # Yield for the test session
     yield
-    logger.debug("[SESSION] Session-level DB checks complete. No teardown needed here.")
+    test_logger.debug("[SESSION] Database connection checks complete.")
 
 
 @pytest.fixture(scope="function")
 def function_db_setup(app, session_db_setup):
     """
-    Creates tables before each test function and drops them afterwards.
-    Ensures a fresh DB state for every test.
+    Prepares a clean database state for each test function.
     """
-    logger.debug("[FUNCTION] Entering function_db_setup fixture...")
+    test_logger.debug("[FUNCTION] Preparing database state for test function...")
     with app.app_context():
-        logger.debug("[FUNCTION] App context active. Creating all tables...")
+        test_logger.debug("[FUNCTION] Creating database tables...")
         db.create_all()
-        logger.debug("[FUNCTION] Tables created successfully.")
+        test_logger.debug("[FUNCTION] Database tables created successfully.")
 
-    # Hand over control to the test function
+    # Yield control to the test function
     yield
 
-    logger.debug("[FUNCTION] Test function completed. Dropping all tables...")
+    test_logger.debug("[FUNCTION] Cleaning up database after test function...")
     with app.app_context():
         db.session.remove()
         db.drop_all()
-        logger.debug("[FUNCTION] All tables dropped. DB is clean for the next test.")
+        test_logger.debug("[FUNCTION] Database cleaned up successfully.")

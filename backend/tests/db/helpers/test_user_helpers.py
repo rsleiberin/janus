@@ -1,22 +1,13 @@
-# test_user_helpers.py
-
 import pytest
-import logging
 from backend.db import db
 from backend.db.helpers.user_helpers import UserHelpers
+from backend.utils.logger import CentralizedLogger
 
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler()]
-)
-logger = logging.getLogger("test_logger")
-
+logger = CentralizedLogger("test_user_helpers")
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_create_user():
-    logger.debug("Starting test_create_user...")
+    logger.log_to_console("DEBUG", "Starting test_create_user...")
     user_data = {
         "username": "testuser",
         "email": "test@example.com",
@@ -26,12 +17,12 @@ def test_create_user():
     new_user = UserHelpers.create(user_data)
     assert new_user.id is not None, "User was not assigned an ID."
     assert new_user.username == "testuser", "Username mismatch."
-    logger.debug("test_create_user passed successfully.")
+    logger.log_to_console("DEBUG", "test_create_user passed successfully.")
 
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_by_id():
-    logger.debug("Starting test_get_by_id...")
+    logger.log_to_console("DEBUG", "Starting test_get_by_id...")
     user_data = {
         "username": "getbyid_user",
         "email": "getbyid@example.com",
@@ -44,12 +35,12 @@ def test_get_by_id():
     fetched_user = UserHelpers.get_by_id(created_user.id)
     assert fetched_user is not None, "Fetched user is None."
     assert fetched_user.id == created_user.id, "Fetched ID does not match created user."
-    logger.debug("test_get_by_id passed successfully.")
+    logger.log_to_console("DEBUG", "test_get_by_id passed successfully.")
 
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_by_email():
-    logger.debug("Starting test_get_by_email...")
+    logger.log_to_console("DEBUG", "Starting test_get_by_email...")
     user_data = {
         "username": "email_user",
         "email": "emailtest@example.com",
@@ -60,12 +51,12 @@ def test_get_by_email():
     fetched_by_email = UserHelpers.get_by_email("emailtest@example.com")
     assert fetched_by_email is not None, "Expected to find a user by email."
     assert fetched_by_email.id == created_user.id, "Email-based fetch mismatch."
-    logger.debug("test_get_by_email passed successfully.")
+    logger.log_to_console("DEBUG", "test_get_by_email passed successfully.")
 
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_update_user():
-    logger.debug("Starting test_update_user...")
+    logger.log_to_console("DEBUG", "Starting test_update_user...")
     user_data = {
         "username": "updateuser",
         "email": "update@example.com",
@@ -81,12 +72,12 @@ def test_update_user():
     updated_user = UserHelpers.update(created_user.id, updated_data)
     assert updated_user.username == "updateduser", "Username not updated correctly."
     assert updated_user.password_hash == "newhash", "Password hash not updated."
-    logger.debug("test_update_user passed successfully.")
+    logger.log_to_console("DEBUG", "test_update_user passed successfully.")
 
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_delete_user():
-    logger.debug("Starting test_delete_user...")
+    logger.log_to_console("DEBUG", "Starting test_delete_user...")
     user_data = {
         "username": "deleteuser",
         "email": "delete@example.com",
@@ -99,12 +90,12 @@ def test_delete_user():
     UserHelpers.delete(user_id)
     deleted_user = UserHelpers.get_by_id(user_id)
     assert deleted_user is None, "User record still present after deletion."
-    logger.debug("test_delete_user passed successfully.")
+    logger.log_to_console("DEBUG", "test_delete_user passed successfully.")
 
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_count_users():
-    logger.debug("Starting test_count_users...")
+    logger.log_to_console("DEBUG", "Starting test_count_users...")
     user_data_1 = {
         "username": "countuser1",
         "email": "count1@example.com",
@@ -122,12 +113,12 @@ def test_count_users():
 
     total_users = UserHelpers.count()
     assert total_users == 2, f"Expected 2 users, found {total_users}."
-    logger.debug("test_count_users passed successfully.")
+    logger.log_to_console("DEBUG", "test_count_users passed successfully.")
 
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_exists_user():
-    logger.debug("Starting test_exists_user...")
+    logger.log_to_console("DEBUG", "Starting test_exists_user...")
     user_data = {
         "username": "existsuser",
         "email": "exists@example.com",
@@ -137,4 +128,4 @@ def test_exists_user():
     new_user = UserHelpers.create(user_data)
     user_exists = UserHelpers.exists(new_user.id)
     assert user_exists is True, "Expected the user to exist."
-    logger.debug("test_exists_user passed successfully.")
+    logger.log_to_console("DEBUG", "test_exists_user passed successfully.")

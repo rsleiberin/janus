@@ -1,15 +1,19 @@
-#!/usr/bin/env python3
+# seed_data.py
 
 from datetime import datetime
 from backend.db import db
 from backend.models import Image, User, Admin, Log, Analytics, Security
+from backend.utils.logger import CentralizedLogger
 
+logger = CentralizedLogger()
 
 def seed_data():
     """
     Seed the database with initial data.
     Expects an active Flask app context and DB session.
     """
+    logger.log_to_console("INFO", "Starting database seeding...")
+
     # Create default users
     user1 = User(
         username="admin",
@@ -25,6 +29,14 @@ def seed_data():
     )
     db.session.add_all([user1, user2])
     db.session.commit()  # Commit here to generate user IDs for FK relationships
+    logger.log_to_console("INFO", "Default users seeded.")
+    logger.log_to_db(
+        level="INFO",
+        message="Default users seeded",
+        module="seed_data",
+        user_id=user1.id,  # Attach the admin user for traceability
+        meta_data={"user_count": 2},
+    )
 
     # Create default images
     image1 = Image(
@@ -50,10 +62,26 @@ def seed_data():
         updated_at=datetime.utcnow(),
     )
     db.session.add_all([image1, image2])
+    logger.log_to_console("INFO", "Default images seeded.")
+    logger.log_to_db(
+        level="INFO",
+        message="Default images seeded",
+        module="seed_data",
+        user_id=user1.id,
+        meta_data={"image_count": 2},
+    )
 
     # Create an admin for user1
     admin1 = Admin(user_id=user1.id, admin_level="superadmin")
     db.session.add(admin1)
+    logger.log_to_console("INFO", "Admin created for user1.")
+    logger.log_to_db(
+        level="INFO",
+        message="Admin created",
+        module="seed_data",
+        user_id=user1.id,
+        meta_data={"user_id": user1.id, "admin_level": "superadmin"},
+    )
 
     # Create logs for user actions
     log1 = Log(
@@ -73,6 +101,14 @@ def seed_data():
         meta_data={"filename": "image2.jpg"},
     )
     db.session.add_all([log1, log2])
+    logger.log_to_console("INFO", "User actions logged.")
+    logger.log_to_db(
+        level="INFO",
+        message="User logs created",
+        module="seed_data",
+        user_id=user1.id,
+        meta_data={"log_count": 2},
+    )
 
     # Create analytics data
     analytics1 = Analytics(
@@ -86,6 +122,14 @@ def seed_data():
         created_at=datetime.utcnow(),
     )
     db.session.add_all([analytics1, analytics2])
+    logger.log_to_console("INFO", "Analytics data seeded.")
+    logger.log_to_db(
+        level="INFO",
+        message="Analytics data created",
+        module="seed_data",
+        user_id=user1.id,
+        meta_data={"analytics_count": 2},
+    )
 
     # Create security logs
     security1 = Security(
@@ -95,11 +139,25 @@ def seed_data():
         user_id=user2.id, action="Login attempt", timestamp=datetime.utcnow()
     )
     db.session.add_all([security1, security2])
+    logger.log_to_console("INFO", "Security logs created.")
+    logger.log_to_db(
+        level="INFO",
+        message="Security logs created",
+        module="seed_data",
+        user_id=user1.id,
+        meta_data={"security_log_count": 2},
+    )
 
     # Commit all changes
     db.session.commit()
-    print("Database seeded successfully.")
+    logger.log_to_console("INFO", "Database seeding completed successfully.")
+    logger.log_to_db(
+        level="INFO",
+        message="Database seeding process completed",
+        module="seed_data",
+        user_id=user1.id,
+    )
 
 
 if __name__ == "__main__":
-    print("Ensure this script is run within a Flask app context.")
+    logger.log_to_console("WARNING", "Ensure this script is run within a Flask app context.")

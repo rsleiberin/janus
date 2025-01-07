@@ -1,16 +1,9 @@
-# test_multi_model_helpers.py
-
 import pytest
-import logging
-
+from datetime import datetime
+from sqlalchemy.sql import text
 from backend.db import db
-from backend.db.helpers.log_helpers import LogHelpers
-from backend.db.helpers.security_helpers import SecurityHelpers
-from backend.db.helpers.user_helpers import UserHelpers
-from backend.db.helpers.admin_helpers import AdminHelpers
-from backend.db.helpers.analytics_helpers import AnalyticsHelpers
-from backend.db.helpers.image_helpers import ImageHelpers
-
+from backend.models import Image, User, Admin, Log, Analytics, Security
+from backend.utils.logger import CentralizedLogger
 from backend.db.helpers.multi_model_helpers import (
     get_logs_by_user,
     count_user_actions,
@@ -18,125 +11,140 @@ from backend.db.helpers.multi_model_helpers import (
     get_admin_level,
     get_analytics_data_for_image,
     track_user_security_actions,
-    get_images_with_analytics
+    get_images_with_analytics,
 )
 
-from backend.models import Security, User, Admin, Log
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler()]
-)
-logger = logging.getLogger("test_logger")
-
-
-
-#
-# Combined Helper for User and Log Helpers
-#
+logger = CentralizedLogger("test_multi_model_helpers")
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_logs_by_user():
-    logger.debug("Starting test_get_logs_by_user...")
-    user_id = 1
-    action = "file_uploaded"
-    LogHelpers.create_log(action, user_id)
-    logs = get_logs_by_user(user_id)
-    assert len(logs) > 0, "Expected logs for the user but got none."
-    logger.debug("test_get_logs_by_user passed successfully.")
+    logger.log_to_console("DEBUG", "Starting test_get_logs_by_user...")
 
+    # Insert logs directly
+    insert_query = text("""
+        INSERT INTO logs (action, user_id, meta_data, level, timestamp, module)
+        VALUES
+        ('Action 1', 1, '{"key": "value"}', 'INFO', :timestamp, NULL),
+        ('Action 2', 1, '{"key": "value2"}', 'INFO', :timestamp, NULL)
+    """)
+    db.session.execute(insert_query, {"timestamp": datetime.utcnow()})
+    db.session.commit()
+
+    logs = get_logs_by_user(1)
+    assert len(logs) == 2, f"Expected 2 logs, found {len(logs)}."
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_count_user_actions():
-    logger.debug("Starting test_count_user_actions...")
-    user_id = 1
-    LogHelpers.create_log("file_uploaded", user_id)
-    LogHelpers.create_log("file_deleted", user_id)
-    user_action_count = count_user_actions(user_id)
-    assert user_action_count == 2, "Expected 2 user actions."
-    logger.debug("test_count_user_actions passed successfully.")
+    logger.log_to_console("DEBUG", "Starting test_count_user_actions...")
 
+    # Insert logs directly
+    insert_query = text("""
+        INSERT INTO logs (action, user_id, meta_data, level, timestamp, module)
+        VALUES
+        ('Action 1', 1, '{"key": "value"}', 'INFO', :timestamp, NULL),
+        ('Action 2', 1, '{"key": "value2"}', 'INFO', :timestamp, NULL)
+    """)
+    db.session.execute(insert_query, {"timestamp": datetime.utcnow()})
+    db.session.commit()
 
-#
-# Combined Helper for User and Admin Helpers
-#
+    count = count_user_actions(1)
+    assert count == 2, f"Expected 2 actions, found {count}."
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_is_user_admin():
-    logger.debug("Starting test_is_user_admin...")
-    # Pass a username so it doesn't violate NOT NULL
-    user = UserHelpers.create({
-        "username": "admin_user", 
-        "email": "admin@example.com", 
-        "password_hash": "password", 
-        "role": "user"
-    })
+    logger.log_to_console("DEBUG", "Starting test_is_user_admin...")
 
-    admin_data = {"user_id": user.id, "admin_level": "superadmin"}
-    AdminHelpers.create(admin_data)
-    is_admin_result = is_user_admin(user.id)
-    assert is_admin_result is True, "Expected user to be recognized as admin."
-    logger.debug("test_is_user_admin passed successfully.")
+    # Insert user and admin entries
+    user_insert_query = text("""
+        INSERT INTO users (username, email, password_hash, role)
+        VALUES ('admin_user', 'admin@example.com', 'hashed_password', 'admin')
+    """)
+    db.session.execute(user_insert_query)
+    db.session.commit()
 
+    admin_insert_query = text("""
+        INSERT INTO admins (user_id, admin_level)
+        VALUES (1, 'superadmin')
+    """)
+    db.session.execute(admin_insert_query)
+    db.session.commit()
+
+    is_admin = is_user_admin(1)
+    assert is_admin, "Expected user to be an admin."
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_admin_level():
-    logger.debug("Starting test_get_admin_level...")
-    # Pass a username so it doesn't violate NOT NULL
-    user = UserHelpers.create({
-        "username": "admin_user2", 
-        "email": "admin2@example.com", 
-        "password_hash": "password", 
-        "role": "user"
-    })
+    logger.log_to_console("DEBUG", "Starting test_get_admin_level...")
 
-    admin_data = {"user_id": user.id, "admin_level": "superadmin"}
-    AdminHelpers.create(admin_data)
-    admin_level = get_admin_level(user.id)
-    assert admin_level == "superadmin", "Admin level mismatch."
-    logger.debug("test_get_admin_level passed successfully.")
-#
-# Combined Helper for Analytics and Image Helpers
-#
+    # Insert user and admin entries
+    user_insert_query = text("""
+        INSERT INTO users (username, email, password_hash, role)
+        VALUES ('admin_user', 'admin@example.com', 'hashed_password', 'admin')
+    """)
+    db.session.execute(user_insert_query)
+    db.session.commit()
+
+    admin_insert_query = text("""
+        INSERT INTO admins (user_id, admin_level)
+        VALUES (1, 'superadmin')
+    """)
+    db.session.execute(admin_insert_query)
+    db.session.commit()
+
+    admin_level = get_admin_level(1)
+    assert admin_level == 'superadmin', f"Expected 'superadmin', got {admin_level}."
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_analytics_data_for_image():
-    logger.debug("Starting test_get_analytics_data_for_image...")
-    image = ImageHelpers.create({"filename": "test.jpg", "width": 800, "height": 600})
-    analytics_data = {"data": {"key": "value"}}
-    AnalyticsHelpers.create_analytics(analytics_data["data"])
-    analytics = get_analytics_data_for_image(image.id)
-    assert len(analytics) > 0, "Expected analytics data associated with the image."
-    logger.debug("test_get_analytics_data_for_image passed successfully.")
+    logger.log_to_console("DEBUG", "Starting test_get_analytics_data_for_image...")
 
+    # Insert analytics entry
+    analytics_insert_query = text("""
+        INSERT INTO analytics (data, research_topic, created_at)
+        VALUES ('{"metric": "value"}', 'test_topic', :timestamp)
+    """)
+    db.session.execute(analytics_insert_query, {"timestamp": datetime.utcnow()})
+    db.session.commit()
 
-#
-# Combined Helper for User and Security Helpers
-#
+    analytics_data = get_analytics_data_for_image(1)
+    assert len(analytics_data) == 1, f"Expected 1 analytics entry, found {len(analytics_data)}."
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_track_user_security_actions():
-    logger.debug("Starting test_track_user_security_actions...")
-    user_id = 1
-    action = "login_attempt"
-    SecurityHelpers.create_security_entry(user_id, action)
-    security_actions = track_user_security_actions(user_id)
-    assert len(security_actions) > 0, "Expected security actions for the user."
-    logger.debug("test_track_user_security_actions passed successfully.")
+    logger.log_to_console("DEBUG", "Starting test_track_user_security_actions...")
 
+    # Insert security entries
+    security_insert_query = text("""
+        INSERT INTO security (user_id, action, timestamp)
+        VALUES
+        (1, 'Login Attempt', :timestamp),
+        (1, 'Password Change', :timestamp)
+    """)
+    db.session.execute(security_insert_query, {"timestamp": datetime.utcnow()})
+    db.session.commit()
 
-#
-# Combined Helper for Image and Analytics Helpers
-#
+    actions = track_user_security_actions(1)
+    assert len(actions) == 2, f"Expected 2 actions, found {len(actions)}."
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_images_with_analytics():
-    logger.debug("Starting test_get_images_with_analytics...")
-    image_data = {"filename": "test.jpg", "width": 800, "height": 600}
-    ImageHelpers.create(image_data)
-    analytics_data = {"data": {"key": "value"}}
-    AnalyticsHelpers.create_analytics(analytics_data["data"])
+    logger.log_to_console("DEBUG", "Starting test_get_images_with_analytics...")
+
+    # Insert image and analytics entries
+    image_insert_query = text("""
+        INSERT INTO images (filename, width, height, created_at, updated_at)
+        VALUES ('test_image.png', 1920, 1080, :timestamp, :timestamp)
+    """)
+    db.session.execute(image_insert_query, {"timestamp": datetime.utcnow()})
+    db.session.commit()
+
+    analytics_insert_query = text("""
+        INSERT INTO analytics (data, research_topic, created_at)
+        VALUES ('{"metric": "value"}', 'test_topic', :timestamp)
+    """)
+    db.session.execute(analytics_insert_query, {"timestamp": datetime.utcnow()})
+    db.session.commit()
+
     images_with_analytics = get_images_with_analytics()
-    assert len(images_with_analytics) > 0, "Expected at least one image with analytics data."
-    logger.debug("test_get_images_with_analytics passed successfully.")
+    assert len(images_with_analytics) == 1, f"Expected 1 image with analytics, found {len(images_with_analytics)}."
+    assert len(images_with_analytics[0]['analytics']) == 1, "Expected 1 analytics entry for the image."
