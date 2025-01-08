@@ -19,15 +19,19 @@ class SessionCommitError(DatabaseError):
     pass
 
 # Admin-specific error classes
-class AdminNotFoundError(DatabaseError):
+class AdminError(DatabaseError):
+    """Base class for admin-related exceptions."""
+    pass
+
+class AdminNotFoundError(AdminError):
     """Raised when an admin record is not found."""
     pass
 
-class AdminCreationError(DatabaseError):
+class AdminCreationError(AdminError):
     """Raised when there is an error creating an admin record."""
     pass
 
-class AdminUpdateError(DatabaseError):
+class AdminUpdateError(AdminError):
     """Raised when there is an error updating an admin record."""
     pass
 
@@ -98,6 +102,90 @@ class LogMetadataError(LogError):
     """Raised when there is an issue with log metadata."""
     pass
 
+# Security-specific error classes
+class SecurityError(DatabaseError):
+    """Base class for security-related exceptions."""
+    pass
+
+class SecurityActionNotFoundError(SecurityError):
+    """Raised when a security-related action is not found."""
+    pass
+
+class SecurityActionCreationError(SecurityError):
+    """Raised when there is an error creating a security-related action."""
+    pass
+
+class SecurityEntryNotFoundError(SecurityError):
+    """Raised when a specific security entry is not found."""
+    pass
+
+class SecurityEntryDeletionError(SecurityError):
+    """Raised when a security entry could not be deleted."""
+    pass
+
+class SecurityQueryError(SecurityError):
+    """Raised when there is an error querying security entries."""
+    pass
+
+# User-specific error classes
+class UserError(DatabaseError):
+    """Base class for user-related exceptions."""
+    pass
+
+class UserNotFoundError(UserError):
+    """Raised when a user record is not found."""
+    pass
+
+class UserCreationError(UserError):
+    """Raised when there is an error creating a user record."""
+    pass
+
+class UserUpdateError(UserError):
+    """Raised when there is an error updating a user record."""
+    pass
+
+class UserDeletionError(UserError):
+    """Raised when there is an error deleting a user record."""
+    pass
+
+class UserQueryError(UserError):
+    """Raised when there is an error querying user records."""
+    pass
+
+
+# Multi-model helpers error classes
+class MultiModelError(DatabaseError):
+    """Base class for multi-model-related exceptions."""
+    pass
+
+class LogsByUserError(MultiModelError):
+    """Raised when fetching logs by user fails."""
+    pass
+
+class UserActionCountError(MultiModelError):
+    """Raised when counting user actions fails."""
+    pass
+
+class AdminCheckError(MultiModelError):
+    """Raised when checking admin status fails."""
+    pass
+
+class AdminLevelFetchError(MultiModelError):
+    """Raised when fetching admin level fails."""
+    pass
+
+class AnalyticsForImageError(MultiModelError):
+    """Raised when fetching analytics for an image fails."""
+    pass
+
+class SecurityActionsFetchError(MultiModelError):
+    """Raised when fetching security-related actions fails."""
+    pass
+
+class ImagesWithAnalyticsError(MultiModelError):
+    """Raised when fetching images with analytics fails."""
+    pass
+
 def handle_database_error(error, module=None, meta_data=None):
     """
     Handles and logs database errors.
@@ -117,6 +205,14 @@ def handle_database_error(error, module=None, meta_data=None):
             status=500,
             error_code="DB_CONNECTION_ERROR",
             message="Failed to connect to the database.",
+            details=str(error),
+            meta_data=meta_data
+        ), 500
+    elif isinstance(error, UserError):
+        return format_error_response(
+            status=500,
+            error_code="USER_ERROR",
+            message="A user-related error occurred.",
             details=str(error),
             meta_data=meta_data
         ), 500
@@ -157,6 +253,22 @@ def handle_database_error(error, module=None, meta_data=None):
             status=500,
             error_code="LOG_ERROR",
             message="A log-related error occurred.",
+            details=str(error),
+            meta_data=meta_data
+        ), 500
+    elif isinstance(error, SecurityError):
+        return format_error_response(
+            status=500,
+            error_code="SECURITY_ERROR",
+            message="A security-related error occurred.",
+            details=str(error),
+            meta_data=meta_data
+        ), 500
+    elif isinstance(error, MultiModelError):
+        return format_error_response(
+            status=500,
+            error_code="MULTI_MODEL_ERROR",
+            message="A multi-model-related error occurred.",
             details=str(error),
             meta_data=meta_data
         ), 500

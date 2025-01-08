@@ -1,9 +1,12 @@
 import pytest
 from backend.db import db
 from backend.db.helpers.user_helpers import UserHelpers
+from backend.models import User  # Import the User model
 from backend.utils.logger import CentralizedLogger
+from backend.utils.error_handling.db.errors import UserNotFoundError, UserQueryError
 
 logger = CentralizedLogger("test_user_helpers")
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_create_user():
@@ -32,9 +35,15 @@ def test_get_by_id():
     created_user = UserHelpers.create(user_data)
     db.session.flush()
 
+    # Test successful fetch
     fetched_user = UserHelpers.get_by_id(created_user.id)
     assert fetched_user is not None, "Fetched user is None."
     assert fetched_user.id == created_user.id, "Fetched ID does not match created user."
+
+    # Test failure for non-existent ID
+    with pytest.raises(UserNotFoundError):
+        UserHelpers.get_by_id(9999)
+
     logger.log_to_console("DEBUG", "test_get_by_id passed successfully.")
 
 
@@ -48,9 +57,16 @@ def test_get_by_email():
         "role": "user"
     }
     created_user = UserHelpers.create(user_data)
+
+    # Test successful fetch
     fetched_by_email = UserHelpers.get_by_email("emailtest@example.com")
     assert fetched_by_email is not None, "Expected to find a user by email."
     assert fetched_by_email.id == created_user.id, "Email-based fetch mismatch."
+
+    # Test failure for non-existent email
+    with pytest.raises(UserNotFoundError):
+        UserHelpers.get_by_email("nonexistent@example.com")
+
     logger.log_to_console("DEBUG", "test_get_by_email passed successfully.")
 
 
@@ -87,9 +103,11 @@ def test_delete_user():
     created_user = UserHelpers.create(user_data)
     user_id = created_user.id
 
+    # Test successful deletion
     UserHelpers.delete(user_id)
-    deleted_user = UserHelpers.get_by_id(user_id)
-    assert deleted_user is None, "User record still present after deletion."
+    with pytest.raises(UserNotFoundError):
+        UserHelpers.get_by_id(user_id)
+
     logger.log_to_console("DEBUG", "test_delete_user passed successfully.")
 
 
@@ -129,3 +147,15 @@ def test_exists_user():
     user_exists = UserHelpers.exists(new_user.id)
     assert user_exists is True, "Expected the user to exist."
     logger.log_to_console("DEBUG", "test_exists_user passed successfully.")
+
+
+@pytest.mark.usefixtures("function_db_setup")
+def test_user_query_error():
+    logger.log_to_console("DEBUG", "Starting test_user_query_error...")
+
+    # Simulate a query error by deliberately causing an invalid SQLAlchemy query
+    with pytest.raises(UserQueryError):
+        try:
+            db.session.query(User).filter_by(nonexistent_field="value").all()  # Invalid attribute
+        except Exception as e:
+            raise UserQueryError("Simulated query error.") from e

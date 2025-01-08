@@ -1,6 +1,16 @@
 from backend.db import db
 from backend.models import Image, User, Admin, Log, Analytics, Security
 from backend.utils.logger import CentralizedLogger
+from backend.utils.error_handling.db.errors import (
+    LogsByUserError,
+    UserActionCountError,
+    AdminCheckError,
+    AdminLevelFetchError,
+    AnalyticsForImageError,
+    SecurityActionsFetchError,
+    ImagesWithAnalyticsError,
+    handle_database_error,
+)
 
 logger = CentralizedLogger("multi_model_helpers")
 
@@ -11,8 +21,9 @@ def get_logs_by_user(user_id):
         logger.log_to_console("DEBUG", "Fetched logs by user", user_id=user_id, count=len(logs))
         return logs
     except Exception as e:
-        logger.log_to_console("ERROR", "Failed to fetch logs by user", user_id=user_id, error=str(e))
-        return []
+        error = LogsByUserError(f"Failed to fetch logs for user ID {user_id}: {str(e)}")
+        logger.log_to_console("ERROR", str(error), user_id=user_id)
+        raise handle_database_error(error, module="multi_model_helpers", meta_data={"user_id": user_id})
 
 def count_user_actions(user_id):
     """Count the number of actions performed by a user."""
@@ -21,8 +32,9 @@ def count_user_actions(user_id):
         logger.log_to_console("DEBUG", "Counted user actions", user_id=user_id, count=count)
         return count
     except Exception as e:
-        logger.log_to_console("ERROR", "Failed to count user actions", user_id=user_id, error=str(e))
-        return 0
+        error = UserActionCountError(f"Failed to count actions for user ID {user_id}: {str(e)}")
+        logger.log_to_console("ERROR", str(error), user_id=user_id)
+        raise handle_database_error(error, module="multi_model_helpers", meta_data={"user_id": user_id})
 
 def is_user_admin(user_id):
     """Check if a user has admin privileges."""
@@ -31,8 +43,9 @@ def is_user_admin(user_id):
         logger.log_to_console("DEBUG", "Checked admin status", user_id=user_id, is_admin=admin_exists)
         return admin_exists
     except Exception as e:
-        logger.log_to_console("ERROR", "Failed to check admin status", user_id=user_id, error=str(e))
-        return False
+        error = AdminCheckError(f"Failed to check admin status for user ID {user_id}: {str(e)}")
+        logger.log_to_console("ERROR", str(error), user_id=user_id)
+        raise handle_database_error(error, module="multi_model_helpers", meta_data={"user_id": user_id})
 
 def get_admin_level(user_id):
     """Fetch the admin level of a user."""
@@ -42,8 +55,9 @@ def get_admin_level(user_id):
         logger.log_to_console("DEBUG", "Fetched admin level", user_id=user_id, admin_level=admin_level)
         return admin_level
     except Exception as e:
-        logger.log_to_console("ERROR", "Failed to fetch admin level", user_id=user_id, error=str(e))
-        return None
+        error = AdminLevelFetchError(f"Failed to fetch admin level for user ID {user_id}: {str(e)}")
+        logger.log_to_console("ERROR", str(error), user_id=user_id)
+        raise handle_database_error(error, module="multi_model_helpers", meta_data={"user_id": user_id})
 
 def get_analytics_data_for_image(image_id):
     """Fetch analytics data associated with a specific image."""
@@ -52,8 +66,9 @@ def get_analytics_data_for_image(image_id):
         logger.log_to_console("DEBUG", "Fetched analytics data for image", image_id=image_id, count=len(analytics_data))
         return analytics_data
     except Exception as e:
-        logger.log_to_console("ERROR", "Failed to fetch analytics data for image", image_id=image_id, error=str(e))
-        return []
+        error = AnalyticsForImageError(f"Failed to fetch analytics data for image ID {image_id}: {str(e)}")
+        logger.log_to_console("ERROR", str(error), image_id=image_id)
+        raise handle_database_error(error, module="multi_model_helpers", meta_data={"image_id": image_id})
 
 def track_user_security_actions(user_id):
     """Fetch all security-related actions for a specific user."""
@@ -62,8 +77,9 @@ def track_user_security_actions(user_id):
         logger.log_to_console("DEBUG", "Fetched security actions for user", user_id=user_id, count=len(actions))
         return actions
     except Exception as e:
-        logger.log_to_console("ERROR", "Failed to fetch security actions for user", user_id=user_id, error=str(e))
-        return []
+        error = SecurityActionsFetchError(f"Failed to fetch security actions for user ID {user_id}: {str(e)}")
+        logger.log_to_console("ERROR", str(error), user_id=user_id)
+        raise handle_database_error(error, module="multi_model_helpers", meta_data={"user_id": user_id})
 
 def get_images_with_analytics():
     """Fetch all images with associated analytics data."""
@@ -76,5 +92,6 @@ def get_images_with_analytics():
         logger.log_to_console("DEBUG", "Fetched images with analytics", count=len(result))
         return result
     except Exception as e:
-        logger.log_to_console("ERROR", "Failed to fetch images with analytics", error=str(e))
-        return []
+        error = ImagesWithAnalyticsError(f"Failed to fetch images with analytics: {str(e)}")
+        logger.log_to_console("ERROR", str(error))
+        raise handle_database_error(error, module="multi_model_helpers")

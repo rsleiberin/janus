@@ -13,14 +13,21 @@ from backend.db.helpers.multi_model_helpers import (
     track_user_security_actions,
     get_images_with_analytics,
 )
+from backend.utils.error_handling.db.errors import (
+    LogsByUserError,
+    UserActionCountError,
+    AdminCheckError,
+    AdminLevelFetchError,
+    AnalyticsForImageError,
+    SecurityActionsFetchError,
+    ImagesWithAnalyticsError,
+)
 
 logger = CentralizedLogger("test_multi_model_helpers")
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_logs_by_user():
     logger.log_to_console("DEBUG", "Starting test_get_logs_by_user...")
-
-    # Insert logs directly
     insert_query = text("""
         INSERT INTO logs (action, user_id, meta_data, level, timestamp, module)
         VALUES
@@ -30,14 +37,16 @@ def test_get_logs_by_user():
     db.session.execute(insert_query, {"timestamp": datetime.utcnow()})
     db.session.commit()
 
-    logs = get_logs_by_user(1)
-    assert len(logs) == 2, f"Expected 2 logs, found {len(logs)}."
+    try:
+        logs = get_logs_by_user(1)
+        assert len(logs) == 2, f"Expected 2 logs, found {len(logs)}."
+    except LogsByUserError as e:
+        pytest.fail(str(e))
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_count_user_actions():
     logger.log_to_console("DEBUG", "Starting test_count_user_actions...")
-
-    # Insert logs directly
     insert_query = text("""
         INSERT INTO logs (action, user_id, meta_data, level, timestamp, module)
         VALUES
@@ -47,14 +56,16 @@ def test_count_user_actions():
     db.session.execute(insert_query, {"timestamp": datetime.utcnow()})
     db.session.commit()
 
-    count = count_user_actions(1)
-    assert count == 2, f"Expected 2 actions, found {count}."
+    try:
+        count = count_user_actions(1)
+        assert count == 2, f"Expected 2 actions, found {count}."
+    except UserActionCountError as e:
+        pytest.fail(str(e))
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_is_user_admin():
     logger.log_to_console("DEBUG", "Starting test_is_user_admin...")
-
-    # Insert user and admin entries
     user_insert_query = text("""
         INSERT INTO users (username, email, password_hash, role)
         VALUES ('admin_user', 'admin@example.com', 'hashed_password', 'admin')
@@ -69,14 +80,16 @@ def test_is_user_admin():
     db.session.execute(admin_insert_query)
     db.session.commit()
 
-    is_admin = is_user_admin(1)
-    assert is_admin, "Expected user to be an admin."
+    try:
+        is_admin = is_user_admin(1)
+        assert is_admin, "Expected user to be an admin."
+    except AdminCheckError as e:
+        pytest.fail(str(e))
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_admin_level():
     logger.log_to_console("DEBUG", "Starting test_get_admin_level...")
-
-    # Insert user and admin entries
     user_insert_query = text("""
         INSERT INTO users (username, email, password_hash, role)
         VALUES ('admin_user', 'admin@example.com', 'hashed_password', 'admin')
@@ -91,14 +104,16 @@ def test_get_admin_level():
     db.session.execute(admin_insert_query)
     db.session.commit()
 
-    admin_level = get_admin_level(1)
-    assert admin_level == 'superadmin', f"Expected 'superadmin', got {admin_level}."
+    try:
+        admin_level = get_admin_level(1)
+        assert admin_level == 'superadmin', f"Expected 'superadmin', got {admin_level}."
+    except AdminLevelFetchError as e:
+        pytest.fail(str(e))
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_analytics_data_for_image():
     logger.log_to_console("DEBUG", "Starting test_get_analytics_data_for_image...")
-
-    # Insert analytics entry
     analytics_insert_query = text("""
         INSERT INTO analytics (data, research_topic, created_at)
         VALUES ('{"metric": "value"}', 'test_topic', :timestamp)
@@ -106,14 +121,16 @@ def test_get_analytics_data_for_image():
     db.session.execute(analytics_insert_query, {"timestamp": datetime.utcnow()})
     db.session.commit()
 
-    analytics_data = get_analytics_data_for_image(1)
-    assert len(analytics_data) == 1, f"Expected 1 analytics entry, found {len(analytics_data)}."
+    try:
+        analytics_data = get_analytics_data_for_image(1)
+        assert len(analytics_data) == 1, f"Expected 1 analytics entry, found {len(analytics_data)}."
+    except AnalyticsForImageError as e:
+        pytest.fail(str(e))
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_track_user_security_actions():
     logger.log_to_console("DEBUG", "Starting test_track_user_security_actions...")
-
-    # Insert security entries
     security_insert_query = text("""
         INSERT INTO security (user_id, action, timestamp)
         VALUES
@@ -123,14 +140,16 @@ def test_track_user_security_actions():
     db.session.execute(security_insert_query, {"timestamp": datetime.utcnow()})
     db.session.commit()
 
-    actions = track_user_security_actions(1)
-    assert len(actions) == 2, f"Expected 2 actions, found {len(actions)}."
+    try:
+        actions = track_user_security_actions(1)
+        assert len(actions) == 2, f"Expected 2 actions, found {len(actions)}."
+    except SecurityActionsFetchError as e:
+        pytest.fail(str(e))
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_images_with_analytics():
     logger.log_to_console("DEBUG", "Starting test_get_images_with_analytics...")
-
-    # Insert image and analytics entries
     image_insert_query = text("""
         INSERT INTO images (filename, width, height, created_at, updated_at)
         VALUES ('test_image.png', 1920, 1080, :timestamp, :timestamp)
@@ -145,6 +164,9 @@ def test_get_images_with_analytics():
     db.session.execute(analytics_insert_query, {"timestamp": datetime.utcnow()})
     db.session.commit()
 
-    images_with_analytics = get_images_with_analytics()
-    assert len(images_with_analytics) == 1, f"Expected 1 image with analytics, found {len(images_with_analytics)}."
-    assert len(images_with_analytics[0]['analytics']) == 1, "Expected 1 analytics entry for the image."
+    try:
+        images_with_analytics = get_images_with_analytics()
+        assert len(images_with_analytics) == 1, f"Expected 1 image with analytics, found {len(images_with_analytics)}."
+        assert len(images_with_analytics[0]['analytics']) == 1, "Expected 1 analytics entry for the image."
+    except ImagesWithAnalyticsError as e:
+        pytest.fail(str(e))
