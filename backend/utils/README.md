@@ -13,7 +13,7 @@ This directory contains utility scripts for the Janus backend. These utilities p
 - **security.py**: Security utilities (e.g., input validation, sanitization) **[🚧 In Progress | Ticket #32]**
 - **error_handling/**:
   - **api/errors.py**: Error handling for API-related operations **[🚧 In Progress | Ticket #58]**
-  - **db/errors.py**: Error handling for database-related operations **[🚧 In Progress | Ticket #58]**
+  - **db/errors.py**: Error handling for database-related operations **[✅ Completed]**
   - **extensions/errors.py**: Error handling for extensions **[🚧 In Progress | Ticket #58]**
   - **routes/errors.py**: Error handling for routes **[🚧 In Progress | Ticket #58]**
   - **tests/errors.py**: Error handling for test cases **[🚧 In Progress | Ticket #58]**
@@ -69,32 +69,6 @@ logger = CentralizedLogger("app_logger")
       user_id=1,
       meta_data={"details": "Connection timed out"}
   )
-  ```
-
----
-
-## Completed Integration
-
-### Backend Directory
-- Integrated `CentralizedLogger` into:
-  - `config.py` and its corresponding test `test_config.py`.
-  - Added logging for validation warnings and debug-level database URI outputs.
-
-### DB Directory
-- Integrated `CentralizedLogger` into all database helper files:
-  - `log_helpers.py`
-  - `multi_model_helpers.py`
-  - `security_helpers.py`
-  - `user_helpers.py`
-- Updated all related tests to mock and validate logger functionality.
-
----
-
-## Remaining Integration
-
-### Pending
-- **APIs and Routes**: Logging integration will be addressed as these directories are created and populated.
-- **Extensions and Other Directories**: Integration will proceed when implemented.
 
 ---
 

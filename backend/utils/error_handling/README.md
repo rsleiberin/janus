@@ -8,7 +8,7 @@ The `error_handling` directory centralizes error management across the backend, 
 ## Directory Structure
 - **`error_handling.py`**: Centralized error-handling utility with reusable functions for standardizing error responses and logging. **[✅ Completed | Ticket #58]**
 - **`api/errors.py`**: Handles API-specific errors, such as invalid requests or authentication issues. **[🚧 In Progress | Ticket Pending]**
-- **`db/errors.py`**: Manages errors related to database operations, such as connection failures or schema violations. **[🚧 In Progress | Ticket Pending]**
+- **`db/errors.py`**: Manages errors related to database operations, such as connection failures or schema violations. **[✅ Completed]**
 - **`extensions/errors.py`**: Handles errors related to extensions or integrations with third-party systems. **[🚧 In Progress | Ticket Pending]**
 - **`routes/errors.py`**: Manages route-specific errors, such as missing endpoints or bad parameters. **[🚧 In Progress | Ticket Pending]**
 - **`tests/errors.py`**: Provides error-handling utilities for testing scenarios. **[🚧 In Progress | Ticket Pending]**
