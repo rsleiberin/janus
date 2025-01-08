@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import patch
 from backend.db import db
 from backend.db.helpers.analytics_helpers import AnalyticsHelpers
+from backend.utils.error_handling.db.errors import AnalyticsNotFoundError
 
 
 @pytest.mark.usefixtures("function_db_setup")
@@ -134,22 +135,23 @@ def test_delete_analytics():
          patch("backend.utils.logger.CentralizedLogger.log_to_db") as mock_db_log:
         AnalyticsHelpers.delete_analytics(session=db.session, analytics_id=analytics.id)
 
-        # Verify deletion
-        deleted_entry = AnalyticsHelpers.get_by_id(session=db.session, analytics_id=analytics.id)
-        assert deleted_entry is None, "Analytics record still present after deletion."
+        # Verify deletion by asserting that get_by_id raises AnalyticsNotFoundError
+        with pytest.raises(AnalyticsNotFoundError, match=f"Analytics entry with ID {analytics.id} not found."):
+            AnalyticsHelpers.get_by_id(session=db.session, analytics_id=analytics.id)
 
-        # Verify logging
+        # Verify logging for console
         mock_console_log.assert_any_call(
             "INFO",
             f"Deleted analytics entry with ID: {analytics.id}"
         )
+
+        # Verify logging for database
         mock_db_log.assert_any_call(
             level="INFO",
             message=f"Deleted analytics entry with ID: {analytics.id}",
             module="analytics_helpers",
             meta_data={"analytics_id": analytics.id}
         )
-
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_count_analytics():

@@ -3,6 +3,14 @@ from backend.utils.logger import CentralizedLogger
 from backend.db import db
 from backend.models import Log
 from sqlalchemy import text
+from backend.utils.error_handling.db.errors import (
+    LogNotFoundError,
+    LogCreationError,
+    LogDeletionError,
+    LogQueryError,
+    LogMetadataError,
+    handle_database_error
+)
 
 logger = CentralizedLogger("log_helpers")
 
@@ -20,7 +28,10 @@ class LogHelpers:
             meta_data (dict, optional): Additional metadata for the log.
 
         Returns:
-            Log: The created log entry or None if failed.
+            Log: The created log entry.
+
+        Raises:
+            LogCreationError: If there is an error creating the log.
         """
         try:
             logger.log_to_console(
@@ -31,9 +42,7 @@ class LogHelpers:
                 module=module,
                 meta_data=meta_data
             )
-            logger.log_to_console("DEBUG", "Preparing log entry for database insertion.")
-            
-            # Create log entry
+
             new_log = Log(
                 action=action,
                 user_id=user_id,
@@ -42,26 +51,15 @@ class LogHelpers:
                 meta_data=meta_data,
                 timestamp=datetime.utcnow()
             )
-            
-            # Add to database
+
             db.session.add(new_log)
             db.session.commit()
             logger.log_to_console("DEBUG", f"Log entry created successfully with ID {new_log.id}.")
-            
+
             return new_log
         except Exception as e:
-            logger.log_to_console(
-                "ERROR",
-                "Failed to create log entry",
-                error=str(e),
-                action=action,
-                user_id=user_id,
-                module=module,
-                meta_data=meta_data
-            )
             db.session.rollback()
-            return None
-
+            raise LogCreationError(f"Failed to create log entry: {str(e)}") from e
 
     @staticmethod
     def get_by_id(log_id):
@@ -72,15 +70,21 @@ class LogHelpers:
             log_id (int): The ID of the log to retrieve.
 
         Returns:
-            Log: The log entry if found, None otherwise.
+            Log: The log entry if found.
+
+        Raises:
+            LogNotFoundError: If the log entry is not found.
         """
         try:
             log_entry = db.session.get(Log, log_id)
+            if not log_entry:
+                raise LogNotFoundError(f"Log with ID {log_id} not found.")
+
             logger.log_to_console("DEBUG", "Retrieved log by ID", log_id=log_id)
             return log_entry
-        except Exception as e:
-            logger.log_to_console("ERROR", "Failed to retrieve log by ID", error=str(e))
-            return None
+        except LogNotFoundError as e:
+            logger.log_to_console("ERROR", str(e), module="log_helpers", meta_data={"log_id": log_id})
+            raise e  # Ensure the correct exception is raised
 
     @staticmethod
     def get_by_user_id(user_id):
@@ -92,14 +96,16 @@ class LogHelpers:
 
         Returns:
             list[Log]: A list of log entries for the user.
+
+        Raises:
+            LogQueryError: If there is an error querying the logs.
         """
         try:
             logs = Log.query.filter_by(user_id=user_id).all()
             logger.log_to_console("DEBUG", "Retrieved logs by user ID", user_id=user_id, count=len(logs))
             return logs
         except Exception as e:
-            logger.log_to_console("ERROR", "Failed to retrieve logs by user ID", error=str(e))
-            return []
+            raise LogQueryError(f"Failed to retrieve logs for user ID {user_id}: {str(e)}") from e
 
     @staticmethod
     def get_by_module(module):
@@ -111,14 +117,16 @@ class LogHelpers:
 
         Returns:
             list[Log]: A list of log entries for the module.
+
+        Raises:
+            LogQueryError: If there is an error querying the logs.
         """
         try:
             logs = Log.query.filter_by(module=module).all()
             logger.log_to_console("DEBUG", "Retrieved logs by module", module=module, count=len(logs))
             return logs
         except Exception as e:
-            logger.log_to_console("ERROR", "Failed to retrieve logs by module", error=str(e))
-            return []
+            raise LogQueryError(f"Failed to retrieve logs for module {module}: {str(e)}") from e
 
     @staticmethod
     def get_by_level(level):
@@ -130,14 +138,16 @@ class LogHelpers:
 
         Returns:
             list[Log]: A list of log entries for the level.
+
+        Raises:
+            LogQueryError: If there is an error querying the logs.
         """
         try:
             logs = Log.query.filter_by(level=level).all()
             logger.log_to_console("DEBUG", "Retrieved logs by level", count=len(logs), log_level=level)
             return logs
         except Exception as e:
-            logger.log_to_console("ERROR", "Failed to retrieve logs by level", error=str(e))
-            return []
+            raise LogQueryError(f"Failed to retrieve logs for level {level}: {str(e)}") from e
 
     @staticmethod
     def get_recent_logs(limit=10):
@@ -149,14 +159,16 @@ class LogHelpers:
 
         Returns:
             list[Log]: A list of the most recent log entries.
+
+        Raises:
+            LogQueryError: If there is an error querying the logs.
         """
         try:
             logs = Log.query.order_by(Log.timestamp.desc()).limit(limit).all()
             logger.log_to_console("DEBUG", "Retrieved recent logs", count=len(logs))
             return logs
         except Exception as e:
-            logger.log_to_console("ERROR", "Failed to retrieve recent logs", error=str(e))
-            return []
+            raise LogQueryError(f"Failed to retrieve recent logs: {str(e)}") from e
 
     @staticmethod
     def delete_log(log_id):
@@ -168,20 +180,25 @@ class LogHelpers:
 
         Returns:
             bool: True if deletion was successful, False otherwise.
+
+        Raises:
+            LogDeletionError: If there is an error deleting the log.
         """
         try:
             log_entry = db.session.get(Log, log_id)
             if not log_entry:
-                logger.log_to_console("WARNING", "Log entry not found for deletion", log_id=log_id)
-                return False
+                raise LogNotFoundError(f"Log with ID {log_id} not found.")
+
             db.session.delete(log_entry)
             db.session.commit()
             logger.log_to_console("INFO", "Log entry deleted", log_id=log_id)
             return True
+        except LogNotFoundError as e:
+            logger.log_to_console("WARNING", str(e))
+            raise
         except Exception as e:
-            logger.log_to_console("ERROR", "Failed to delete log entry", error=str(e))
             db.session.rollback()
-            return False
+            raise LogDeletionError(f"Failed to delete log with ID {log_id}: {str(e)}") from e
 
     @staticmethod
     def count():
@@ -190,14 +207,16 @@ class LogHelpers:
 
         Returns:
             int: The total count of logs.
+
+        Raises:
+            LogQueryError: If there is an error querying the logs.
         """
         try:
             log_count = Log.query.count()
             logger.log_to_console("DEBUG", "Counted logs", count=log_count)
             return log_count
         except Exception as e:
-            logger.log_to_console("ERROR", "Failed to count logs", error=str(e))
-            return 0
+            raise LogQueryError(f"Failed to count logs: {str(e)}") from e
 
     @staticmethod
     def exists(**filters):
@@ -209,6 +228,9 @@ class LogHelpers:
 
         Returns:
             bool: True if a log entry exists, False otherwise.
+
+        Raises:
+            LogQueryError: If there is an error querying the logs.
         """
         try:
             exists_query = Log.query.filter_by(**filters).first() is not None
@@ -217,11 +239,7 @@ class LogHelpers:
             )
             return exists_query
         except Exception as e:
-            logger.log_to_console(
-                "ERROR", "Failed to check log existence", filters=filters, error=str(e)
-            )
-            return False
-
+            raise LogQueryError(f"Failed to check log existence: {str(e)}") from e
 
     @staticmethod
     def get_logs_with_metadata_key(key):
@@ -233,18 +251,16 @@ class LogHelpers:
 
         Returns:
             list[Log]: A list of log entries containing the key.
+
+        Raises:
+            LogMetadataError: If there is an issue querying metadata.
         """
         try:
-            # Use JSON functions for SQLite
             logs = Log.query.filter(text(f"json_extract(meta_data, '$.{key}') IS NOT NULL")).all()
             logger.log_to_console("DEBUG", "Retrieved logs by metadata key", key=key, count=len(logs))
             return logs
         except Exception as e:
-            logger.log_to_console("ERROR", "Failed to retrieve logs by metadata key", error=str(e))
-            return []
-
-
-
+            raise LogMetadataError(f"Failed to retrieve logs by metadata key {key}: {str(e)}") from e
 
     @staticmethod
     def get_logs_with_metadata_value(key, value):
@@ -259,9 +275,24 @@ class LogHelpers:
             list[Log]: A list of log entries containing the key-value pair.
         """
         try:
-            logs = Log.query.filter(Log.meta_data[key] == value).all()
-            logger.log_to_console("DEBUG", "Retrieved logs by metadata value", key=key, value=value, count=len(logs))
+            # Adjusted for SQLite JSON filtering
+            logs = Log.query.filter(
+                text(f"json_extract(meta_data, '$.{key}') = :value")
+            ).params(value=value).all()
+            logger.log_to_console(
+                "DEBUG",
+                "Retrieved logs by metadata value",
+                key=key,
+                value=value,
+                count=len(logs),
+            )
             return logs
         except Exception as e:
-            logger.log_to_console("ERROR", "Failed to retrieve logs by metadata value", error=str(e))
+            logger.log_to_console(
+                "ERROR",
+                "Failed to retrieve logs by metadata value",
+                key=key,
+                value=value,
+                error=str(e),
+            )
             return []

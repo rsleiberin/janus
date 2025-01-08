@@ -1,6 +1,7 @@
 from sqlalchemy.exc import SQLAlchemyError
 from backend.utils.error_handling.error_handling import format_error_response, log_error
 
+# General database error classes
 class DatabaseError(Exception):
     """Base class for all database-related exceptions."""
     pass
@@ -17,6 +18,7 @@ class SessionCommitError(DatabaseError):
     """Raised when there is an error committing a session."""
     pass
 
+# Admin-specific error classes
 class AdminNotFoundError(DatabaseError):
     """Raised when an admin record is not found."""
     pass
@@ -27,6 +29,73 @@ class AdminCreationError(DatabaseError):
 
 class AdminUpdateError(DatabaseError):
     """Raised when there is an error updating an admin record."""
+    pass
+
+# Analytics-specific error classes
+class AnalyticsError(DatabaseError):
+    """Base class for analytics-related exceptions."""
+    pass
+
+class AnalyticsNotFoundError(AnalyticsError):
+    """Raised when an analytics entry is not found."""
+    pass
+
+class AnalyticsCreationError(AnalyticsError):
+    """Raised when there is an error creating an analytics entry."""
+    pass
+
+class AnalyticsDeletionError(AnalyticsError):
+    """Raised when there is an error deleting an analytics entry."""
+    pass
+
+class AnalyticsQueryError(AnalyticsError):
+    """Raised when there is an error querying analytics entries."""
+    pass
+
+# Image-specific error classes
+class ImageError(DatabaseError):
+    """Base class for image-related exceptions."""
+    pass
+
+class ImageNotFoundError(ImageError):
+    """Raised when an image record is not found."""
+    pass
+
+class ImageCreationError(ImageError):
+    """Raised when there is an error creating an image record."""
+    pass
+
+class ImageUpdateError(ImageError):
+    """Raised when there is an error updating an image record."""
+    pass
+
+class ImageDeletionError(ImageError):
+    """Raised when there is an error deleting an image record."""
+    pass
+
+# Log-specific error classes
+class LogError(DatabaseError):
+    """Base class for log-related exceptions."""
+    pass
+
+class LogNotFoundError(LogError):
+    """Raised when a log entry is not found."""
+    pass
+
+class LogCreationError(LogError):
+    """Raised when there is an error creating a log entry."""
+    pass
+
+class LogDeletionError(LogError):
+    """Raised when there is an error deleting a log entry."""
+    pass
+
+class LogQueryError(LogError):
+    """Raised when there is an error querying log entries."""
+    pass
+
+class LogMetadataError(LogError):
+    """Raised when there is an issue with log metadata."""
     pass
 
 def handle_database_error(error, module=None, meta_data=None):
@@ -64,6 +133,30 @@ def handle_database_error(error, module=None, meta_data=None):
             status=500,
             error_code="SESSION_COMMIT_ERROR",
             message="An error occurred while committing to the database.",
+            details=str(error),
+            meta_data=meta_data
+        ), 500
+    elif isinstance(error, AnalyticsError):
+        return format_error_response(
+            status=500,
+            error_code="ANALYTICS_ERROR",
+            message="An analytics-related error occurred.",
+            details=str(error),
+            meta_data=meta_data
+        ), 500
+    elif isinstance(error, ImageError):
+        return format_error_response(
+            status=500,
+            error_code="IMAGE_ERROR",
+            message="An image-related error occurred.",
+            details=str(error),
+            meta_data=meta_data
+        ), 500
+    elif isinstance(error, LogError):
+        return format_error_response(
+            status=500,
+            error_code="LOG_ERROR",
+            message="A log-related error occurred.",
             details=str(error),
             meta_data=meta_data
         ), 500
