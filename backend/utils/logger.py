@@ -7,9 +7,25 @@ from backend.models import Log
 
 
 class CentralizedLogger:
+    """
+    A centralized logging utility for the application.
+
+    Args:
+        name (str): The logger's name.
+        log_level (str, optional): Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+                                   If not provided, the value is read from the environment variable `LOG_LEVEL`.
+    """
     VALID_LOG_LEVELS = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
 
-    def __init__(self, name="app"):
+    def __init__(self, name="app", log_level=None):
+        """
+        Initializes the logger.
+
+        Args:
+            name (str): The logger's name.
+            log_level (str, optional): Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+                                       If not provided, the value is read from the environment.
+        """
         self.logger = logging.getLogger(name)
 
         if not self.logger.handlers:
@@ -18,8 +34,8 @@ class CentralizedLogger:
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
 
-        # Read log level from environment variable or default to DEBUG
-        log_level = os.getenv("LOG_LEVEL", "DEBUG").upper()
+        # Determine log level from argument or environment variable
+        log_level = log_level or os.getenv("LOG_LEVEL", "DEBUG").upper()
         if log_level not in self.VALID_LOG_LEVELS:
             log_level = "DEBUG"
 

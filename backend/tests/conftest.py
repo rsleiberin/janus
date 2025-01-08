@@ -69,6 +69,11 @@ def function_db_setup(app, session_db_setup):
     with app.app_context():
         test_logger.debug("[FUNCTION] Creating database tables...")
         db.create_all()
+
+        # Seed required tables
+        from backend.models import Log
+        db.session.commit()
+
         test_logger.debug("[FUNCTION] Database tables created successfully.")
 
     # Yield control to the test function
@@ -79,3 +84,4 @@ def function_db_setup(app, session_db_setup):
         db.session.remove()
         db.drop_all()
         test_logger.debug("[FUNCTION] Database cleaned up successfully.")
+

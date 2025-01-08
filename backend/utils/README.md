@@ -27,6 +27,50 @@ This directory contains utility scripts for the Janus backend. These utilities p
 ### Overview
 The `logger.py` module provides centralized logging functionality for the backend, supporting both console and database logging. It ensures all logs are consistent, structured, and enriched with contextual metadata.
 
+### Key Features
+- **Dynamic Log Levels**:
+  - Log levels (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`) can be configured dynamically during initialization or through an environment variable (`LOG_LEVEL`).
+- **Flexible Output**:
+  - Logs messages to the console.
+  - Optionally stores logs in the database.
+
+### Initialization
+You can initialize the logger with a custom log level or rely on the environment variable `LOG_LEVEL`.
+
+#### Example
+```python
+from backend.utils.logger import CentralizedLogger
+
+# Initialize logger with dynamic log level
+logger = CentralizedLogger("app_logger", log_level="INFO")
+
+# Or rely on the environment variable
+logger = CentralizedLogger("app_logger")
+```
+
+### Methods
+- **`log_to_console(level, message, **kwargs)`**:
+  Logs messages to the console with optional metadata.
+
+  Example:
+  ```python
+  logger.log_to_console("DEBUG", "Application started", module="main")
+  ```
+
+- **`log_to_db(level, message, module=None, user_id=None, meta_data=None)`**:
+  Logs messages to the database.
+
+  Example:
+  ```python
+  logger.log_to_db(
+      level="ERROR",
+      message="Failed to connect to the database",
+      module="db_setup",
+      user_id=1,
+      meta_data={"details": "Connection timed out"}
+  )
+  ```
+
 ---
 
 ## Completed Integration
@@ -55,8 +99,7 @@ The `logger.py` module provides centralized logging functionality for the backen
 ---
 
 ## Relevant Tickets
-- **Ticket #9**: Refactor and Enhance `logger.py` **[Completed]**
-- **Ticket #30**: Complete `file_handler.py` **[In Progress]**
-- **Ticket #32**: Implement `security.py` **[In Progress]**
-- **Ticket #58**: Centralized Error Handling for `utils` Directory **[In Progress]**
-- **Ticket #61**: Document `utils` Directory Structure and Usage **[Completed]**
+- **Ticket #30**: Complete `file_handler.py` **[🚧 In Progress]**
+- **Ticket #32**: Implement `security.py` **[🚧 In Progress]**
+- **Ticket #58**: Centralized Error Handling for `utils` Directory **[🚧 In Progress]**
+

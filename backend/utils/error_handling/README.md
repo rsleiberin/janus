@@ -6,13 +6,13 @@ The `error_handling` directory centralizes error management across the backend, 
 ---
 
 ## Directory Structure
-- **`error_handling.py`**: Centralized error-handling utility with reusable functions for standardizing error responses and logging.
-- **`api/errors.py`**: Handles API-specific errors, such as invalid requests or authentication issues.
-- **`db/errors.py`**: Manages errors related to database operations, such as connection failures or schema violations.
-- **`extensions/errors.py`**: Handles errors related to extensions or integrations with third-party systems.
-- **`routes/errors.py`**: Manages route-specific errors, such as missing endpoints or bad parameters.
-- **`tests/errors.py`**: Provides error-handling utilities for testing scenarios.
-- **`utils/errors.py`**: Contains general-purpose error-handling utilities.
+- **`error_handling.py`**: Centralized error-handling utility with reusable functions for standardizing error responses and logging. **[✅ Completed | Ticket #58]**
+- **`api/errors.py`**: Handles API-specific errors, such as invalid requests or authentication issues. **[🚧 In Progress | Ticket Pending]**
+- **`db/errors.py`**: Manages errors related to database operations, such as connection failures or schema violations. **[🚧 In Progress | Ticket Pending]**
+- **`extensions/errors.py`**: Handles errors related to extensions or integrations with third-party systems. **[🚧 In Progress | Ticket Pending]**
+- **`routes/errors.py`**: Manages route-specific errors, such as missing endpoints or bad parameters. **[🚧 In Progress | Ticket Pending]**
+- **`tests/errors.py`**: Provides error-handling utilities for testing scenarios. **[🚧 In Progress | Ticket Pending]**
+- **`utils/errors.py`**: Contains general-purpose error-handling utilities. **[🚧 In Progress | Ticket Pending]**
 
 ---
 
@@ -37,6 +37,16 @@ The error-handling utilities are designed to:
 
 ---
 
+## Test Coverage
+- **Unit Tests**:
+  - Validated `format_error_response`, `log_error`, and `handle_general_error` for correct functionality.
+- **Database Logging**:
+  - Ensured `log_to_db` properly logs errors to the database during tests.
+- **Response Formatting**:
+  - Verified that optional fields (`details`, `meta_data`) are correctly included in error responses when provided.
+
+---
+
 ## Best Practices
 1. Use the `CentralizedLogger` for logging errors to maintain consistency.
 2. Define custom exception classes for specific domains in their respective files (e.g., `DatabaseError` in `db/errors.py`).
@@ -48,3 +58,4 @@ The error-handling utilities are designed to:
 ## Relevant Tickets
 - **Ticket #58**: Centralized Error Handling for `utils` Directory.
 - **Ticket #61**: Documentation for `utils` Directory.
+- **Ticket Pending**: Module-specific error handling (API, DB, Routes, etc.).

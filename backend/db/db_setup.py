@@ -1,9 +1,9 @@
-# db_setup.py
 import os
 from flask import Flask
-from backend.models import db  # The shared SQLAlchemy instance
+from backend.db import db  # The shared SQLAlchemy instance
 from backend.config import DevelopmentConfig  # Or ProductionConfig for production
 from backend.utils.logger import CentralizedLogger
+from backend.utils.error_handling.db.errors import DatabaseConnectionError
 
 logger = CentralizedLogger()
 
@@ -21,7 +21,11 @@ def create_app():
     )
 
     # Initialize the database
-    db.init_app(app)
+    try:
+        db.init_app(app)
+    except Exception as error:
+        raise DatabaseConnectionError("Failed to initialize the database.") from error
+
     return app
 
 if __name__ == "__main__":
@@ -41,13 +45,11 @@ if __name__ == "__main__":
             f"File size: {os.path.getsize(db_path)} bytes"
         )
     else:
-        logger.log_to_console(
-            "ERROR",
-            "ERROR: Database file not created!"
-        )
+        error_message = "ERROR: Database file not created!"
+        logger.log_to_console("ERROR", error_message)
         logger.log_to_db(
             level="ERROR",
-            message="Database file not created",
+            message=error_message,
             module="db_setup",
             meta_data={"db_path": db_path}
         )

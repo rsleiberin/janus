@@ -26,9 +26,8 @@ class DevelopmentConfig(Config):
         self.DEBUG = True
 
         # Resolve the DB path relative to the backend directory
-        base_dir = os.path.abspath(os.path.dirname(__file__))  # Current directory of config.py
-        backend_dir = os.path.abspath(os.path.join(base_dir, "."))  # Backend directory
-        db_path = os.path.join(backend_dir, "instance", "image_processing.db")
+        base_dir = os.path.abspath(os.path.dirname(__file__))
+        db_path = os.path.join(base_dir, "instance", "image_processing.db")
         self.SQLALCHEMY_DATABASE_URI = f"sqlite:///{db_path}"
 
         # Log the resolved DB path

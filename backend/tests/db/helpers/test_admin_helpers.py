@@ -54,9 +54,9 @@ def test_get_by_id():
         assert fetched_admin.id == admin.id, "Admin ID mismatch."
 
         # Verify logging
-        mock_console_log.assert_called_with(
+        mock_console_log.assert_any_call(
             "INFO",
-            f"Fetching admin by ID: {admin.id}"
+            f"Fetched admin by ID: {admin.id}"
         )
 
 

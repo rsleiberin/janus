@@ -1,9 +1,13 @@
-# admin_helpers.py
-
 from backend.db import db
 from backend.models import Admin
 from flask import current_app  # To get the current app context
 from backend.utils.logger import CentralizedLogger
+from backend.utils.error_handling.db.errors import (
+    AdminNotFoundError,
+    AdminCreationError,
+    AdminUpdateError,
+    handle_database_error,
+)
 
 # Initialize the logger
 logger = CentralizedLogger(name="admin_helpers")
@@ -31,20 +35,34 @@ class AdminHelpers:
         except Exception as e:
             logger.log_to_console("ERROR", "Failed to create admin.", exception=e)
             logger.log_to_db("ERROR", "Admin creation failed.", module="admin_helpers", meta_data={"error": str(e)})
-            raise
+            raise AdminCreationError("Failed to create admin record.") from e
 
     @staticmethod
     def get_by_id(admin_id):
         """Get an admin by their ID."""
-        with current_app.app_context():
-            logger.log_to_console("INFO", f"Fetching admin by ID: {admin_id}")
-            return db.session.get(Admin, admin_id)
+        try:
+            with current_app.app_context():
+                admin = db.session.get(Admin, admin_id)
+                if not admin:
+                    raise AdminNotFoundError(f"Admin with ID {admin_id} not found.")
+                logger.log_to_console("INFO", f"Fetched admin by ID: {admin_id}")
+                return admin
+        except Exception as e:
+            logger.log_to_console("ERROR", "Error fetching admin by ID.", exception=e)
+            raise handle_database_error(e, module="admin_helpers", meta_data={"admin_id": admin_id})
 
     @staticmethod
     def get_by_user_id(user_id):
         """Get an admin by the associated user's ID."""
-        logger.log_to_console("INFO", f"Fetching admin by user ID: {user_id}")
-        return db.session.query(Admin).filter_by(user_id=user_id).first()
+        try:
+            admin = db.session.query(Admin).filter_by(user_id=user_id).first()
+            if not admin:
+                raise AdminNotFoundError(f"Admin for user ID {user_id} not found.")
+            logger.log_to_console("INFO", f"Fetched admin by user ID: {user_id}")
+            return admin
+        except Exception as e:
+            logger.log_to_console("ERROR", "Error fetching admin by user ID.", exception=e)
+            raise handle_database_error(e, module="admin_helpers", meta_data={"user_id": user_id})
 
     @staticmethod
     def update(admin_id, updated_data):
@@ -68,23 +86,10 @@ class AdminHelpers:
                 )
                 return admin
             else:
-                logger.log_to_console("WARNING", f"Admin {admin_id} not found for update.")
-                logger.log_to_db(
-                    "WARNING",
-                    "Admin update attempted on non-existent record.",
-                    module="admin_helpers",
-                    meta_data={"admin_id": admin_id}
-                )
-                return None
+                raise AdminNotFoundError(f"Admin with ID {admin_id} not found.")
         except Exception as e:
             logger.log_to_console("ERROR", f"Failed to update admin {admin_id}.", exception=e)
-            logger.log_to_db(
-                "ERROR",
-                "Admin update failed.",
-                module="admin_helpers",
-                meta_data={"admin_id": admin_id, "error": str(e)}
-            )
-            raise
+            raise AdminUpdateError("Failed to update admin record.") from e
 
     @staticmethod
     def delete(admin_id):
@@ -102,33 +107,29 @@ class AdminHelpers:
                     meta_data={"admin_id": admin_id}
                 )
             else:
-                logger.log_to_console("WARNING", f"Admin {admin_id} not found for deletion.")
-                logger.log_to_db(
-                    "WARNING",
-                    "Admin deletion attempted on non-existent record.",
-                    module="admin_helpers",
-                    meta_data={"admin_id": admin_id}
-                )
+                raise AdminNotFoundError(f"Admin with ID {admin_id} not found.")
         except Exception as e:
             logger.log_to_console("ERROR", f"Failed to delete admin {admin_id}.", exception=e)
-            logger.log_to_db(
-                "ERROR",
-                "Admin deletion failed.",
-                module="admin_helpers",
-                meta_data={"admin_id": admin_id, "error": str(e)}
-            )
-            raise
+            raise handle_database_error(e, module="admin_helpers", meta_data={"admin_id": admin_id})
 
     @staticmethod
     def count():
         """Get the number of admins."""
-        count = db.session.query(Admin).count()
-        logger.log_to_console("INFO", f"Total number of admins: {count}")
-        return count
+        try:
+            count = db.session.query(Admin).count()
+            logger.log_to_console("INFO", f"Total number of admins: {count}")
+            return count
+        except Exception as e:
+            logger.log_to_console("ERROR", "Error counting admins.", exception=e)
+            raise handle_database_error(e, module="admin_helpers")
 
     @staticmethod
     def exists(admin_id):
         """Check if an admin with a specific ID exists."""
-        exists = db.session.query(Admin).filter_by(id=admin_id).first() is not None
-        logger.log_to_console("INFO", f"Admin existence check for ID {admin_id}: {exists}")
-        return exists
+        try:
+            exists = db.session.query(Admin).filter_by(id=admin_id).first() is not None
+            logger.log_to_console("INFO", f"Admin existence check for ID {admin_id}: {exists}")
+            return exists
+        except Exception as e:
+            logger.log_to_console("ERROR", "Error checking admin existence.", exception=e)
+            raise handle_database_error(e, module="admin_helpers", meta_data={"admin_id": admin_id})

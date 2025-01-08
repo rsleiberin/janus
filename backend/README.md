@@ -26,6 +26,7 @@ This directory contains the Flask backend for the Janus project, responsible for
 - **app.py**: Main Flask application entry point **[✅ Completed]**
 - **config.py**: Backend configuration settings **[✅ Completed]**
 - **models.py**: SQLAlchemy models for database schema **[✅ Completed]**
+- **.flaskenv**: This file contains Flask-specific environment variables **[✅ Completed]**
 - **routes/**: Modularized Flask routes **[🚧 In Progress]**
 - **templates/**: Flask templates for rendering views **[❌ Pending | Phase 3]**
 - **static/**: Static files for serving assets **[❌ Pending | Phase 3]**
