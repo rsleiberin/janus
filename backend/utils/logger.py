@@ -1,20 +1,29 @@
-# logger.py
 import logging
 import json
+import os
 from datetime import datetime
 from backend.db import db
 from backend.models import Log
 
 
 class CentralizedLogger:
+    VALID_LOG_LEVELS = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
+
     def __init__(self, name="app"):
         self.logger = logging.getLogger(name)
+
         if not self.logger.handlers:
             handler = logging.StreamHandler()
             formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
-        self.logger.setLevel(logging.DEBUG)
+
+        # Read log level from environment variable or default to DEBUG
+        log_level = os.getenv("LOG_LEVEL", "DEBUG").upper()
+        if log_level not in self.VALID_LOG_LEVELS:
+            log_level = "DEBUG"
+
+        self.logger.setLevel(getattr(logging, log_level))
 
     def log_to_console(self, level, message, **kwargs):
         """
@@ -68,20 +77,3 @@ class CentralizedLogger:
         if kwargs:
             return f"{message} | Context: {json.dumps(kwargs, default=str)}"
         return message
-
-
-# Example usage
-if __name__ == "__main__":
-    logger = CentralizedLogger()
-
-    # Console logging
-    logger.log_to_console("INFO", "Application started", module="main")
-
-    # Database logging
-    logger.log_to_db(
-        level="ERROR",
-        message="Database connection failed",
-        module="db_setup",
-        user_id=1,
-        meta_data={"details": "Connection timeout after 30 seconds"}
-    )

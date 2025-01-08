@@ -4,6 +4,10 @@ __pycache__/
 *.pyc
 .env
 
+# Flask backend/
+backend/.flaskenv
+
+
 # Node.js
 node_modules/
 *.log
