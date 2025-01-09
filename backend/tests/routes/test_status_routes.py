@@ -1,23 +1,44 @@
 import pytest
-from backend import create_app
-from backend.models import db
+from sqlalchemy.exc import OperationalError
+from backend.utils.error_handling.routes.errors import DatabaseUnavailableError
 
-@pytest.fixture
-def client():
-    """Fixture for setting up the Flask test client with app context."""
-    app = create_app()
 
-    # Set up the database in the test environment
-    with app.app_context():
-        db.create_all()  # Ensure tables are created
-        yield app.test_client()  # Yield the test client
+def test_health_check_success(client, mocker):
+    """
+    Test the /status endpoint when the database is connected successfully.
+    """
+    # Mock the database session to simulate successful connection
+    mock_session = mocker.patch("backend.db.session.execute")
+    mock_session.return_value = None  # Simulate success
 
-        # Clean up after tests
-        db.drop_all()
+    # Perform the health check
+    response = client.get("/status")
+    data = response.get_json()
 
-def test_status_route(client):
-    """Test the /status endpoint."""
-    response = client.get('/status')
+    # Assertions
     assert response.status_code == 200
-    assert response.json['status'] == 'ok'
-    assert 'connected' in response.json['database']
+    assert data["status"] == "ok"
+    assert data["database"] == "connected"
+
+
+def test_health_check_database_error(client, mocker):
+    """
+    Test the /status endpoint when the database connection fails.
+    """
+    # Mock the database session to simulate a connection failure
+    mock_session = mocker.patch("backend.db.session.execute")
+    mock_session.side_effect = OperationalError("Mocked database error", {}, None)
+
+    # Perform the health check
+    response = client.get("/status")
+    data = response.get_json()
+
+    # Assertions
+    assert response.status_code == 500
+    assert data is not None
+    assert data["status"] == 500
+    assert data["error_code"] == "DATABASE_UNAVAILABLE"
+    assert data["message"] == "The database is not accessible at this time."
+    assert "Database connection failed." in data["details"]
+
+

@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, current_app
 from sqlalchemy.sql import text
+from sqlalchemy.exc import OperationalError
 from backend.db import db
-
+from backend.utils.error_handling.routes.errors import DatabaseUnavailableError, format_error_response
 
 # Create a blueprint for status routes
 status_bp = Blueprint("status", __name__)
@@ -14,17 +15,23 @@ def health_check():
     try:
         # Check database connection
         db.session.execute(text("SELECT 1"))
-        database_status = "connected"
-    except Exception as e:
-        database_status = f"error: {str(e)}"
+        return jsonify({
+            "status": "ok",
+            "database": "connected"
+        })
+    except OperationalError as e:
+        current_app.logger.error("Database connection failed.", exc_info=e)
+        raise DatabaseUnavailableError("Database connection failed.") from e
 
-    # Debugging logs
-    print("Database status in /status route:", database_status)
-    print("Database session bind:", db.session.bind)  # Check if session is bound
-    print("Database engine bound:", db.engine if hasattr(db, 'engine') else None)
-
-    return jsonify({
-        "status": "ok",
-        "database": database_status
-    })
-
+# Error handler for DatabaseUnavailableError
+@status_bp.app_errorhandler(DatabaseUnavailableError)
+def handle_database_unavailable_error(error):
+    """
+    Error handler for DatabaseUnavailableError.
+    """
+    return format_error_response(
+        status=500,
+        error_code="DATABASE_UNAVAILABLE",
+        message="The database is not accessible at this time.",
+        details=str(error)
+    ), 500
