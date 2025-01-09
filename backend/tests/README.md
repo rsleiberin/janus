@@ -1,151 +1,93 @@
 # Backend Tests
 
 ## Overview
-This document outlines the **test strategy** for Janus’ backend, covering API endpoints, database interactions, utility functions, and error handling. Our approach includes **unit**, **integration**, and **end-to-end** tests to ensure the robustness and reliability of the backend components.
+The `tests` directory ensures that all backend components, including database operations, API routes, utilities, and error handling, are thoroughly tested for functionality, reliability, and edge cases.
 
 ---
 
-## Testing Organization and File Status
+## Directory Structure with Status
 
-### Root
-- **`README.md`**: Documentation
-- **`__init__.py`**: Module Initialization
-- **`conftest.py`**: ✔️ Complete
-- **`test_config.py`**: ✔️ Complete
+**tests/**
+- **README.md** [✅ Completed]  
+  Documentation for testing strategy, structure, and best practices.
+- **\_\_init\_\_.py** [✅ Completed]  
+  Module initialization for the `tests` directory.
+- **conftest.py** [✅ Completed]  
+  Shared fixtures for Flask app context and database setup.
+- **test_config.py** [✅ Completed]  
+  Tests for app configuration and environment settings.
 
-### Database (`db/`)
-- **`__init__.py`**: Module Initialization
-- **`test_db_schema_creation.py`**: ✔️ Complete
-- **`test_db_setup.py`**: ✔️ Complete
-- **`test_seed_data.py`**: ✔️ Complete
+### Subdirectories
+**db/**
+- **\_\_init\_\_.py** [✅ Completed]  
+  Module initialization for database-related tests.
+- **test_db_schema_creation.py** [✅ Completed]  
+  Validates database schema creation logic.
+- **test_db_setup.py** [✅ Completed]  
+  Ensures database connection and setup work correctly.
+- **test_seed_data.py** [✅ Completed]  
+  Tests database seeding operations.
+- **helpers/**  
+  - **test_admin_helpers.py** [✅ Completed]  
+    Covers admin-specific database helper functions.
+  - **test_analytics_helpers.py** [✅ Completed]  
+    Tests analytics-related helper operations.
+  - **test_image_helpers.py** [✅ Completed]  
+    Validates image-related database helpers.
+  - **test_log_helpers.py** [✅ Completed]  
+    Ensures logging helper functionality.
+  - **test_multi_model_helpers.py** [✅ Completed]  
+    Tests operations involving multiple database models.
+  - **test_security_helpers.py** [✅ Completed]  
+    Validates security-related database helpers.
+  - **test_user_helpers.py** [✅ Completed]  
+    Covers user-related helper utilities.
 
-#### Helpers (`db/helpers/`)
-- **`__init__.py`**: Module Initialization
-- **`test_admin_helpers.py`**: ✔️ Complete
-- **`test_analytics_helpers.py`**: ✔️ Complete
-- **`test_image_helpers.py`**: ✔️ Complete
-- **`test_log_helpers.py`**: ✔️ Complete
-- **`test_multi_model_helpers.py`**: ✔️ Complete
-- **`test_security_helpers.py`**: ✔️ Complete
-- **`test_user_helpers.py`**: ✔️ Complete
+**routes/**
+- **\_\_init\_\_.py** [✅ Completed]  
+  Module initialization for route-related tests.
+- **test_status_routes.py** [🚧 In Progress | #71]  
+  Tests for API health-check routes.
+- **test_file_routes.py** [🚧 In Progress | #71]  
+  Validates file upload and management routes.
+- **test_image_routes.py** [🚧 In Progress | #71]  
+  Covers image processing-related API routes.
 
-### Extensions (`extensions/`)
-- **`__init__.py`**: Module Initialization
-
-### Routes (`routes/`)
-- **`__init__.py`**: Module Initialization
-- **`test_status_routes.py`**: 🚧 In Progress
-- **`test_file_routes.py`**: 🚧 In Progress
-- **`test_image_routes.py`**: 🚧 In Progress
-
-### Static (`static/`)
-- **`__init__.py`**: Module Initialization
-
-### Templates (`templates/`)
-- **`__init__.py`**: Module Initialization
-
-### Utilities (`utils/`)
-- **`__init__.py`**: Module Initialization
-- **`test_error_handling.py`**: ✔️ Complete
-- **`test_logger.py`**: ✔️ Complete
-
-#### Error Handling (`utils/error_handling/`)
-- **`api/errors.py`**: 🚧 In Progress
-- **`db/test_errors.py`**: ✔️ Complete
-- **`extensions/errors.py`**: 🚧 In Progress
-- **`routes/errors.py`**: 🚧 In Progress
-- **`test_error_handling.py`**: ✔️ Complete
-- **`tests/errors.py`**: 🚧 In Progress
-- **`utils/errors.py`**: 🚧 In Progress
-
----
-
-## Coverage Updates
-
-- **`utils/error_handling/error_handling.py`**: Tested and integrated with `logger.py` for centralized logging. **Complete.**
-- **`utils/error_handling/db/errors.py`**: Comprehensive unit tests written to validate error handling for all error classes and functions. **Complete.**
-- **Centralized Logging**: All relevant test files validate integration with `logger.py`, ensuring error handling utilizes the centralized logging system. **Complete.**
-- **Routes Testing**: All route test files (`test_status_routes.py`, `test_file_routes.py`, `test_image_routes.py`) are currently marked as **In Progress**.
-
----
-
-## Best Practices for Writing Tests
-
-1. **Test Granularity**:
-   - Write **unit tests** for individual functions and classes.
-   - Write **integration tests** to validate interactions between components.
-   - Write **end-to-end tests** for full user workflows.
-
-2. **Fixtures**:
-   - Use `conftest.py` for shared fixtures to maintain consistency and reduce duplication.
-   - Leverage session and function-level fixtures for database setup and teardown.
-
-3. **Organize by Scope**:
-   - Group tests logically (e.g., `db/` for database-related tests, `routes/` for API endpoints, `utils/` for utility functions).
-
-4. **Keep Tests Isolated**:
-   - Ensure each test runs independently by resetting the environment or database state.
-
-5. **Run Regularly**:
-   - Integrate tests into CI/CD pipelines to catch issues early.
+**utils/**
+- **\_\_init\_\_.py** [✅ Completed]  
+  Module initialization for utility-related tests.
+- **test_file_handler.py** [✅ Completed]  
+  Tests file operations, including error handling.
+- **test_logger.py** [✅ Completed]  
+  Validates centralized logging behavior.
+- **test_security.py** [✅ Completed]  
+  Tests authentication, authorization, and input validation in the `security.py` module.
+- **error_handling/**  
+  - **test_error_handling.py** [✅ Completed]  
+    Tests centralized error-handling utilities.
+  - **api/errors.py** [🚧 In Progress | #Pending]  
+    Validates API-specific error handling.
+  - **db/test_errors.py** [✅ Completed]  
+    Covers database error handling cases.
+  - **extensions/errors.py** [🚧 In Progress | #Pending]  
+    Tests errors from third-party integrations.
+  - **routes/errors.py** [🚧 In Progress | #72]  
+    Handles route-specific errors.
+  - **utils/errors.py** [✅ Completed]  
+    General utility error handling.
 
 ---
 
-## Running Tests
-
-### Prerequisites
-1. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-
-   ```
-2. **Install Testing Libraries**:
-   ```bash
-   pip install pytest pytest-flask
-   ```
-
-### Commands
-- **Run All Tests**:
-  ```bash
-  pytest
-  ```
-- **Run Specific Test Files**:
-  ```bash
-  pytest backend/tests/<path_to_test_file>
-  ```
-- **Run Specific Test Functions**:
-  ```bash
-  pytest backend/tests/<path_to_test_file>::<test_function_name>
-  ```
+## Best Practices
+1. **Test Coverage**: Ensure both success and failure scenarios are tested for all functions and classes.  
+2. **Fixtures**: Use `conftest.py` for shared fixtures, such as Flask app setup or in-memory database initialization.  
+3. **Isolation**: Each test should be self-contained and reset the database or application state before and after execution.  
+4. **Granularity**: Group tests logically by module (e.g., `db/`, `routes/`, `utils/`) and test for specific functionality within each.  
+5. **Continuous Integration**: Integrate tests into CI/CD pipelines to catch regressions early.
 
 ---
 
-## Debugging Tips
-
-1. **Logging**:
-   - Use `pytest -s` to view print/log statements during test runs.
-
-2. **Database Issues**:
-   - Ensure the database schema is initialized before running tests.
-   - Use an in-memory SQLite database for faster test execution.
-
-3. **Path Issues**:
-   - Verify the Python path is set correctly to resolve imports.
-
----
-
-## Example Test Output
-```plaintext
-================================== test session starts ===================================
-platform linux -- Python 3.8.10, pytest-8.3.4, pluggy-1.5.0
-rootdir: /home/tank/janus
-plugins: flask-1.3.0
-collected 5 items
-
-backend/tests/db/test_db_schema_creation.py .                                     [ 50%]
-backend/tests/db/test_seed_data.py .                                              [100%]
-
-=================================== 5 passed in 0.87s =====================================
-All tests have passed successfully.
-```
-
+## Future Enhancements
+- Add integration and edge-case testing for **routes/**.  
+- Expand error-handling tests to cover API, extensions, and route-specific cases.  
+- Automate test coverage reporting to ensure ongoing improvements.
