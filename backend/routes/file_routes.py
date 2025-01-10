@@ -1,10 +1,14 @@
-from flask import Blueprint, jsonify, request, current_app
+from flask import Blueprint, jsonify, request
 import os
 from backend.utils.error_handling.routes.errors import (
     FileAccessError,
     FileNotFoundErrorCustom,
     handle_route_error,
 )
+from backend.utils.logger import CentralizedLogger
+
+# Initialize the logger
+logger = CentralizedLogger("file_routes")
 
 BASE_DIRECTORY = "/home/tank/janus"
 file_bp = Blueprint("file", __name__)
@@ -20,10 +24,11 @@ def list_files():
             for file in files:
                 files_list.append(os.path.join(root, file))
 
-        current_app.logger.info("Listed all files in the directory.")
+        logger.log_to_console("INFO", "Listed all files in the directory.")
         return jsonify(files=files_list)
     except Exception as e:
-        current_app.logger.error("Unexpected error listing files", exc_info=e)
+        logger.log_to_console("ERROR", "Unexpected error listing files", exc_info=e)
+        logger.log_to_db("ERROR", "Unexpected error listing files", module="file_routes")
         return handle_route_error(e)
 
 @file_bp.route('/files/content', methods=['POST'])
@@ -44,16 +49,19 @@ def read_file():
         with open(full_path, 'r') as file:
             content = file.read()
 
-        current_app.logger.info(f"Read file: {relative_path}")
+        logger.log_to_console("INFO", f"Read file: {relative_path}")
+        logger.log_to_db("INFO", f"File read successfully: {relative_path}", module="file_routes")
         return jsonify(content=content)
     except FileNotFoundError:
-        current_app.logger.warning(f"File not found: {relative_path}")
+        logger.log_to_console("WARNING", f"File not found: {relative_path}")
+        logger.log_to_db("WARNING", f"File not found: {relative_path}", module="file_routes")
         return handle_route_error(FileNotFoundErrorCustom("The requested file was not found."))
     except FileAccessError as e:
-        current_app.logger.error("File access error", exc_info=e)
+        logger.log_to_console("ERROR", "File access error", exc_info=e)
+        logger.log_to_db("ERROR", f"File access error: {relative_path}", module="file_routes")
         return handle_route_error(e)
     except Exception as e:
-        current_app.logger.error("Unexpected error reading file", exc_info=e)
+        logger.log_to_console("ERROR", "Unexpected error reading file", exc_info=e)
+        logger.log_to_db("ERROR", "Unexpected error reading file", module="file_routes")
         # Use handle_route_error for unexpected errors
         return handle_route_error(RuntimeError("An unexpected error occurred."))
-

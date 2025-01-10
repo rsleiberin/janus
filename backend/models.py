@@ -55,7 +55,7 @@ class Log(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     action = db.Column(db.String(255), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     module = db.Column(db.String(100), nullable=True)  # Optional module name
     level = db.Column(db.String(50), nullable=True)  # Log level (INFO, DEBUG, etc.)

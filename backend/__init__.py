@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask_migrate import Migrate
 from backend.db import db  # Correct import for db
 from backend.config import DevelopmentConfig  # Or ProductionConfig for production
 from backend.models import *  # Centralized import for all models
@@ -8,6 +9,8 @@ from backend.utils.logger import CentralizedLogger  # Import centralized logger
 # Initialize logger for this module
 logger = CentralizedLogger("backend_init")
 
+# Initialize Flask-Migrate
+migrate = Migrate()
 
 def create_app():
     """Factory function to create and configure the Flask application."""
@@ -39,7 +42,8 @@ def create_app():
     try:
         logger.log_to_console("INFO", "Initializing the database...")
         db.init_app(app)
-        logger.log_to_console("INFO", "db.init_app() completed successfully.")
+        migrate.init_app(app, db)  # Initialize Flask-Migrate here
+        logger.log_to_console("INFO", "db.init_app() and migrate.init_app() completed successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error during database initialization", error=str(e))
         raise  # Ensure that if initialization fails, it is reported
