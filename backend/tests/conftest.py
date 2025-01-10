@@ -70,10 +70,7 @@ def function_db_setup(app, session_db_setup):
         test_logger.debug("[FUNCTION] Creating database tables...")
         db.create_all()
 
-        # Add required seed data, e.g., log table setup
-        from backend.models import Log
-        db.session.commit()
-
+        # Add required seed data
         test_logger.debug("[FUNCTION] Database tables created successfully.")
 
     # Yield control to the test function

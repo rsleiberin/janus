@@ -63,6 +63,7 @@ def create_app():
         from backend.routes.status_routes import status_bp
         from backend.routes.file_routes import file_bp
         from backend.routes.authentication_routes import auth_bp  # Import authentication blueprint
+        from backend.routes.user_routes import user_bp  # Import user blueprint
         logger.log_to_console("INFO", "Blueprints imported successfully.")
     except ImportError as e:
         logger.log_to_console("ERROR", "Error importing blueprints", error=str(e))
@@ -72,6 +73,7 @@ def create_app():
         app.register_blueprint(status_bp)
         app.register_blueprint(file_bp)
         app.register_blueprint(auth_bp)  # Register authentication blueprint
+        app.register_blueprint(user_bp)  # Register user blueprint
         logger.log_to_console("INFO", "Blueprints registered successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error registering blueprints", error=str(e))

@@ -16,6 +16,12 @@ class UnauthorizedError(Exception):
 class AuthenticationError(Exception):
     """Raised when authentication fails."""
 
+class UserNotFoundError(Exception):
+    """Raised when a requested user is not found."""
+
+class InvalidUserDataError(Exception):
+    """Raised when provided user data is invalid or incomplete."""
+
 # Error Handlers
 def handle_route_error(error, meta_data=None):
     """
@@ -68,6 +74,22 @@ def handle_route_error(error, meta_data=None):
             details=str(error),
             meta_data=meta_data,
         ), 401
+    elif isinstance(error, UserNotFoundError):
+        return format_error_response(
+            status=404,
+            error_code="USER_NOT_FOUND",
+            message="The requested user was not found.",
+            details=str(error),
+            meta_data=meta_data,
+        ), 404
+    elif isinstance(error, InvalidUserDataError):
+        return format_error_response(
+            status=400,
+            error_code="INVALID_USER_DATA",
+            message="The provided user data is invalid or incomplete.",
+            details=str(error),
+            meta_data=meta_data,
+        ), 400
     else:
         return format_error_response(
             status=500,
