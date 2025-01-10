@@ -12,16 +12,26 @@ This directory contains modularized Flask routes for the Janus backend. Each fil
   Documentation for the directory and its routes.
 - **\_\_init\_\_.py** [✅ Completed]  
   Initializes the `routes` module.
-- **status_routes.py** [🚧 In Progress | #71, #72, #73]  
+- **status_routes.py** [✅ Completed]  
   General routes for health checks and system status.
-- **file_routes.py** [🚧 In Progress | #71, #72, #73]  
+- **file_routes.py** [✅ Completed]  
   Routes for handling file uploads and management.
-- **image_routes.py** [❌ Pending | Phase 3]  
-  Handles image-related API operations.
-- **user_routes.py** [❌ Pending | Phase 3]  
-  Manages user-related functionality (e.g., authentication, profile updates).
+- **authentication_routes.py** [✅ Completed]  
+  Provides endpoints for user authentication, including registration, login, and profile retrieval.
 - **admin_routes.py** [❌ Pending | Phase 3]  
   Administrative routes for managing users, logs, and other data.
+- **analytics_routes.py** [❌ Pending | Phase 3]  
+  Routes for analytics and data reporting.
+- **error_and_health_monitoring_routes.py** [❌ Pending | Phase 3]  
+  Routes for error tracking and health monitoring.
+- **image_routes.py** [❌ Pending | Phase 3]  
+  Handles image-related API operations.
+- **log_routes.py** [❌ Pending | Phase 3]  
+  Routes for accessing and managing application logs.
+- **security_routes.py** [❌ Pending | Phase 3]  
+  Security-related routes, including access control and permissions.
+- **user_routes.py** [❌ Pending | Phase 3]  
+  Manages user-related functionality (e.g., profile updates).
 - **files/** [↺ Managed]  
   Placeholder for file-related assets or configurations.
 
@@ -31,13 +41,19 @@ This directory contains modularized Flask routes for the Janus backend. Each fil
 
 ### **status_routes.py**
 **Endpoints**:
-- `/status` (GET): Returns a "healthy" status message for system monitoring.  
+- `/status` (GET): Returns a "healthy" status message for system monitoring.
 
 ### **file_routes.py**
 **Endpoints**:
 - `/upload` (POST): Handles file uploads, saving metadata to the database.  
 - `/files/<file_id>` (GET): Retrieves information about a specific file.  
 - `/files` (GET): Lists all uploaded files and their metadata.
+
+### **authentication_routes.py**
+**Endpoints**:
+- `/auth/register` (POST): Allows users to register with a username, email, password, and role.  
+- `/auth/login` (POST): Authenticates users and generates JWT access tokens.  
+- `/auth/profile` (GET): Retrieves user profile information for authenticated users.
 
 ---
 
@@ -52,5 +68,5 @@ This directory contains modularized Flask routes for the Janus backend. Each fil
 
 ## Future Enhancements
 - Integrate `image_routes.py`, `user_routes.py`, and `admin_routes.py` as the backend expands.  
-- Add support for API authentication and authorization.  
-- Provide OpenAPI documentation for all routes.
+- Add OpenAPI documentation for all routes.  
+- Implement rate limiting and API key-based access control.

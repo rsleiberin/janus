@@ -1,5 +1,3 @@
-# Backend Tests
-
 ## Overview
 The `tests` directory ensures that all backend components, including database operations, API routes, utilities, and error handling, are thoroughly tested for functionality, reliability, and edge cases.
 
@@ -46,11 +44,13 @@ The `tests` directory ensures that all backend components, including database op
 **routes/**
 - **\_\_init\_\_.py** [✅ Completed]  
   Module initialization for route-related tests.
-- **test_status_routes.py** [🚧 In Progress | #71]  
+- **test_status_routes.py** [✅ Completed]  
   Tests for API health-check routes.
-- **test_file_routes.py** [🚧 In Progress | #71]  
+- **test_file_routes.py** [✅ Completed]  
   Validates file upload and management routes.
-- **test_image_routes.py** [🚧 In Progress | #71]  
+- **test_authentication_routes.py** [✅ Completed]  
+  Tests for user registration, login, and profile retrieval routes.
+- **test_image_routes.py** [❌ Pending | Phase 3]  
   Covers image processing-related API routes.
 
 **utils/**
@@ -89,5 +89,6 @@ The `tests` directory ensures that all backend components, including database op
 
 ## Future Enhancements
 - Add integration and edge-case testing for **routes/**.  
-- Expand error-handling tests to cover API, extensions, and route-specific cases.  
-- Automate test coverage reporting to ensure ongoing improvements.
+- Automate test coverage reporting to ensure ongoing improvements.  
+- Expand route testing to cover authorization and advanced error-handling cases.  
+- Complete testing for `api/errors.py` and `extensions/errors.py` to ensure robustness across all error-handling layers.
