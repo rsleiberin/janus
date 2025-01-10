@@ -10,6 +10,12 @@ class FileAccessError(Exception):
 class FileNotFoundErrorCustom(Exception):
     """Raised when a requested file is not found."""
 
+class UnauthorizedError(Exception):
+    """Raised when a user is unauthorized to access a resource."""
+
+class AuthenticationError(Exception):
+    """Raised when authentication fails."""
+
 # Error Handlers
 def handle_route_error(error, meta_data=None):
     """
@@ -46,6 +52,22 @@ def handle_route_error(error, meta_data=None):
             details=str(error),
             meta_data=meta_data,
         ), 404
+    elif isinstance(error, UnauthorizedError):
+        return format_error_response(
+            status=401,
+            error_code="UNAUTHORIZED",
+            message="You are not authorized to access this resource.",
+            details=str(error),
+            meta_data=meta_data,
+        ), 401
+    elif isinstance(error, AuthenticationError):
+        return format_error_response(
+            status=401,
+            error_code="AUTHENTICATION_FAILED",
+            message="Authentication failed. Please check your credentials.",
+            details=str(error),
+            meta_data=meta_data,
+        ), 401
     else:
         return format_error_response(
             status=500,

@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager  # Import JWTManager
 from backend.db import db  # Correct import for db
 from backend.config import DevelopmentConfig  # Or ProductionConfig for production
 from backend.models import *  # Centralized import for all models
@@ -31,6 +32,7 @@ def create_app():
     app.config.from_object(DevelopmentConfig)  # Use DevelopmentConfig for local development
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["JWT_SECRET_KEY"] = "your_test_secret_key"  # Add a JWT secret key for secure token generation
 
     # Log the URI for the database connection
     logger.log_to_console("DEBUG", "Database URI set", uri=app.config["SQLALCHEMY_DATABASE_URI"])
@@ -48,10 +50,19 @@ def create_app():
         logger.log_to_console("ERROR", "Error during database initialization", error=str(e))
         raise  # Ensure that if initialization fails, it is reported
 
+    # Initialize JWTManager
+    try:
+        JWTManager(app)
+        logger.log_to_console("INFO", "JWTManager initialized successfully.")
+    except Exception as e:
+        logger.log_to_console("ERROR", "Error initializing JWTManager", error=str(e))
+        raise  # Ensure that JWTManager initialization issues are raised
+
     # Import and register blueprints inside the function to avoid circular imports
     try:
         from backend.routes.status_routes import status_bp
         from backend.routes.file_routes import file_bp
+        from backend.routes.authentication_routes import auth_bp  # Import authentication blueprint
         logger.log_to_console("INFO", "Blueprints imported successfully.")
     except ImportError as e:
         logger.log_to_console("ERROR", "Error importing blueprints", error=str(e))
@@ -60,6 +71,7 @@ def create_app():
     try:
         app.register_blueprint(status_bp)
         app.register_blueprint(file_bp)
+        app.register_blueprint(auth_bp)  # Register authentication blueprint
         logger.log_to_console("INFO", "Blueprints registered successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error registering blueprints", error=str(e))

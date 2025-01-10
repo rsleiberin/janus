@@ -5,10 +5,10 @@ class Config:
     """Base configuration."""
     def __init__(self):
         self.SECRET_KEY = os.getenv('SECRET_KEY', 'fallback_insecure_key')
-        self.SQLALCHEMY_TRACK_MODIFICATIONS = False  # Disable modification tracking for performance
-        self.LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")  # Default to DEBUG
+        self.SQLALCHEMY_TRACK_MODIFICATIONS = False
+        self.JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'super_secret_jwt_key')  # Add JWT secret key
+        self.LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
 
-        # Set up centralized logger with dynamic log level
         self.logger = CentralizedLogger("config", log_level=self.LOG_LEVEL)
 
     def validate(self):
@@ -24,22 +24,22 @@ class DevelopmentConfig(Config):
     def __init__(self):
         super().__init__()
         self.DEBUG = True
+        self.JWT_SECRET_KEY = "dev_jwt_secret"  # Development-specific JWT key
 
-        # Resolve the DB path relative to the backend directory
         base_dir = os.path.abspath(os.path.dirname(__file__))
         db_path = os.path.join(base_dir, "instance", "image_processing.db")
         self.SQLALCHEMY_DATABASE_URI = f"sqlite:///{db_path}"
 
-        # Log the resolved DB path
         self.logger.log_to_console("DEBUG", "Development DB URI set.", db_uri=self.SQLALCHEMY_DATABASE_URI)
 
 class TestingConfig(Config):
     """Testing configuration."""
-    __test__ = False  # Tell pytest not to collect this class as a test
+    __test__ = False
 
     def __init__(self):
         super().__init__()
         self.TESTING = True
+        self.JWT_SECRET_KEY = "test_jwt_secret"  # Testing-specific JWT key
         self.SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
         self.logger.log_to_console("DEBUG", "Testing DB URI set to in-memory SQLite.")
 
@@ -48,5 +48,6 @@ class ProductionConfig(Config):
     def __init__(self):
         super().__init__()
         self.DEBUG = False
+        self.JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')  # Use environment variable for production
         self.SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
         self.logger.log_to_console("DEBUG", "Production DB URI set.", db_uri=self.SQLALCHEMY_DATABASE_URI)

@@ -1,5 +1,3 @@
-# conftest.py
-
 import pytest
 import logging
 from flask import Flask
@@ -27,9 +25,11 @@ def app():
 
     # Set in-memory SQLite for tests
     application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
-    test_logger.debug("[SESSION] Using in-memory SQLite database for testing.")
+    application.config["JWT_SECRET_KEY"] = "test_secret_key"  # Add a test JWT key
+    application.config["JWT_TOKEN_LOCATION"] = ["headers"]   # Add JWT configuration
+    application.config["TESTING"] = True
 
-    test_logger.debug("[SESSION] Flask application initialization complete.")
+    test_logger.debug("[SESSION] Using in-memory SQLite database for testing.")
     return application
 
 
@@ -70,7 +70,7 @@ def function_db_setup(app, session_db_setup):
         test_logger.debug("[FUNCTION] Creating database tables...")
         db.create_all()
 
-        # Seed required tables
+        # Add required seed data, e.g., log table setup
         from backend.models import Log
         db.session.commit()
 
@@ -84,4 +84,3 @@ def function_db_setup(app, session_db_setup):
         db.session.remove()
         db.drop_all()
         test_logger.debug("[FUNCTION] Database cleaned up successfully.")
-
