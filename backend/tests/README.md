@@ -50,6 +50,8 @@ The `tests` directory ensures that all backend components, including database op
   Validates file upload and management routes.
 - **test_authentication_routes.py** [✅ Completed]  
   Tests for user registration, login, and profile retrieval routes.
+- **test_user_routes.py** [✅ Completed]  
+  Tests for user profile retrieval and update routes.
 - **test_image_routes.py** [❌ Pending | Phase 3]  
   Covers image processing-related API routes.
 

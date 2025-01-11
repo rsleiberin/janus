@@ -18,6 +18,8 @@ This directory contains modularized Flask routes for the Janus backend. Each fil
   Routes for handling file uploads and management.
 - **authentication_routes.py** [✅ Completed]  
   Provides endpoints for user authentication, including registration, login, and profile retrieval.
+- **user_routes.py** [✅ Completed]  
+  Manages user-related functionality (e.g., profile retrieval and updates).
 - **admin_routes.py** [❌ Pending | Phase 3]  
   Administrative routes for managing users, logs, and other data.
 - **analytics_routes.py** [❌ Pending | Phase 3]  
@@ -30,8 +32,6 @@ This directory contains modularized Flask routes for the Janus backend. Each fil
   Routes for accessing and managing application logs.
 - **security_routes.py** [❌ Pending | Phase 3]  
   Security-related routes, including access control and permissions.
-- **user_routes.py** [❌ Pending | Phase 3]  
-  Manages user-related functionality (e.g., profile updates).
 - **files/** [↺ Managed]  
   Placeholder for file-related assets or configurations.
 
@@ -55,6 +55,11 @@ This directory contains modularized Flask routes for the Janus backend. Each fil
 - `/auth/login` (POST): Authenticates users and generates JWT access tokens.  
 - `/auth/profile` (GET): Retrieves user profile information for authenticated users.
 
+### **user_routes.py**
+**Endpoints**:
+- `/user/profile` (GET): Retrieves the profile of the authenticated user.  
+- `/user/profile` (PUT): Updates the profile of the authenticated user.
+
 ---
 
 ## Best Practices
@@ -67,6 +72,7 @@ This directory contains modularized Flask routes for the Janus backend. Each fil
 ---
 
 ## Future Enhancements
-- Integrate `image_routes.py`, `user_routes.py`, and `admin_routes.py` as the backend expands.  
+- Integrate remaining routes: `image_routes.py`, `admin_routes.py`, `analytics_routes.py`, and others.  
 - Add OpenAPI documentation for all routes.  
 - Implement rate limiting and API key-based access control.
+- Add JWT refresh token endpoint to `security_routes.py`.

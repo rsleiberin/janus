@@ -2,10 +2,12 @@ import os
 from flask import Flask
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager  # Import JWTManager
+from flask_jwt_extended.exceptions import NoAuthorizationError, InvalidHeaderError
 from backend.db import db  # Correct import for db
 from backend.config import DevelopmentConfig  # Or ProductionConfig for production
 from backend.models import *  # Centralized import for all models
 from backend.utils.logger import CentralizedLogger  # Import centralized logger
+from backend.utils.error_handling.error_handling import format_error_response
 
 # Initialize logger for this module
 logger = CentralizedLogger("backend_init")
@@ -58,12 +60,32 @@ def create_app():
         logger.log_to_console("ERROR", "Error initializing JWTManager", error=str(e))
         raise  # Ensure that JWTManager initialization issues are raised
 
+    # Register JWT error handlers
+    @app.errorhandler(NoAuthorizationError)
+    def handle_no_authorization_error(e):
+        return format_error_response(
+            status=401,
+            error_code="AUTHENTICATION_FAILED",
+            message="Authentication failed. Please log in.",
+            details=str(e),
+        ), 401
+
+    @app.errorhandler(InvalidHeaderError)
+    def handle_invalid_header_error(e):
+        return format_error_response(
+            status=401,
+            error_code="INVALID_AUTH_HEADER",
+            message="The authentication header is invalid.",
+            details=str(e),
+        ), 401
+
     # Import and register blueprints inside the function to avoid circular imports
     try:
         from backend.routes.status_routes import status_bp
         from backend.routes.file_routes import file_bp
         from backend.routes.authentication_routes import auth_bp  # Import authentication blueprint
         from backend.routes.user_routes import user_bp  # Import user blueprint
+        from backend.routes.admin_routes import admin_bp  # Import admin blueprint
         logger.log_to_console("INFO", "Blueprints imported successfully.")
     except ImportError as e:
         logger.log_to_console("ERROR", "Error importing blueprints", error=str(e))
@@ -74,6 +96,7 @@ def create_app():
         app.register_blueprint(file_bp)
         app.register_blueprint(auth_bp)  # Register authentication blueprint
         app.register_blueprint(user_bp)  # Register user blueprint
+        app.register_blueprint(admin_bp)  # Register admin blueprint
         logger.log_to_console("INFO", "Blueprints registered successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error registering blueprints", error=str(e))
