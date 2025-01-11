@@ -7,7 +7,7 @@ from backend.db import db  # Correct import for db
 from backend.config import DevelopmentConfig  # Or ProductionConfig for production
 from backend.models import *  # Centralized import for all models
 from backend.utils.logger import CentralizedLogger  # Import centralized logger
-from backend.utils.error_handling.error_handling import format_error_response
+from backend.utils.error_handling.error_handling import format_error_response, handle_general_error
 
 # Initialize logger for this module
 logger = CentralizedLogger("backend_init")
@@ -79,6 +79,13 @@ def create_app():
             details=str(e),
         ), 401
 
+    # Register a global error handler for unhandled exceptions
+    @app.errorhandler(Exception)
+    def handle_unhandled_exception(e):
+        logger.log_to_console("ERROR", str(e), module="general")
+        return handle_general_error(e)
+
+
     # Import and register blueprints inside the function to avoid circular imports
     try:
         from backend.routes.status_routes import status_bp
@@ -86,6 +93,7 @@ def create_app():
         from backend.routes.authentication_routes import auth_bp  # Import authentication blueprint
         from backend.routes.user_routes import user_bp  # Import user blueprint
         from backend.routes.admin_routes import admin_bp  # Import admin blueprint
+        from backend.routes.error_and_health_monitoring_routes import error_and_health_bp
         logger.log_to_console("INFO", "Blueprints imported successfully.")
     except ImportError as e:
         logger.log_to_console("ERROR", "Error importing blueprints", error=str(e))
@@ -97,6 +105,7 @@ def create_app():
         app.register_blueprint(auth_bp)  # Register authentication blueprint
         app.register_blueprint(user_bp)  # Register user blueprint
         app.register_blueprint(admin_bp)  # Register admin blueprint
+        app.register_blueprint(error_and_health_bp)
         logger.log_to_console("INFO", "Blueprints registered successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error registering blueprints", error=str(e))

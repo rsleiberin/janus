@@ -37,6 +37,14 @@ class UnauthorizedAccessError(Exception):
     """Raised when a user tries to perform an unauthorized action."""
 
 
+class HealthCheckError(Exception):
+    """Raised when a health check fails due to an internal issue."""
+
+
+class LogRetrievalError(Exception):
+    """Raised when fetching logs encounters an error."""
+
+
 # Error Handlers
 def handle_route_error(error, meta_data=None):
     """
@@ -121,6 +129,24 @@ def handle_route_error(error, meta_data=None):
             details=str(error),
             meta_data=meta_data,
         ), 403
+    elif isinstance(error, HealthCheckError):
+        logger.log_to_console("ERROR", "Health check failed.", details=str(error), meta_data=meta_data)
+        return format_error_response(
+            status=500,
+            error_code="HEALTH_CHECK_FAILED",
+            message="The system health check encountered an issue.",
+            details=str(error),
+            meta_data=meta_data,
+        ), 500
+    elif isinstance(error, LogRetrievalError):
+        logger.log_to_console("ERROR", "Error retrieving logs.", details=str(error), meta_data=meta_data)
+        return format_error_response(
+            status=500,
+            error_code="LOG_RETRIEVAL_ERROR",
+            message="An error occurred while retrieving logs.",
+            details=str(error),
+            meta_data=meta_data,
+        ), 500
     else:
         logger.log_to_console("ERROR", "Unknown route error occurred.", details=str(error), meta_data=meta_data)
         return format_error_response(
