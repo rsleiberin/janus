@@ -1,12 +1,12 @@
 import os
 from flask import Flask
 from flask_migrate import Migrate
-from flask_jwt_extended import JWTManager  # Import JWTManager
+from flask_jwt_extended import JWTManager
 from flask_jwt_extended.exceptions import NoAuthorizationError, InvalidHeaderError
-from backend.db import db  # Correct import for db
-from backend.config import DevelopmentConfig  # Or ProductionConfig for production
-from backend.models import *  # Centralized import for all models
-from backend.utils.logger import CentralizedLogger  # Import centralized logger
+from backend.db import db
+from backend.config import DevelopmentConfig  # Change to ProductionConfig as needed
+from backend.models import *  # Import all models
+from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.error_handling import format_error_response, handle_general_error
 
 # Initialize logger for this module
@@ -26,31 +26,25 @@ def create_app():
     # Correctly resolve the database file path
     base_dir = os.path.abspath(os.path.dirname(__file__))
     db_path = os.path.join(base_dir, "instance", "image_processing.db")
-    
-    # Log the database path
     logger.log_to_console("DEBUG", "Resolved database path", path=db_path)
 
     # Apply configuration
     app.config.from_object(DevelopmentConfig)  # Use DevelopmentConfig for local development
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["JWT_SECRET_KEY"] = "your_test_secret_key"  # Add a JWT secret key for secure token generation
+    app.config["JWT_SECRET_KEY"] = "your_test_secret_key"  # Add a secure JWT secret key
 
-    # Log the URI for the database connection
     logger.log_to_console("DEBUG", "Database URI set", uri=app.config["SQLALCHEMY_DATABASE_URI"])
-
-    # Log the created db instance
-    logger.log_to_console("DEBUG", "Database instance created", instance=str(db))
 
     # Initialize the database
     try:
         logger.log_to_console("INFO", "Initializing the database...")
         db.init_app(app)
-        migrate.init_app(app, db)  # Initialize Flask-Migrate here
+        migrate.init_app(app, db)
         logger.log_to_console("INFO", "db.init_app() and migrate.init_app() completed successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error during database initialization", error=str(e))
-        raise  # Ensure that if initialization fails, it is reported
+        raise
 
     # Initialize JWTManager
     try:
@@ -58,7 +52,7 @@ def create_app():
         logger.log_to_console("INFO", "JWTManager initialized successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error initializing JWTManager", error=str(e))
-        raise  # Ensure that JWTManager initialization issues are raised
+        raise
 
     # Register JWT error handlers
     @app.errorhandler(NoAuthorizationError)
@@ -85,32 +79,35 @@ def create_app():
         logger.log_to_console("ERROR", str(e), module="general")
         return handle_general_error(e)
 
-    # Import and register blueprints inside the function to avoid circular imports
+    # Import and register blueprints
     try:
         from backend.routes.status_routes import status_bp
         from backend.routes.file_routes import file_bp
-        from backend.routes.authentication_routes import auth_bp  # Import authentication blueprint
-        from backend.routes.user_routes import user_bp  # Import user blueprint
-        from backend.routes.admin_routes import admin_bp  # Import admin blueprint
+        from backend.routes.authentication_routes import auth_bp
+        from backend.routes.user_routes import user_bp
+        from backend.routes.admin_routes import admin_bp
         from backend.routes.error_and_health_monitoring_routes import error_and_health_bp
-        from backend.routes.analytics_routes import analytics_bp  # Import analytics blueprint
+        from backend.routes.analytics_routes import analytics_bp
+        from backend.routes.security_routes import security_bp  # Add the security blueprint
+
         logger.log_to_console("INFO", "Blueprints imported successfully.")
     except ImportError as e:
         logger.log_to_console("ERROR", "Error importing blueprints", error=str(e))
-        raise  # Raise an error if blueprints cannot be imported
+        raise
 
     try:
         app.register_blueprint(status_bp)
         app.register_blueprint(file_bp)
-        app.register_blueprint(auth_bp)  # Register authentication blueprint
-        app.register_blueprint(user_bp)  # Register user blueprint
-        app.register_blueprint(admin_bp)  # Register admin blueprint
+        app.register_blueprint(auth_bp)
+        app.register_blueprint(user_bp)
+        app.register_blueprint(admin_bp)
         app.register_blueprint(error_and_health_bp)
-        app.register_blueprint(analytics_bp)  # Register analytics blueprint
+        app.register_blueprint(analytics_bp)
+        app.register_blueprint(security_bp)  # Register the security blueprint
         logger.log_to_console("INFO", "Blueprints registered successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error registering blueprints", error=str(e))
-        raise  # Raise an error if blueprint registration fails
+        raise
 
     logger.log_to_console("INFO", "App creation complete.")
     return app
