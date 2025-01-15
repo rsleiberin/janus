@@ -52,16 +52,20 @@ def read_file():
         logger.log_to_console("INFO", f"Read file: {relative_path}")
         logger.log_to_db("INFO", f"File read successfully: {relative_path}", module="file_routes")
         return jsonify(content=content)
+
     except FileNotFoundError:
-        logger.log_to_console("WARNING", f"File not found: {relative_path}")
-        logger.log_to_db("WARNING", f"File not found: {relative_path}", module="file_routes")
-        return handle_route_error(FileNotFoundErrorCustom("The requested file was not found."))
+        # Properly map the error with a custom message
+        error = FileNotFoundErrorCustom(f"The requested file was not found: {relative_path}")
+        logger.log_to_console("WARNING", str(error))
+        logger.log_to_db("WARNING", str(error), module="file_routes")
+        return handle_route_error(error)
+
     except FileAccessError as e:
         logger.log_to_console("ERROR", "File access error", exc_info=e)
         logger.log_to_db("ERROR", f"File access error: {relative_path}", module="file_routes")
         return handle_route_error(e)
+
     except Exception as e:
         logger.log_to_console("ERROR", "Unexpected error reading file", exc_info=e)
         logger.log_to_db("ERROR", "Unexpected error reading file", module="file_routes")
-        # Use handle_route_error for unexpected errors
         return handle_route_error(RuntimeError("An unexpected error occurred."))

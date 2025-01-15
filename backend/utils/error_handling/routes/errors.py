@@ -8,42 +8,38 @@ logger = CentralizedLogger("route_errors")
 class DatabaseUnavailableError(Exception):
     """Raised when the database is not accessible."""
 
-
 class FileAccessError(Exception):
     """Raised when there is an issue accessing a file."""
-
 
 class FileNotFoundErrorCustom(Exception):
     """Raised when a requested file is not found."""
 
-
 class UnauthorizedError(Exception):
     """Raised when a user is unauthorized to access a resource."""
-
 
 class AuthenticationError(Exception):
     """Raised when authentication fails."""
 
-
 class UserNotFoundError(Exception):
     """Raised when the requested user is not found."""
-
 
 class InvalidUserDataError(Exception):
     """Raised when provided user data is invalid or incomplete."""
 
-
 class UnauthorizedAccessError(Exception):
     """Raised when a user tries to perform an unauthorized action."""
-
 
 class HealthCheckError(Exception):
     """Raised when a health check fails due to an internal issue."""
 
-
 class LogRetrievalError(Exception):
     """Raised when fetching logs encounters an error."""
 
+class AnalyticsQueryError(Exception):
+    """Raised when an analytics query fails."""
+
+class InvalidAnalyticsRequestError(Exception):
+    """Raised when an analytics request has invalid parameters."""
 
 # Error Handlers
 def handle_route_error(error, meta_data=None):
@@ -76,7 +72,7 @@ def handle_route_error(error, meta_data=None):
             meta_data=meta_data,
         ), 403
     elif isinstance(error, FileNotFoundErrorCustom):
-        logger.log_to_console("WARNING", "Requested file not found.", details=str(error), meta_data=meta_data)
+        logger.log_to_console("WARNING", "File not found.", details=str(error), meta_data=meta_data)
         return format_error_response(
             status=404,
             error_code="FILE_NOT_FOUND",
@@ -84,24 +80,6 @@ def handle_route_error(error, meta_data=None):
             details=str(error),
             meta_data=meta_data,
         ), 404
-    elif isinstance(error, UnauthorizedError):
-        logger.log_to_console("ERROR", "Unauthorized access attempt.", details=str(error), meta_data=meta_data)
-        return format_error_response(
-            status=401,
-            error_code="UNAUTHORIZED",
-            message="You are not authorized to access this resource.",
-            details=str(error),
-            meta_data=meta_data,
-        ), 401
-    elif isinstance(error, AuthenticationError):
-        logger.log_to_console("ERROR", "Authentication failed.", details=str(error), meta_data=meta_data)
-        return format_error_response(
-            status=401,
-            error_code="AUTHENTICATION_FAILED",
-            message="Authentication failed. Please check your credentials.",
-            details=str(error),
-            meta_data=meta_data,
-        ), 401
     elif isinstance(error, UserNotFoundError):
         logger.log_to_console("WARNING", "User not found.", details=str(error), meta_data=meta_data)
         return format_error_response(
@@ -112,38 +90,38 @@ def handle_route_error(error, meta_data=None):
             meta_data=meta_data,
         ), 404
     elif isinstance(error, InvalidUserDataError):
-        logger.log_to_console("ERROR", "Invalid user data provided.", details=str(error), meta_data=meta_data)
+        logger.log_to_console("ERROR", "Invalid user data.", details=str(error), meta_data=meta_data)
         return format_error_response(
             status=400,
             error_code="INVALID_USER_DATA",
-            message="The provided user data is invalid or incomplete.",
+            message="The provided user data is invalid.",
             details=str(error),
             meta_data=meta_data,
         ), 400
-    elif isinstance(error, UnauthorizedAccessError):
-        logger.log_to_console("ERROR", "Unauthorized access attempt.", details=str(error), meta_data=meta_data)
+    elif isinstance(error, AnalyticsQueryError):
+        logger.log_to_console("ERROR", "Analytics query failed.", details=str(error), meta_data=meta_data)
         return format_error_response(
-            status=403,
-            error_code="UNAUTHORIZED_ACCESS",
-            message="You do not have permission to perform this action.",
+            status=500,
+            error_code="ANALYTICS_QUERY_ERROR",
+            message="An error occurred while processing the analytics query.",
             details=str(error),
             meta_data=meta_data,
-        ), 403
+        ), 500
+    elif isinstance(error, InvalidAnalyticsRequestError):
+        logger.log_to_console("ERROR", "Invalid analytics request parameters.", details=str(error), meta_data=meta_data)
+        return format_error_response(
+            status=400,
+            error_code="INVALID_ANALYTICS_REQUEST",
+            message="The provided analytics request parameters are invalid.",
+            details=str(error),
+            meta_data=meta_data,
+        ), 400
     elif isinstance(error, HealthCheckError):
         logger.log_to_console("ERROR", "Health check failed.", details=str(error), meta_data=meta_data)
         return format_error_response(
             status=500,
             error_code="HEALTH_CHECK_FAILED",
             message="The system health check encountered an issue.",
-            details=str(error),
-            meta_data=meta_data,
-        ), 500
-    elif isinstance(error, LogRetrievalError):
-        logger.log_to_console("ERROR", "Error retrieving logs.", details=str(error), meta_data=meta_data)
-        return format_error_response(
-            status=500,
-            error_code="LOG_RETRIEVAL_ERROR",
-            message="An error occurred while retrieving logs.",
             details=str(error),
             meta_data=meta_data,
         ), 500

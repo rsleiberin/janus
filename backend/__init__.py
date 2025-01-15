@@ -85,7 +85,6 @@ def create_app():
         logger.log_to_console("ERROR", str(e), module="general")
         return handle_general_error(e)
 
-
     # Import and register blueprints inside the function to avoid circular imports
     try:
         from backend.routes.status_routes import status_bp
@@ -94,6 +93,7 @@ def create_app():
         from backend.routes.user_routes import user_bp  # Import user blueprint
         from backend.routes.admin_routes import admin_bp  # Import admin blueprint
         from backend.routes.error_and_health_monitoring_routes import error_and_health_bp
+        from backend.routes.analytics_routes import analytics_bp  # Import analytics blueprint
         logger.log_to_console("INFO", "Blueprints imported successfully.")
     except ImportError as e:
         logger.log_to_console("ERROR", "Error importing blueprints", error=str(e))
@@ -106,6 +106,7 @@ def create_app():
         app.register_blueprint(user_bp)  # Register user blueprint
         app.register_blueprint(admin_bp)  # Register admin blueprint
         app.register_blueprint(error_and_health_bp)
+        app.register_blueprint(analytics_bp)  # Register analytics blueprint
         logger.log_to_console("INFO", "Blueprints registered successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error registering blueprints", error=str(e))

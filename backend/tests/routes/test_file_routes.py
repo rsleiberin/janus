@@ -49,7 +49,8 @@ def test_files_content_endpoint_nonexistent_file(mock_open_func, client, mocker)
     assert response.status_code == 404
     assert data["error_code"] == "FILE_NOT_FOUND"
 
-    mock_logger.assert_called_once_with("WARNING", f"File not found: {nonexistent_file_path}")
+    # Update the expected log message
+    mock_logger.assert_called_once_with("WARNING", f"The requested file was not found: {nonexistent_file_path}")
 
 @pytest.mark.usefixtures("client")
 @patch("builtins.open", side_effect=Exception("Mock unexpected error"))
