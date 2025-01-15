@@ -1,38 +1,43 @@
 from flask import Blueprint, jsonify, request
+from backend.models import Analytics, db
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.routes.errors import handle_route_error
-from backend.db import db
-from backend.models import Analytics
+from backend.utils.error_handling.routes.errors import handle_route_error, InvalidAnalyticsRequestError
 
-# Initialize blueprint and logger
-analytics_bp = Blueprint("analytics", __name__)
 logger = CentralizedLogger("analytics_routes")
 
+analytics_bp = Blueprint("analytics", __name__, url_prefix="/analytics")
 
-@analytics_bp.route("/analytics", methods=["POST"])
-def create_analytics_record():
+
+@analytics_bp.route("", methods=["POST"])
+def create_analytics_entry():
     """
-    Endpoint to create a new analytics record.
+    Create a new analytics entry.
     """
     try:
         logger.log_to_console("INFO", "Creating a new analytics record.")
-        data = request.json
-        if not data or "data" not in data:
-            raise ValueError("Invalid payload: 'data' is required.")
         
-        research_topic = data.get("research_topic", "General")
-        analytics_record = Analytics(data=data["data"], research_topic=research_topic)
-        db.session.add(analytics_record)
+        data = request.json.get("data")
+        research_topic = request.json.get("research_topic")
+
+        if not data:
+            raise InvalidAnalyticsRequestError("Analytics data is required.")
+
+        analytics_entry = Analytics(data=data, research_topic=research_topic)
+        db.session.add(analytics_entry)
         db.session.commit()
 
         logger.log_to_console("INFO", "Analytics record created successfully.")
-        return jsonify({"message": "Analytics record created successfully."}), 201
+        return jsonify({
+            "id": analytics_entry.id,
+            "message": "Analytics entry created successfully."
+        }), 201
 
     except Exception as e:
+        logger.log_to_console("ERROR", "Error creating analytics entry.", details=str(e))
         return handle_route_error(e)
 
 
-@analytics_bp.route("/analytics", methods=["GET"])
+@analytics_bp.route("", methods=["GET"])
 def get_analytics_records():
     """
     Endpoint to fetch all analytics records.
@@ -51,20 +56,49 @@ def get_analytics_records():
         ]
 
         logger.log_to_console("INFO", f"Fetched {len(serialized_records)} analytics records.")
-        return jsonify(serialized_records), 200
+        return jsonify({"analytics": serialized_records}), 200
 
     except Exception as e:
         return handle_route_error(e)
 
 
-@analytics_bp.route("/analytics/<int:record_id>", methods=["DELETE"])
+@analytics_bp.route("/<int:record_id>", methods=["GET"])
+def fetch_single_analytics_entry(record_id):
+    """
+    Fetch a single analytics entry by ID.
+    """
+    try:
+        logger.log_to_console("INFO", f"Fetching analytics record with ID: {record_id}.")
+        record = db.session.get(Analytics, record_id)
+        if not record:
+            logger.log_to_console("WARNING", f"Analytics record with ID {record_id} not found.")
+            return jsonify({
+                "error_code": "RECORD_NOT_FOUND",
+                "message": f"Analytics record with ID {record_id} not found."
+            }), 404
+
+        serialized_record = {
+            "id": record.id,
+            "data": record.data,
+            "research_topic": record.research_topic,
+            "created_at": record.created_at,
+        }
+        logger.log_to_console("INFO", f"Fetched analytics record with ID: {record_id}.")
+        return jsonify(serialized_record), 200
+
+    except Exception as e:
+        return handle_route_error(e)
+
+
+
+@analytics_bp.route("/<int:record_id>", methods=["DELETE"])
 def delete_analytics_record(record_id):
     """
     Endpoint to delete an analytics record by ID.
     """
     try:
         logger.log_to_console("INFO", f"Deleting analytics record with ID: {record_id}.")
-        record = Analytics.query.get(record_id)
+        record = db.session.get(Analytics, record_id)
         if not record:
             raise ValueError(f"Analytics record with ID {record_id} not found.")
 
@@ -72,7 +106,7 @@ def delete_analytics_record(record_id):
         db.session.commit()
 
         logger.log_to_console("INFO", f"Analytics record {record_id} deleted successfully.")
-        return jsonify({"message": f"Analytics record {record_id} deleted successfully."}), 200
+        return jsonify({"message": "Analytics entry deleted successfully."}), 200
 
     except Exception as e:
         return handle_route_error(e)
