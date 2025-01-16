@@ -3,6 +3,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended.exceptions import NoAuthorizationError, InvalidHeaderError
+from werkzeug.exceptions import UnprocessableEntity
 from backend.db import db
 from backend.config import DevelopmentConfig  # Change to ProductionConfig as needed
 from backend.models import *  # Import all models
@@ -48,29 +49,29 @@ def create_app():
 
     # Initialize JWTManager
     try:
-        JWTManager(app)
+        jwt = JWTManager(app)
         logger.log_to_console("INFO", "JWTManager initialized successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error initializing JWTManager", error=str(e))
         raise
 
     # Register JWT error handlers
-    @app.errorhandler(NoAuthorizationError)
+    @jwt.unauthorized_loader
     def handle_no_authorization_error(e):
         return format_error_response(
             status=401,
             error_code="AUTHENTICATION_FAILED",
             message="Authentication failed. Please log in.",
-            details=str(e),
+            details=e,
         ), 401
 
-    @app.errorhandler(InvalidHeaderError)
-    def handle_invalid_header_error(e):
+    @jwt.invalid_token_loader
+    def handle_invalid_token_error(e):
         return format_error_response(
             status=401,
-            error_code="INVALID_AUTH_HEADER",
-            message="The authentication header is invalid.",
-            details=str(e),
+            error_code="INVALID_TOKEN",
+            message="Token is invalid or expired.",
+            details=e,
         ), 401
 
     # Register a global error handler for unhandled exceptions

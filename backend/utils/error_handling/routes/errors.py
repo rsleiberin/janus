@@ -46,7 +46,6 @@ class InvalidAnalyticsRequestError(Exception):
 class WeakPasswordError(Exception):
     """Raised when a new password does not meet complexity requirements."""
 
-
 # Error Handlers
 def handle_route_error(error, meta_data=None):
     """
@@ -78,12 +77,22 @@ def handle_route_error(error, meta_data=None):
                 details=str(error),
                 meta_data=meta_data,
             ), 404
-        elif isinstance(error, (NoAuthorizationError, InvalidHeaderError)):
-            logger.log_to_console("ERROR", "Authorization error occurred.", details=str(error), meta_data=meta_data)
+        elif isinstance(error, NoAuthorizationError):
+            logger.log_to_console("ERROR", "Missing Authorization Header.", details=str(error), meta_data=meta_data)
+            return format_error_response(
+                status=401,
+                error_code="MISSING_AUTHORIZATION_HEADER",
+                message="Missing Authorization Header",
+                details=str(error),
+                meta_data=meta_data,
+            ), 401
+
+        elif isinstance(error, InvalidHeaderError):
+            logger.log_to_console("ERROR", "Invalid token provided.", details=str(error), meta_data=meta_data)
             return format_error_response(
                 status=401,
                 error_code="AUTHORIZATION_ERROR",
-                message="Authorization failed. Check your credentials or token.",
+                message="Token is invalid or expired.",
                 details=str(error),
                 meta_data=meta_data,
             ), 401
