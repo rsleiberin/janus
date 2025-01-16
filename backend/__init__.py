@@ -90,7 +90,8 @@ def create_app():
         from backend.routes.error_and_health_monitoring_routes import error_and_health_bp
         from backend.routes.analytics_routes import analytics_bp
         from backend.routes.security_routes import security_bp
-        from backend.routes.log_routes import log_bp  # Import the log_routes blueprint
+        from backend.routes.log_routes import log_bp
+        from backend.routes.image_routes import image_bp  # Corrected blueprint name to `image_bp`
 
         logger.log_to_console("INFO", "Blueprints imported successfully.")
     except ImportError as e:
@@ -106,7 +107,8 @@ def create_app():
         app.register_blueprint(error_and_health_bp)
         app.register_blueprint(analytics_bp)
         app.register_blueprint(security_bp)
-        app.register_blueprint(log_bp)  # Register the log_routes blueprint
+        app.register_blueprint(log_bp)
+        app.register_blueprint(image_bp, url_prefix="/images")  # Register the corrected `image_bp` blueprint
         logger.log_to_console("INFO", "Blueprints registered successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error registering blueprints", error=str(e))

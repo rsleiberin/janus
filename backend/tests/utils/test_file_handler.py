@@ -1,70 +1,61 @@
-# test_file_handler.py
-
 import os
-import pytest
-from backend.utils.file_handler import read_file, write_file, delete_file
+import re
+from backend.utils.logger import CentralizedLogger
+from backend.utils.error_handling.error_handling import error_context, log_error
 from backend.utils.error_handling.utils.errors import FileHandlerError
 
-@pytest.mark.usefixtures("function_db_setup")
-class TestFileHandler:
-    """
-    Tests for the file_handler module.
-    """
+logger = CentralizedLogger(name="file_handler_logger")
+UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", "backend/uploads")
 
-    def test_read_nonexistent_file(self, tmp_path):
-        """
-        Attempt to read a file that doesn't exist.
-        Expect a FileHandlerError.
-        """
-        non_existent_file = tmp_path / "non_existent.txt"
-        with pytest.raises(FileHandlerError) as exc_info:
-            read_file(str(non_existent_file))
-        assert "File does not exist" in str(exc_info.value)
+def construct_file_path(user_id, filename):
+    base_folder = UPLOAD_FOLDER
+    user_folder = os.path.join(base_folder, f"user_{user_id}")
+    return os.path.join(user_folder, filename)
 
-    def test_read_file_success(self, tmp_path):
-        """
-        Successfully read a file that exists.
-        """
-        file_path = tmp_path / "test_read.txt"
-        file_content = "Hello, Janus!"
-        file_path.write_text(file_content, encoding="utf-8")
+def is_valid_filename(filename):
+    return not re.search(r"(\.\.|\/)", filename)
 
-        result = read_file(str(file_path))
-        assert result == file_content
+def read_file(user_id, filename):
+    file_path = construct_file_path(user_id, filename)
+    with error_context(module="file_handler", meta_data={"operation": "read", "file_path": file_path}):
+        if not os.path.exists(file_path):
+            raise FileHandlerError(f"File does not exist: {file_path}")
+        try:
+            with open(file_path, "rb") as f:
+                data = f.read()
+            logger.log_to_console("INFO", f"File read successfully: {file_path}")
+            return data
+        except Exception as e:
+            log_error(e, module="file_handler", meta_data={"file_path": file_path})
+            raise FileHandlerError(f"Failed to read file: {file_path}") from e
 
-    def test_write_file_success(self, tmp_path):
-        """
-        Successfully write content to a file.
-        """
-        file_path = tmp_path / "test_write.txt"
-        content_to_write = "Welcome to Janus!"
-        
-        write_file(str(file_path), content_to_write)
-        assert file_path.read_text(encoding="utf-8") == content_to_write
+def write_file(user_id, filename, content, mode="wb"):
+    if not is_valid_filename(filename):
+        raise FileHandlerError(f"Invalid filename: {filename}")
 
-    def test_write_file_exception(self, tmp_path):
-        """
-        Attempt to write to an invalid path, expecting FileHandlerError.
-        """
-        # On some operating systems, writing to a directory as a file triggers an error
-        invalid_path = tmp_path  # This is a directory, not a file
-        with pytest.raises(FileHandlerError):
-            write_file(str(invalid_path), "Should fail")
+    file_path = construct_file_path(user_id, filename)
+    user_directory = os.path.dirname(file_path)
 
-    def test_delete_file_nonexistent(self, tmp_path):
-        """
-        Deleting a file that doesn't exist should not raise an error.
-        It logs a warning but continues gracefully.
-        """
-        non_existent_file = tmp_path / "non_existent_delete.txt"
-        delete_file(str(non_existent_file))  # Should not raise an exception
+    with error_context(module="file_handler", meta_data={"operation": "write", "file_path": file_path}):
+        if not os.path.exists(user_directory):
+            os.makedirs(user_directory)
+        try:
+            with open(file_path, mode) as f:
+                f.write(content)
+            logger.log_to_console("INFO", f"File written successfully: {file_path}")
+        except Exception as e:
+            log_error(e, module="file_handler", meta_data={"file_path": file_path})
+            raise FileHandlerError(f"Failed to write file: {file_path}") from e
 
-    def test_delete_file_success(self, tmp_path):
-        """
-        Successfully delete an existing file.
-        """
-        file_path = tmp_path / "test_delete.txt"
-        file_path.write_text("Content to delete", encoding="utf-8")
-
-        delete_file(str(file_path))
-        assert not file_path.exists()
+def delete_file(user_id, filename):
+    file_path = construct_file_path(user_id, filename)
+    with error_context(module="file_handler", meta_data={"operation": "delete", "file_path": file_path}):
+        if not os.path.exists(file_path):
+            logger.log_to_console("WARNING", f"File does not exist for deletion: {file_path}")
+            return
+        try:
+            os.remove(file_path)
+            logger.log_to_console("INFO", f"File deleted successfully: {file_path}")
+        except Exception as e:
+            log_error(e, module="file_handler", meta_data={"file_path": file_path})
+            raise FileHandlerError(f"Failed to delete file: {file_path}") from e

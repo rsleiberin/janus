@@ -46,6 +46,14 @@ class InvalidAnalyticsRequestError(Exception):
 class WeakPasswordError(Exception):
     """Raised when a new password does not meet complexity requirements."""
 
+class ImageProcessingError(Exception):
+    """Raised when an error occurs during image processing."""
+
+class ImageUploadError(Exception):
+    """Raised when an error occurs during image upload."""
+
+class ImageNotFoundError(Exception):
+    """Raised when a requested image is not found."""
 
 # Error Handlers
 def handle_route_error(error, meta_data=None):
@@ -70,6 +78,9 @@ def handle_route_error(error, meta_data=None):
             UserNotFoundError: (404, "USER_NOT_FOUND", "The requested user does not exist."),
             InvalidUserDataError: (400, "INVALID_USER_DATA", "The provided user data is invalid."),
             HealthCheckError: (500, "HEALTH_CHECK_FAILED", "The system health check encountered an issue."),
+            ImageProcessingError: (500, "IMAGE_PROCESSING_ERROR", "An error occurred during image processing."),
+            ImageUploadError: (400, "IMAGE_UPLOAD_ERROR", "An error occurred during image upload."),
+            ImageNotFoundError: (404, "IMAGE_NOT_FOUND", "The requested image was not found."),
         }
 
         if error.__class__ in error_mapping:
