@@ -46,6 +46,7 @@ class InvalidAnalyticsRequestError(Exception):
 class WeakPasswordError(Exception):
     """Raised when a new password does not meet complexity requirements."""
 
+
 # Error Handlers
 def handle_route_error(error, meta_data=None):
     """
@@ -59,98 +60,39 @@ def handle_route_error(error, meta_data=None):
         tuple: A JSON response and HTTP status code.
     """
     try:
-        if isinstance(error, FileAccessError):
-            logger.log_to_console("ERROR", "File access denied.", details=str(error), meta_data=meta_data)
-            return format_error_response(
-                status=403,
-                error_code="FILE_ACCESS_DENIED",
-                message="Access denied to the requested file.",
-                details=str(error),
-                meta_data=meta_data,
-            ), 403
-        elif isinstance(error, FileNotFoundErrorCustom):
-            logger.log_to_console("WARNING", "File not found.", details=str(error), meta_data=meta_data)
-            return format_error_response(
-                status=404,
-                error_code="FILE_NOT_FOUND",
-                message="The requested file was not found.",
-                details=str(error),
-                meta_data=meta_data,
-            ), 404
-        elif isinstance(error, NoAuthorizationError):
-            logger.log_to_console("ERROR", "Missing Authorization Header.", details=str(error), meta_data=meta_data)
-            return format_error_response(
-                status=401,
-                error_code="MISSING_AUTHORIZATION_HEADER",
-                message="Missing Authorization Header",
-                details=str(error),
-                meta_data=meta_data,
-            ), 401
+        error_mapping = {
+            FileAccessError: (403, "FILE_ACCESS_DENIED", "Access denied to the requested file."),
+            FileNotFoundErrorCustom: (404, "FILE_NOT_FOUND", "The requested file was not found."),
+            NoAuthorizationError: (401, "MISSING_AUTHORIZATION_HEADER", "Missing Authorization Header"),
+            InvalidHeaderError: (401, "AUTHORIZATION_ERROR", "Token is invalid or expired."),
+            AuthenticationError: (401, "AUTHENTICATION_ERROR", "Invalid credentials provided."),
+            WeakPasswordError: (400, "WEAK_PASSWORD", "The provided password does not meet complexity requirements."),
+            UserNotFoundError: (404, "USER_NOT_FOUND", "The requested user does not exist."),
+            InvalidUserDataError: (400, "INVALID_USER_DATA", "The provided user data is invalid."),
+            HealthCheckError: (500, "HEALTH_CHECK_FAILED", "The system health check encountered an issue."),
+        }
 
-        elif isinstance(error, InvalidHeaderError):
-            logger.log_to_console("ERROR", "Invalid token provided.", details=str(error), meta_data=meta_data)
+        if error.__class__ in error_mapping:
+            status, error_code, message = error_mapping[error.__class__]
+            logger.log_to_console("ERROR", message, details=str(error), meta_data=meta_data)
             return format_error_response(
-                status=401,
-                error_code="AUTHORIZATION_ERROR",
-                message="Token is invalid or expired.",
+                status=status,
+                error_code=error_code,
+                message=message,
                 details=str(error),
                 meta_data=meta_data,
-            ), 401
-        elif isinstance(error, AuthenticationError):
-            logger.log_to_console("ERROR", "Authentication error occurred.", details=str(error), meta_data=meta_data)
-            return format_error_response(
-                status=401,
-                error_code="AUTHENTICATION_ERROR",
-                message="Invalid credentials provided.",
-                details=str(error),
-                meta_data=meta_data,
-            ), 401
-        elif isinstance(error, WeakPasswordError):
-            logger.log_to_console("ERROR", "Weak password provided.", details=str(error), meta_data=meta_data)
-            return format_error_response(
-                status=400,
-                error_code="WEAK_PASSWORD",
-                message="The provided password does not meet complexity requirements.",
-                details=str(error),
-                meta_data=meta_data,
-            ), 400
-        elif isinstance(error, UserNotFoundError):
-            logger.log_to_console("WARNING", "User not found.", details=str(error), meta_data=meta_data)
-            return format_error_response(
-                status=404,
-                error_code="USER_NOT_FOUND",
-                message="The requested user does not exist.",
-                details=str(error),
-                meta_data=meta_data,
-            ), 404
-        elif isinstance(error, InvalidUserDataError):
-            logger.log_to_console("ERROR", "Invalid user data.", details=str(error), meta_data=meta_data)
-            return format_error_response(
-                status=400,
-                error_code="INVALID_USER_DATA",
-                message="The provided user data is invalid.",
-                details=str(error),
-                meta_data=meta_data,
-            ), 400
-        elif isinstance(error, HealthCheckError):
-            logger.log_to_console("ERROR", "Health check failed.", details=str(error), meta_data=meta_data)
-            return format_error_response(
-                status=500,
-                error_code="HEALTH_CHECK_FAILED",
-                message="The system health check encountered an issue.",
-                details=str(error),
-                meta_data=meta_data,
-            ), 500
+            ), status
 
-        else:
-            logger.log_to_console("ERROR", "Unknown route error occurred.", details=str(error), meta_data=meta_data)
-            return format_error_response(
-                status=500,
-                error_code="UNKNOWN_ROUTE_ERROR",
-                message="An unknown error occurred while processing your request.",
-                details=str(error),
-                meta_data=meta_data,
-            ), 500
+        # Handle unknown errors
+        logger.log_to_console("ERROR", "Unknown route error occurred.", details=str(error), meta_data=meta_data)
+        return format_error_response(
+            status=500,
+            error_code="UNKNOWN_ROUTE_ERROR",
+            message="An unknown error occurred while processing your request.",
+            details=str(error),
+            meta_data=meta_data,
+        ), 500
+
     except OperationalError as db_error:
         logger.log_to_console("CRITICAL", "Database logging failed.", details=str(db_error), meta_data=meta_data)
         return format_error_response(
