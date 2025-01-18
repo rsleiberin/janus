@@ -14,7 +14,7 @@ from backend.utils.error_handling.error_handling import format_error_response, h
 logger = CentralizedLogger("backend_init")
 
 # Initialize Flask-Migrate
-migrate = Migrate()
+migrate = Migrate(directory=os.path.join(os.path.dirname(__file__), "migrations"))
 
 def create_app():
     """Factory function to create and configure the Flask application."""
@@ -26,7 +26,7 @@ def create_app():
 
     # Correctly resolve the database file path
     base_dir = os.path.abspath(os.path.dirname(__file__))
-    db_path = os.path.join(base_dir, "instance", "image_processing.db")
+    db_path = os.path.join(base_dir, "instance", "backend.db")
     logger.log_to_console("DEBUG", "Resolved database path", path=db_path)
 
     # Apply configuration
@@ -108,7 +108,7 @@ def create_app():
         app.register_blueprint(analytics_bp)
         app.register_blueprint(security_bp)
         app.register_blueprint(log_bp)
-        app.register_blueprint(image_bp, url_prefix="/images")  # Register the corrected `image_bp` blueprint
+        app.register_blueprint(image_bp, url_prefix="/images")
         logger.log_to_console("INFO", "Blueprints registered successfully.")
     except Exception as e:
         logger.log_to_console("ERROR", "Error registering blueprints", error=str(e))

@@ -48,9 +48,28 @@ The database schema is defined using SQLAlchemy models in `models.py`. Below is 
 - **Key Columns**:
   - `id`: Unique identifier for each image.
   - `filename`: Name of the image file, must be unique.
+  - `user_id`: References the user who uploaded the image.
   - `width`, `height`: Dimensions of the image.
+  - `bit_depth`: Bit depth of the image.
+  - `color_type`: Color type (e.g., RGB, CMYK).
+  - `compression_method`: Compression method used for the image.
   - `image_metadata`: Additional metadata stored in JSON format.
-- **Relationships**: None.
+  - `created_at`: Timestamp for when the image was created.
+  - `updated_at`: Timestamp for when the image was last modified.
+- **Relationships**:
+  - Linked to the `users` table via `user_id`.
+  - Referenced by the `image_analysis` table.
+
+### **image_analysis Table**
+- **Purpose**: Stores analysis results for images.
+- **Key Columns**:
+  - `id`: Unique identifier for each analysis entry.
+  - `image_id`: References the associated image.
+  - `analysis_results`: JSON data containing the analysis results (e.g., dominant colors, patterns).
+  - `created_at`: Timestamp for when the analysis was created.
+  - `updated_at`: Timestamp for when the analysis was last modified.
+- **Relationships**:
+  - Linked to the `images` table via `image_id`.
 
 ### **users Table**
 - **Purpose**: Stores user information.
@@ -59,8 +78,8 @@ The database schema is defined using SQLAlchemy models in `models.py`. Below is 
   - `username`: Unique username for the user.
   - `email`: Unique email address.
   - `password_hash`: Hashed password for authentication.
-  - `role`: Role of the user (e.g., admin, user).
-- **Relationships**: Referenced by `logs`, `admins`, and `security` tables.
+- **Relationships**:
+  - Referenced by `images`, `logs`, `admins`, and `security` tables.
 
 ### **admins Table**
 - **Purpose**: Stores administrative user information.
@@ -68,7 +87,8 @@ The database schema is defined using SQLAlchemy models in `models.py`. Below is 
   - `id`: Unique identifier for each admin.
   - `user_id`: References the user this admin entry is associated with.
   - `admin_level`: The level of admin privileges (e.g., superadmin, moderator).
-- **Relationships**: Linked to `users` table via `user_id`.
+- **Relationships**:
+  - Linked to the `users` table via `user_id`.
 
 ### **logs Table**
 - **Purpose**: Stores logs of user actions.
@@ -78,9 +98,11 @@ The database schema is defined using SQLAlchemy models in `models.py`. Below is 
   - `action`: Description of the action performed.
   - `module`: The system module where the action originated.
   - `level`: Log level (e.g., INFO, DEBUG).
-  - `meta_data`: Additional metadata about the action (stored in JSON format).
-  - `timestamp`: Timestamp of the log entry.
-- **Relationships**: Linked to `users` table via `user_id`.
+  - `log_metadata`: Additional metadata about the action (stored in JSON format).
+  - `timestamp`: Timestamp of the log entry creation.
+  - `updated_at`: Timestamp for when the log entry was last modified.
+- **Relationships**:
+  - Linked to the `users` table via `user_id`.
 
 ### **analytics Table**
 - **Purpose**: Stores analytical and research data.
@@ -89,6 +111,7 @@ The database schema is defined using SQLAlchemy models in `models.py`. Below is 
   - `data`: JSON data containing the analytics or research information.
   - `research_topic`: Optional field for categorizing the research topic.
   - `created_at`: Timestamp for when the entry was created.
+  - `updated_at`: Timestamp for when the entry was last modified.
 - **Relationships**: None.
 
 ### **security Table**
@@ -97,8 +120,11 @@ The database schema is defined using SQLAlchemy models in `models.py`. Below is 
   - `id`: Unique identifier for each security action.
   - `user_id`: References the user who triggered the security action.
   - `action`: Description of the security event.
-  - `timestamp`: Timestamp of the security action.
-- **Relationships**: Linked to `users` table via `user_id`.
+  - `timestamp`: Timestamp for when the security event occurred.
+  - `updated_at`: Timestamp for when the security event was last modified.
+- **Relationships**:
+  - Linked to the `users` table via `user_id`.
+
 
 ## Managed Schemas
 

@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     # Verify the database file exists
     db_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "instance", "image_processing.db")
+        os.path.join(os.path.dirname(__file__), "..", "instance", "backend.db")
     )
     if os.path.exists(db_path):
         logger.log_to_console(

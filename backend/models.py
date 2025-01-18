@@ -2,25 +2,43 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from backend.db import db
 
-
-
 class Image(db.Model):
     """Model for storing image metadata."""
     __tablename__ = "images"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     filename = db.Column(db.String(255), unique=True, nullable=False, index=True)
-    width = db.Column(db.Integer, nullable=False)
-    height = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    width = db.Column(db.Integer, nullable=True)
+    height = db.Column(db.Integer, nullable=True)
     bit_depth = db.Column(db.Integer, nullable=True)
     color_type = db.Column(db.String(50), nullable=True)
     compression_method = db.Column(db.String(50), nullable=True)
-    image_metadata = db.Column(db.JSON, nullable=True)
+    image_metadata = db.Column(db.JSON, nullable=True)  # JSON metadata specific to images
     created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    user = db.relationship('User', backref=db.backref('images', lazy=True))
+
     def __repr__(self):
         return f"<Image {self.filename}>"
+
+
+class ImageAnalysis(db.Model):
+    """Model for storing analysis results linked to images."""
+    __tablename__ = 'image_analysis'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    image_id = db.Column(db.Integer, db.ForeignKey('images.id'), nullable=False)
+    analysis_results = db.Column(db.JSON, nullable=False)  # Stores analysis results
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    image = db.relationship('Image', backref=db.backref('analysis', uselist=False, lazy=True))
+
+    def __repr__(self):
+        return f"<ImageAnalysis {self.id} for Image {self.image_id}>"
+
 
 class User(db.Model):
     """Model for storing user information."""
@@ -30,10 +48,10 @@ class User(db.Model):
     username = db.Column(db.String(255), unique=True, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    role = db.Column(db.String(50), nullable=False)  # e.g., 'admin', 'user'
 
     def __repr__(self):
         return f"<User {self.username}>"
+
 
 class Admin(db.Model):
     """Model for admin users, extending User model."""
@@ -43,11 +61,12 @@ class Admin(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     admin_level = db.Column(db.String(50), nullable=False)  # e.g., 'superadmin', 'moderator'
 
-    user = db.relationship('User', backref=db.backref('admins', lazy=True))
+    # Relationship with User
+    user = db.relationship('User', backref=db.backref('admin_profile', uselist=False, lazy=True))
 
     def __repr__(self):
-        # Avoid triggering a lazy-load after the session has closed.
         return f"<Admin id={self.id}, user_id={self.user_id}, level={self.admin_level}>"
+
 
 class Log(db.Model):
     """Model for storing logs of user actions."""
@@ -57,15 +76,16 @@ class Log(db.Model):
     action = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     module = db.Column(db.String(100), nullable=True)  # Optional module name
     level = db.Column(db.String(50), nullable=True)  # Log level (INFO, DEBUG, etc.)
-    meta_data = db.Column(db.JSON, nullable=True)  # Renamed to avoid conflict
+    log_metadata = db.Column(db.JSON, nullable=True)  # Renamed for consistency and clarity
 
     user = db.relationship('User', backref=db.backref('logs', lazy=True))
 
     def __repr__(self):
         return (
-            f"<Log {self.action} - User {self.user.username} "
+            f"<Log {self.action} - User {self.user_id} "
             f"at {self.timestamp} (Level: {self.level}, Module: {self.module})>"
         )
 
@@ -78,9 +98,11 @@ class Analytics(db.Model):
     data = db.Column(db.JSON, nullable=False)
     research_topic = db.Column(db.String(255), nullable=True)  # Optional field to differentiate research
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __repr__(self):
         return f"<Analytics {self.created_at} - {self.research_topic}>"
+
 
 class Security(db.Model):
     """Model for storing security-related events for users."""
@@ -90,9 +112,9 @@ class Security(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     action = db.Column(db.String(255), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     user = db.relationship('User', backref=db.backref('security', lazy=True))
 
     def __repr__(self):
-        return f"<Security {self.action} - User {self.user.username} at {self.timestamp}>"
-
+        return f"<Security {self.action} - User {self.user_id} at {self.timestamp}>"

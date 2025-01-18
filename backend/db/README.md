@@ -51,35 +51,45 @@ The `db/` directory contains all database-related scripts and files for the Janu
 - **Status**: Complete and verified.
 
 ---
-
 ## Database Schema
 
 The database schema is defined in `models.py`. Below is a detailed description of each table, its columns, and relationships.
 
 ### **images**
-| Column             | Type         | Attributes                      | Description                                 |
-|--------------------|--------------|----------------------------------|---------------------------------------------|
-| `id`               | Integer      | Primary Key, Autoincrement       | Unique identifier for each image.           |
-| `filename`         | String(255)  | Unique, Not Null, Indexed        | Name of the uploaded image.                 |
-| `width`            | Integer      | Not Null                        | Width of the image.                         |
-| `height`           | Integer      | Not Null                        | Height of the image.                        |
-| `bit_depth`        | Integer      | Nullable                        | Bit depth of the image.                     |
-| `color_type`       | String(50)   | Nullable                        | Type of color encoding in the image.        |
-| `compression_method`| String(50) | Nullable                        | Compression method used for the image.      |
-| `image_metadata`   | JSON         | Nullable                        | JSON field to store additional metadata.    |
-| `created_at`       | DateTime     | Default: `datetime.utcnow`       | Timestamp when the image was added.         |
-| `updated_at`       | DateTime     | Updated on change               | Timestamp when the image was last updated.  |
+| Column              | Type         | Attributes                      | Description                                 |
+|---------------------|--------------|----------------------------------|---------------------------------------------|
+| `id`                | Integer      | Primary Key, Autoincrement       | Unique identifier for each image.           |
+| `filename`          | String(255)  | Unique, Not Null, Indexed        | Name of the uploaded image.                 |
+| `user_id`           | Integer      | Foreign Key: `users.id`          | References the user who uploaded the image. |
+| `width`             | Integer      | Nullable                        | Width of the image.                         |
+| `height`            | Integer      | Nullable                        | Height of the image.                        |
+| `bit_depth`         | Integer      | Nullable                        | Bit depth of the image.                     |
+| `color_type`        | String(50)   | Nullable                        | Type of color encoding in the image.        |
+| `compression_method`| String(50)   | Nullable                        | Compression method used for the image.      |
+| `image_metadata`    | JSON         | Nullable                        | JSON field to store additional metadata.    |
+| `created_at`        | DateTime     | Default: `datetime.utcnow`       | Timestamp when the image was added.         |
+| `updated_at`        | DateTime     | Updated on change               | Timestamp when the image was last updated.  |
+
+---
+
+### **image_analysis**
+| Column              | Type         | Attributes                      | Description                                 |
+|---------------------|--------------|----------------------------------|---------------------------------------------|
+| `id`                | Integer      | Primary Key, Autoincrement       | Unique identifier for each analysis entry.  |
+| `image_id`          | Integer      | Foreign Key: `images.id`         | References the associated image.            |
+| `analysis_results`  | JSON         | Not Null                        | JSON data containing the analysis results.  |
+| `created_at`        | DateTime     | Default: `datetime.utcnow`       | Timestamp when the analysis was created.    |
+| `updated_at`        | DateTime     | Updated on change               | Timestamp when the analysis was last updated.|
 
 ---
 
 ### **users**
-| Column         | Type         | Attributes                 | Description                              |
-|----------------|--------------|----------------------------|------------------------------------------|
-| `id`           | Integer      | Primary Key, Autoincrement | Unique identifier for each user.         |
-| `username`     | String(255)  | Unique, Not Null           | Username for the user.                   |
-| `email`        | String(255)  | Unique, Not Null           | Email address of the user.               |
-| `password_hash`| String(255)  | Not Null                  | Encrypted password of the user.          |
-| `role`         | String(50)   | Not Null                  | Role of the user (e.g., 'admin', 'user').|
+| Column          | Type         | Attributes                 | Description                              |
+|-----------------|--------------|----------------------------|------------------------------------------|
+| `id`            | Integer      | Primary Key, Autoincrement | Unique identifier for each user.         |
+| `username`      | String(255)  | Unique, Not Null           | Username for the user.                   |
+| `email`         | String(255)  | Unique, Not Null           | Email address of the user.               |
+| `password_hash` | String(255)  | Not Null                  | Encrypted password of the user.          |
 
 ---
 
@@ -99,9 +109,10 @@ The database schema is defined in `models.py`. Below is a detailed description o
 | `action`     | String(255)  | Not Null                  | Description of the logged action.        |
 | `user_id`    | Integer      | Foreign Key: `users.id`    | Links to the `users` table.              |
 | `timestamp`  | DateTime     | Default: `datetime.utcnow` | Timestamp when the log was created.      |
+| `updated_at` | DateTime     | Updated on change          | Timestamp when the log was last updated. |
 | `module`     | String(100)  | Nullable                  | Module name where the log originated.    |
 | `level`      | String(50)   | Nullable                  | Log level (e.g., INFO, DEBUG).           |
-| `meta_data`  | JSON         | Nullable                  | Additional metadata in JSON format.      |
+| `log_metadata`| JSON        | Nullable                  | Additional metadata in JSON format.      |
 
 ---
 
@@ -112,6 +123,7 @@ The database schema is defined in `models.py`. Below is a detailed description o
 | `data`           | JSON         | Not Null                  | JSON field to store analytical data.     |
 | `research_topic` | String(255)  | Nullable                  | Optional field for categorizing topics.  |
 | `created_at`     | DateTime     | Default: `datetime.utcnow` | Timestamp when the record was created.   |
+| `updated_at`     | DateTime     | Updated on change          | Timestamp when the record was last updated.|
 
 ---
 
@@ -122,14 +134,13 @@ The database schema is defined in `models.py`. Below is a detailed description o
 | `user_id`    | Integer      | Foreign Key: `users.id`    | Links to the `users` table.              |
 | `action`     | String(255)  | Not Null                  | Description of the security event.       |
 | `timestamp`  | DateTime     | Default: `datetime.utcnow` | Time the event was recorded.             |
+| `updated_at` | DateTime     | Updated on change          | Timestamp when the event was last updated.|
 
 ---
+
+## Managed Tables
 
 ### **alembic_version**
 | Column       | Type      | Attributes   | Description                                    |
 |--------------|-----------|--------------|------------------------------------------------|
 | `version_num`| String(32)| Primary Key  | Tracks the current state of database migrations.|
-
----
-
-This format makes the schema highly readable and useful for contributors. It emphasizes professionalism and adheres to documentation best practices.

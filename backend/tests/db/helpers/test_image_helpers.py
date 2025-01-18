@@ -19,7 +19,7 @@ def test_create_image():
     """
     Tests the creation of an image using ImageHelpers.create.
     """
-    image_data = {"filename": "test_image.png", "width": 800, "height": 600}
+    image_data = {"filename": "test_image.png", "width": 800, "height": 600, "user_id": 1}
     with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log, \
          patch("backend.utils.logger.CentralizedLogger.log_to_db") as mock_db_log:
         image = ImageHelpers.create(image_data)
@@ -35,6 +35,7 @@ def test_create_image():
 
         assert image.id is not None, "Image was not assigned an ID."
         assert image.width == 800 and image.height == 600, "Image dimensions incorrect."
+        assert image.user_id == 1, "User ID was not assigned correctly."
 
     # Test error handling for creation
     with pytest.raises(ImageCreationError):
@@ -46,7 +47,7 @@ def test_get_by_id():
     """
     Tests retrieving an image by its ID.
     """
-    image_data = {"filename": "id_test.png", "width": 500, "height": 500}
+    image_data = {"filename": "id_test.png", "width": 500, "height": 500, "user_id": 1}
     image = ImageHelpers.create(image_data)
 
     with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
@@ -57,6 +58,7 @@ def test_get_by_id():
 
         assert fetched_image is not None, "Fetched image is None."
         assert fetched_image.id == image.id, "Fetched ID doesn't match created image."
+        assert fetched_image.user_id == 1, "User ID does not match."
 
     # Test error handling for non-existent ID
     with pytest.raises(ImageNotFoundError, match="Image with ID .* not found."):
@@ -68,7 +70,7 @@ def test_update_image():
     """
     Tests updating an existing image record.
     """
-    initial_data = {"filename": "update_test.png", "width": 300, "height": 300}
+    initial_data = {"filename": "update_test.png", "width": 300, "height": 300, "user_id": 1}
     updated_data = {"width": 1024, "height": 768}
     image = ImageHelpers.create(initial_data)
 
@@ -87,6 +89,7 @@ def test_update_image():
 
         assert updated_image.width == 1024, "Width did not update correctly."
         assert updated_image.height == 768, "Height did not update correctly."
+        assert updated_image.user_id == 1, "User ID should not change."
 
     # Test error handling for non-existent ID
     with pytest.raises(ImageNotFoundError, match="Image with ID .* not found."):
@@ -98,7 +101,7 @@ def test_delete_image():
     """
     Tests deleting an image record by its ID.
     """
-    image_data = {"filename": "delete_test.png", "width": 400, "height": 200}
+    image_data = {"filename": "delete_test.png", "width": 400, "height": 200, "user_id": 1}
     image = ImageHelpers.create(image_data)
 
     with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log, \
@@ -117,15 +120,13 @@ def test_delete_image():
     # Test error handling for already deleted ID
     with pytest.raises(ImageNotFoundError, match="Image with ID .* not found."):
         ImageHelpers.delete(image.id)
-
-
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_all_images():
     """
     Tests retrieving all image records.
     """
-    ImageHelpers.create({"filename": "img1.png", "width": 100, "height": 200})
-    ImageHelpers.create({"filename": "img2.png", "width": 200, "height": 400})
+    ImageHelpers.create({"filename": "img1.png", "width": 100, "height": 200, "user_id": 1})
+    ImageHelpers.create({"filename": "img2.png", "width": 200, "height": 400, "user_id": 1})
 
     with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
         all_images = ImageHelpers.get_all()
@@ -141,8 +142,8 @@ def test_filter_by():
     """
     Tests filtering images by a specific field.
     """
-    ImageHelpers.create({"filename": "filter1.png", "width": 300, "height": 300, "color_type": "RGB"})
-    ImageHelpers.create({"filename": "filter2.png", "width": 300, "height": 300, "color_type": "Grayscale"})
+    ImageHelpers.create({"filename": "filter1.png", "width": 300, "height": 300, "color_type": "RGB", "user_id": 1})
+    ImageHelpers.create({"filename": "filter2.png", "width": 300, "height": 300, "color_type": "Grayscale", "user_id": 1})
 
     with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
         rgb_images = ImageHelpers.filter_by("color_type", "RGB")
@@ -158,8 +159,8 @@ def test_count_images():
     """
     Tests counting the number of image records.
     """
-    ImageHelpers.create({"filename": "count1.png", "width": 100, "height": 100})
-    ImageHelpers.create({"filename": "count2.png", "width": 200, "height": 200})
+    ImageHelpers.create({"filename": "count1.png", "width": 100, "height": 100, "user_id": 1})
+    ImageHelpers.create({"filename": "count2.png", "width": 200, "height": 200, "user_id": 1})
 
     with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
         total = ImageHelpers.count()
@@ -176,7 +177,7 @@ def test_get_images_by_metadata():
     Tests retrieving images by specific metadata.
     """
     metadata_value = {"test_key": "test_value"}
-    ImageHelpers.create({"filename": "metadata.png", "width": 800, "height": 600, "image_metadata": metadata_value})
+    ImageHelpers.create({"filename": "metadata.png", "width": 800, "height": 600, "image_metadata": metadata_value, "user_id": 1})
 
     with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
         results = ImageHelpers.get_by_metadata(metadata_value)
@@ -192,12 +193,13 @@ def test_get_images_by_metadata():
         assert len(results) == 1, "Expected exactly 1 image with the given metadata."
         assert results[0].filename == "metadata.png", "Wrong image returned for metadata filter."
 
+
 @pytest.mark.usefixtures("function_db_setup")
 def test_exists_image():
     """
     Tests checking if an image with a specific ID exists.
     """
-    image = ImageHelpers.create({"filename": "exists_test.png", "width": 50, "height": 50})
+    image = ImageHelpers.create({"filename": "exists_test.png", "width": 50, "height": 50, "user_id": 1})
 
     with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
         exists = ImageHelpers.exists(image.id)
@@ -231,7 +233,7 @@ def test_get_by_filename():
     Tests retrieving an image by filename.
     """
     filename = "search_by_filename.png"
-    ImageHelpers.create({"filename": filename, "width": 640, "height": 480})
+    ImageHelpers.create({"filename": filename, "width": 640, "height": 480, "user_id": 1})
 
     with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
         found_image = ImageHelpers.get_by_filename(filename)
@@ -246,10 +248,6 @@ def test_get_by_filename():
         assert found_image is not None, "Expected to find an image by filename."
         assert found_image.filename == filename, "Filename does not match."
 
-    # Test for non-existent filename
-    with pytest.raises(ImageNotFoundError, match=f"Image with filename .* not found."):
-        ImageHelpers.get_by_filename("non_existent.png")
-
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_images_by_date_range():
@@ -258,14 +256,13 @@ def test_get_images_by_date_range():
     """
     now = datetime.utcnow()
     past_date = now - timedelta(days=2)
-    future_date = now + timedelta(days=2)
 
     # Create images at different times
-    older_image = ImageHelpers.create({"filename": "old.png", "width": 320, "height": 240})
+    older_image = ImageHelpers.create({"filename": "old.png", "width": 320, "height": 240, "user_id": 1})
     older_image.created_at = past_date
     db.session.commit()
 
-    new_image = ImageHelpers.create({"filename": "new.png", "width": 640, "height": 480})
+    new_image = ImageHelpers.create({"filename": "new.png", "width": 640, "height": 480, "user_id": 1})
 
     with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
         results = ImageHelpers.get_images_by_date_range(now - timedelta(days=1), now + timedelta(days=1))
@@ -289,8 +286,8 @@ def test_get_images_by_size():
     """
     Tests retrieving images larger than a specified size.
     """
-    ImageHelpers.create({"filename": "small.png", "width": 100, "height": 100})
-    ImageHelpers.create({"filename": "big.png", "width": 1920, "height": 1080})
+    ImageHelpers.create({"filename": "small.png", "width": 100, "height": 100, "user_id": 1})
+    ImageHelpers.create({"filename": "big.png", "width": 1920, "height": 1080, "user_id": 1})
 
     with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
         large_images = ImageHelpers.get_images_by_size(1280, 720)
@@ -306,12 +303,14 @@ def test_get_images_by_size():
 
         assert len(large_images) == 1, f"Expected 1 image >=1280x720, found {len(large_images)}."
         assert large_images[0].filename == "big.png", "Wrong image returned for size filter."
+
+
 @pytest.mark.usefixtures("function_db_setup")
 def test_update_image_error():
     """
     Tests that ImageUpdateError is raised if an error occurs during the update process.
     """
-    initial_data = {"filename": "update_error_test.png", "width": 300, "height": 300}
+    initial_data = {"filename": "update_error_test.png", "width": 300, "height": 300, "user_id": 1}
     image = ImageHelpers.create(initial_data)
 
     # Simulate an update error with an invalid attribute

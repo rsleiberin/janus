@@ -27,7 +27,7 @@ class DevelopmentConfig(Config):
         self.JWT_SECRET_KEY = "dev_jwt_secret"  # Development-specific JWT key
 
         base_dir = os.path.abspath(os.path.dirname(__file__))
-        db_path = os.path.join(base_dir, "instance", "image_processing.db")
+        db_path = os.path.join(base_dir, "instance", "backend.db")
         self.SQLALCHEMY_DATABASE_URI = f"sqlite:///{db_path}"
 
         self.logger.log_to_console("DEBUG", "Development DB URI set.", db_uri=self.SQLALCHEMY_DATABASE_URI)
