@@ -28,26 +28,16 @@ def construct_file_path(user_id, filename):
     return os.path.join(user_folder, filename)
 
 
-
 def is_valid_filename(filename):
     """
     Validates the filename to prevent malicious or invalid paths.
-    Args:
-        filename (str): The filename to validate.
-    Returns:
-        bool: True if the filename is valid, False otherwise.
     """
     return not re.search(r"(\.\.|\/)", filename)
 
 
 def read_file(user_id, filename):
     """
-    Reads the contents of a file.
-    Args:
-        user_id (str): The ID of the user.
-        filename (str): The name of the file.
-    Returns:
-        str: Contents of the file.
+    Reads the contents of a file in text mode (UTF-8).
     """
     file_path = construct_file_path(user_id, filename)
     with error_context(module="file_handler", meta_data={"operation": "read", "file_path": file_path}):
@@ -65,12 +55,14 @@ def read_file(user_id, filename):
 
 def write_file(user_id, filename, content, mode="w"):
     """
-    Writes content to a file.
+    Writes content to a file. If mode is binary (e.g. "wb"), omit encoding.
+    
     Args:
         user_id (str): The ID of the user.
         filename (str): The name of the file.
-        content (str): The data to write.
-        mode (str, optional): File open mode, defaults to "w" (write).
+        content (str/bytes): The data to write.
+        mode (str, optional): File open mode, defaults to "w" (text). 
+                              Use "wb" for binary data (e.g. images).
     """
     if not is_valid_filename(filename):
         raise FileHandlerError(f"Invalid filename: {filename}")
@@ -82,8 +74,14 @@ def write_file(user_id, filename, content, mode="w"):
         if not os.path.exists(user_directory):
             os.makedirs(user_directory)  # Ensure the user's directory exists
         try:
-            with open(file_path, mode, encoding="utf-8") as f:
-                f.write(content)
+            # Omit encoding if we're in binary mode
+            if "b" in mode:
+                with open(file_path, mode) as f:
+                    f.write(content)  # content should be bytes
+            else:
+                with open(file_path, mode, encoding="utf-8") as f:
+                    f.write(content)  # content should be string
+
             logger.log_to_console("INFO", f"File written successfully: {file_path}")
         except Exception as e:
             log_error(e, module="file_handler", meta_data={"file_path": file_path})
@@ -93,9 +91,6 @@ def write_file(user_id, filename, content, mode="w"):
 def delete_file(user_id, filename):
     """
     Deletes a file if it exists.
-    Args:
-        user_id (str): The ID of the user.
-        filename (str): The name of the file to delete.
     """
     file_path = construct_file_path(user_id, filename)
     with error_context(module="file_handler", meta_data={"operation": "delete", "file_path": file_path}):

@@ -9,14 +9,13 @@ def user_with_token(app, function_db_setup):
     with app.app_context():
         # Cleanup existing test user
         User.query.filter_by(email="testuser@example.com").delete()
-        db.session.commit()  # Ensure cleanup is applied
+        db.session.commit()
 
-        # Create a new test user
+        # Create a new test user (removed role="user")
         user = User(
             username="testuser",
             email="testuser@example.com",
-            password_hash=generate_password_hash("password123"),
-            role="user"
+            password_hash=generate_password_hash("password123")
         )
         db.session.add(user)
         db.session.commit()
@@ -61,17 +60,15 @@ def test_access_protected_route_no_token(client, function_db_setup):
     response = client.get("/security/protected")
     assert response.status_code == 401
     data = response.get_json()
-    assert data["message"] == "Authentication failed. Please log in."  # Updated to match handler output
+    assert data["message"] == "Authentication failed. Please log in."
     assert data["error_code"] == "AUTHENTICATION_FAILED"
-
-
 
 
 def test_access_protected_route_invalid_token(client, function_db_setup):
     """Test accessing a protected route with an invalid token."""
     headers = {"Authorization": "Bearer invalid_token"}
     response = client.get("/security/protected", headers=headers)
-    assert response.status_code == 401  # Ensure the status code matches the handler
+    assert response.status_code == 401
     data = response.get_json()
     assert data["message"] == "Token is invalid or expired."
     assert data["error_code"] == "INVALID_TOKEN"

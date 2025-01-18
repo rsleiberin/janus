@@ -12,12 +12,13 @@ logger = CentralizedLogger("user_routes")
 
 user_bp = Blueprint("user", __name__, url_prefix="/user")
 
+
 @user_bp.route("/profile", methods=["GET"])
 @jwt_required()
 def get_user_profile():
     try:
         current_user = get_jwt_identity()
-        user = db.session.get(User, current_user["id"])  # Use db.session.get()
+        user = db.session.get(User, current_user["id"])
         if not user:
             raise UserNotFoundError("User not found.")
 
@@ -35,7 +36,7 @@ def get_user_profile():
 def update_user_profile():
     try:
         current_user = get_jwt_identity()
-        user = db.session.get(User, current_user["id"])  # Use db.session.get()
+        user = db.session.get(User, current_user["id"])
         if not user:
             raise UserNotFoundError("User not found.")
 

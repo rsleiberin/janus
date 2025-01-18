@@ -34,7 +34,6 @@ class CentralizedLogger:
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
 
-        # Determine log level from argument or environment variable
         log_level = log_level or os.getenv("LOG_LEVEL", "DEBUG").upper()
         if log_level not in self.VALID_LOG_LEVELS:
             log_level = "DEBUG"
@@ -73,7 +72,8 @@ class CentralizedLogger:
                 module=module,
                 user_id=user_id,
                 timestamp=datetime.utcnow(),
-                meta_data=meta_data,
+                # Use 'log_metadata' instead of 'meta_data'
+                log_metadata=meta_data,
             )
             db.session.add(log_entry)
             db.session.commit()

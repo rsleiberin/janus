@@ -63,17 +63,16 @@ def user_with_token(app, function_db_setup):
     from werkzeug.security import generate_password_hash
 
     with app.app_context():
-        # Create a user with a hashed password and default role
+        # Create a user with a hashed password (removed role="user")
         hashed_password = generate_password_hash("testpassword123")
         user = User(
             username="testuser",
             email="testuser@example.com",
-            password_hash=hashed_password,
-            role="user"  # Set a default role
+            password_hash=hashed_password
         )
         db.session.add(user)
         db.session.commit()
 
-        # Generate a JWT token for the created user
         token = create_access_token(identity={"id": user.id, "email": user.email})
         return user, token
+

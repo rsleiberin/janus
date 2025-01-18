@@ -13,14 +13,13 @@ def access_token(app):
 
 def test_get_user_profile_success(client, mocker, access_token, function_db_setup):
     mock_logger = mocker.patch("backend.routes.user_routes.logger.log_to_console")
-    
-    # Add user with a valid password hash
+
+    # Remove "role"
     user = User(
         id=1,
         username="testuser",
         email="testuser@example.com",
-        password_hash=generate_password_hash("securepassword123"),
-        role="user"
+        password_hash=generate_password_hash("securepassword123")
     )
     db.session.add(user)
     db.session.commit()
@@ -42,14 +41,13 @@ def test_get_user_profile_not_found(client, mocker, access_token, function_db_se
 
 def test_update_user_profile_success(client, mocker, access_token, function_db_setup):
     mock_logger = mocker.patch("backend.routes.user_routes.logger.log_to_console")
-    
-    # Add user with a valid password hash
+
+    # Remove "role"
     user = User(
         id=1,
         username="testuser",
         email="testuser@example.com",
-        password_hash=generate_password_hash("securepassword123"),
-        role="user"
+        password_hash=generate_password_hash("securepassword123")
     )
     db.session.add(user)
     db.session.commit()
@@ -60,22 +58,19 @@ def test_update_user_profile_success(client, mocker, access_token, function_db_s
     assert response.status_code == 200
     assert response.get_json()["message"] == "User profile updated successfully."
 
-    # Use db.session.get() instead of User.query.get()
     updated_user = db.session.get(User, 1)
     assert updated_user.username == "updateduser"
 
 
-
 def test_update_user_profile_invalid_data(client, mocker, access_token, function_db_setup):
     mock_logger = mocker.patch("backend.routes.user_routes.logger.log_to_console")
-    
-    # Add user with a valid password hash
+
+    # Remove "role"
     user = User(
         id=1,
         username="testuser",
         email="testuser@example.com",
-        password_hash=generate_password_hash("securepassword123"),
-        role="user"
+        password_hash=generate_password_hash("securepassword123")
     )
     db.session.add(user)
     db.session.commit()

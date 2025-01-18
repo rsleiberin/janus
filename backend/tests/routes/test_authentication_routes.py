@@ -1,63 +1,96 @@
 import pytest
-from werkzeug.security import generate_password_hash
 from flask_jwt_extended import create_access_token
-from backend.models import User, db
-
-@pytest.fixture
-def access_token(app):
-    """Generate a valid JWT access token."""
-    with app.app_context():
-        return create_access_token(identity={"id": 1, "username": "testuser"})
-
+from werkzeug.security import generate_password_hash
+from backend.models import User
+from backend.db import db
 
 def test_register_user_success(client, mocker, function_db_setup):
     mock_logger = mocker.patch("backend.routes.authentication_routes.logger.log_to_console")
-    payload = {"username": "testuser", "email": "testuser@example.com", "password": "securepassword123", "role": "user"}
-    response = client.post("/auth/register", json=payload)
+
+    # Prepare request data without "role"
+    data = {
+        "username": "testuser",
+        "email": "testuser@example.com",
+        "password": "securepassword123"
+    }
+
+    response = client.post("/auth/register", json=data)
     assert response.status_code == 201
     assert response.get_json()["message"] == "User registered successfully."
+
+    # Assert that logger was called
+    mock_logger.assert_any_call("INFO", "User registered: testuser")
 
 
 def test_login_user_success(client, mocker, function_db_setup):
     mock_logger = mocker.patch("backend.routes.authentication_routes.logger.log_to_console")
-    user = User(username="testuser", email="testuser@example.com", password_hash=generate_password_hash("securepassword123"), role="user")
+
+    # Create a user without "role"
+    user = User(
+        username="testuser",
+        email="testuser@example.com",
+        password_hash=generate_password_hash("securepassword123")
+    )
     db.session.add(user)
     db.session.commit()
-    
-    # Debugging: Ensure user is added
-    assert User.query.filter_by(email="testuser@example.com").first() is not None
 
-    payload = {"email": "testuser@example.com", "password": "securepassword123"}
-    response = client.post("/auth/login", json=payload)
-    
-    # Debugging: Log the response
-    print(response.status_code)
-    print(response.get_json())
-
+    # Login request
+    data = {
+        "email": "testuser@example.com",
+        "password": "securepassword123"
+    }
+    response = client.post("/auth/login", json=data)
     assert response.status_code == 200
     assert "access_token" in response.get_json()
 
+    # Assert logging
+    mock_logger.assert_any_call("INFO", f"User logged in: {user.username}")
 
 
 def test_login_user_invalid_credentials(client, mocker, function_db_setup):
     mock_logger = mocker.patch("backend.routes.authentication_routes.logger.log_to_console")
-    payload = {"email": "nonexistent@example.com", "password": "wrongpassword"}
-    response = client.post("/auth/login", json=payload)
+
+    # No user is created in DB, so login should fail
+    data = {
+        "email": "missing@example.com",
+        "password": "invalid"
+    }
+    response = client.post("/auth/login", json=data)
     assert response.status_code == 401
     assert response.get_json()["error"] == "Authentication error."
 
 
-def test_user_profile_success(client, mocker, access_token, function_db_setup):
+def test_user_profile_success(client, mocker, function_db_setup):
     mock_logger = mocker.patch("backend.routes.authentication_routes.logger.log_to_console")
-    user = User(id=1, username="testuser", email="testuser@example.com", password_hash=generate_password_hash("securepassword123"), role="user")
+
+    # Create a user without "role"
+    user = User(
+        id=1,
+        username="testuser",
+        email="testuser@example.com",
+        password_hash=generate_password_hash("securepassword123")
+    )
     db.session.add(user)
     db.session.commit()
-    headers = {"Authorization": f"Bearer {access_token}"}
+
+    # Create an access token for that user
+    token = create_access_token(identity={"id": user.id, "username": user.username})
+
+    headers = {"Authorization": f"Bearer {token}"}
     response = client.get("/auth/profile", headers=headers)
+
     assert response.status_code == 200
-    assert response.get_json()["username"] == "testuser"
+    data = response.get_json()
+    assert data["id"] == 1
+    assert data["username"] == "testuser"
+    assert data["email"] == "testuser@example.com"
+
+    # Assert logging
+    mock_logger.assert_any_call("INFO", f"Profile accessed: {user.username}")
 
 
-def test_user_profile_unauthorized(client):
+def test_user_profile_unauthorized(client, function_db_setup):
+    # No token provided, should fail with 401
     response = client.get("/auth/profile")
     assert response.status_code == 401
+    assert response.get_json()["error_code"] == "AUTHENTICATION_FAILED"

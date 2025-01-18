@@ -19,11 +19,18 @@ def register_user():
     """
     try:
         data = request.get_json()
-        if not data or not all(key in data for key in ("username", "email", "password", "role")):
-            raise ValueError("Missing required fields: username, email, password, or role.")
+        # Removed "role" from required fields
+        required_fields = ("username", "email", "password")
+        if not data or not all(key in data for key in required_fields):
+            raise ValueError("Missing required fields: username, email, or password.")
 
         hashed_password = generate_password_hash(data["password"])
-        new_user = User(username=data["username"], email=data["email"], password_hash=hashed_password, role=data["role"])
+        # Removed "role"
+        new_user = User(
+            username=data["username"],
+            email=data["email"],
+            password_hash=hashed_password
+        )
         db.session.add(new_user)
         db.session.commit()
 
@@ -42,7 +49,6 @@ def register_user():
         return jsonify({"error": "An error occurred while registering the user."}), 500
 
 
-
 @auth_bp.route("/login", methods=["POST"])
 def login_user():
     """
@@ -57,6 +63,7 @@ def login_user():
         if not user or not check_password_hash(user.password_hash, data["password"]):
             return jsonify({"error": "Authentication error."}), 401
 
+        # Identity just has id and username, no "role" in the DB
         access_token = create_access_token(identity={"id": user.id, "username": user.username})
         logger.log_to_console("INFO", f"User logged in: {user.username}")
         return jsonify({"access_token": access_token}), 200
@@ -74,7 +81,7 @@ def login_user():
 def user_profile():
     try:
         current_user = get_jwt_identity()
-        user = db.session.get(User, current_user["id"])  # Use db.session.get()
+        user = db.session.get(User, current_user["id"])
 
         if not user:
             return handle_unauthorized_error(details="User not found.")

@@ -1,5 +1,4 @@
 # seed_data.py
-
 from datetime import datetime
 from backend.db import db
 from backend.models import Image, User, Admin, Log, Analytics, Security
@@ -14,18 +13,16 @@ def seed_data():
     """
     logger.log_to_console("INFO", "Starting database seeding...")
 
-    # Create default users
+    # Create default users (removed 'role' since it's not in the User model)
     user1 = User(
         username="admin",
         email="admin@example.com",
         password_hash="hashed_password",
-        role="admin",
     )
     user2 = User(
         username="user",
         email="user@example.com",
         password_hash="hashed_password",
-        role="user",
     )
     db.session.add_all([user1, user2])
     db.session.commit()  # Commit here to generate user IDs for FK relationships
@@ -38,9 +35,10 @@ def seed_data():
         meta_data={"user_count": 2},
     )
 
-    # Create default images
+    # Create default images (add user_id for each image)
     image1 = Image(
         filename="image1.jpg",
+        user_id=user1.id,
         width=800,
         height=600,
         bit_depth=24,
@@ -52,6 +50,7 @@ def seed_data():
     )
     image2 = Image(
         filename="image2.jpg",
+        user_id=user2.id,
         width=1920,
         height=1080,
         bit_depth=24,
@@ -83,14 +82,14 @@ def seed_data():
         meta_data={"user_id": user1.id, "admin_level": "superadmin"},
     )
 
-    # Create logs for user actions
+    # Create logs for user actions (rename meta_data -> log_metadata)
     log1 = Log(
         action="User logged in",
         user_id=user1.id,
         timestamp=datetime.utcnow(),
         level="INFO",
         module="auth",
-        meta_data={"ip": "127.0.0.1", "device": "desktop"},
+        log_metadata={"ip": "127.0.0.1", "device": "desktop"},
     )
     log2 = Log(
         action="Image uploaded",
@@ -98,7 +97,7 @@ def seed_data():
         timestamp=datetime.utcnow(),
         level="INFO",
         module="images",
-        meta_data={"filename": "image2.jpg"},
+        log_metadata={"filename": "image2.jpg"},
     )
     db.session.add_all([log1, log2])
     logger.log_to_console("INFO", "User actions logged.")

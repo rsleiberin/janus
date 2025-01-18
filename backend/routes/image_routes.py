@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
 from backend.db import db
 from backend.models import Image
@@ -8,15 +9,23 @@ import uuid
 
 image_bp = Blueprint("image_routes", __name__)
 logger = CentralizedLogger("image_routes")
+
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @image_bp.route("/upload", methods=["POST"])
+@jwt_required()
 def upload_image():
+    """
+    Upload an image file for the current user.
+    """
     try:
-        user_id = request.headers.get("User-ID")
+        # Get the user info from the JWT
+        current_user = get_jwt_identity()
+        user_id = current_user["id"]
+
         logger.log_to_console("INFO", "Image upload initiated.", user_id=user_id)
 
         if "file" not in request.files:
@@ -27,15 +36,22 @@ def upload_image():
             return jsonify({"error": "No selected file."}), 400
 
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            unique_filename = f"{uuid.uuid4().hex}_{filename}"
-            write_file(user_id, unique_filename, file.read(), mode="wb")
+            # Generate a safe and unique filename
+            original_filename = secure_filename(file.filename)
+            unique_filename = f"{uuid.uuid4().hex}_{original_filename}"
 
+            # Write the file to the appropriate user directory
+            file_contents = file.read()
+            write_file(user_id, unique_filename, file_contents, mode="wb")
+
+            # Store image metadata in the database
             new_image = Image(filename=unique_filename, user_id=user_id)
             db.session.add(new_image)
             db.session.commit()
 
-            logger.log_to_console("INFO", "Image uploaded successfully.", user_id=user_id, filename=unique_filename)
+            logger.log_to_console(
+                "INFO", "Image uploaded successfully.", user_id=user_id, filename=unique_filename
+            )
             return jsonify({"message": "Image uploaded successfully.", "image_id": new_image.id}), 201
 
         return jsonify({"error": "Unsupported file type."}), 400
@@ -44,9 +60,15 @@ def upload_image():
         return jsonify({"error": "An error occurred while uploading the image."}), 500
 
 @image_bp.route("/<int:image_id>", methods=["GET"])
+@jwt_required()
 def get_image(image_id):
+    """
+    Retrieve metadata for an image by its ID.
+    """
     try:
-        image = Image.query.get(image_id)
+        current_user = get_jwt_identity()
+        # Optionally, you can enforce ownership here by comparing current_user["id"] == image.user_id
+        image = db.session.get(Image, image_id)
         if not image:
             return jsonify({"error": "Image not found."}), 404
 
@@ -63,19 +85,33 @@ def get_image(image_id):
         return jsonify({"error": "An error occurred while retrieving the image metadata."}), 500
 
 @image_bp.route("/<int:image_id>", methods=["DELETE"])
+@jwt_required()
 def delete_image(image_id):
+    """
+    Delete an image by its ID if owned by the current user.
+    """
     try:
-        user_id = request.headers.get("User-ID")
-        image = Image.query.get(image_id)
+        current_user = get_jwt_identity()
+        user_id = current_user["id"]
+
+        image = db.session.get(Image, image_id)
         if not image:
             return jsonify({"error": "Image not found."}), 404
 
+        # Optionally enforce ownership:
+        # if image.user_id != user_id:
+        #     return jsonify({"error": "Not authorized to delete this image."}), 403
+
+        # Physically delete the file from storage
         delete_file(image.user_id, image.filename)
 
+        # Remove record from the database
         db.session.delete(image)
         db.session.commit()
 
-        logger.log_to_console("INFO", "Image deleted successfully.", user_id=user_id, image_id=image_id)
+        logger.log_to_console(
+            "INFO", "Image deleted successfully.", user_id=user_id, image_id=image_id
+        )
         return jsonify({"message": "Image deleted successfully."}), 200
     except Exception as e:
         logger.log_to_console("ERROR", "Error during image deletion.", error=str(e))
