@@ -17,22 +17,6 @@ logger = CentralizedLogger("log_helpers")
 class LogHelpers:
     @staticmethod
     def create_log(action, user_id, module=None, level="INFO", meta_data=None):
-        """
-        Create a new log entry for a user action and save it to the database.
-
-        Args:
-            action (str): The action to log.
-            user_id (int): The ID of the user performing the action.
-            module (str, optional): The module where the action occurred.
-            level (str, optional): The log level (e.g., INFO, DEBUG).
-            meta_data (dict, optional): Additional metadata for the log.
-
-        Returns:
-            Log: The created log entry.
-
-        Raises:
-            LogCreationError: If there is an error creating the log.
-        """
         try:
             logger.log_to_console(
                 level=level,
@@ -43,12 +27,13 @@ class LogHelpers:
                 meta_data=meta_data
             )
 
+            # Notice we now store the 'meta_data' argument in the 'log_metadata' column
             new_log = Log(
                 action=action,
                 user_id=user_id,
                 module=module,
                 level=level,
-                meta_data=meta_data,
+                log_metadata=meta_data,  # Updated to match the new Log model
                 timestamp=datetime.utcnow()
             )
 
@@ -63,18 +48,6 @@ class LogHelpers:
 
     @staticmethod
     def get_by_id(log_id):
-        """
-        Retrieve a log entry by its ID.
-
-        Args:
-            log_id (int): The ID of the log to retrieve.
-
-        Returns:
-            Log: The log entry if found.
-
-        Raises:
-            LogNotFoundError: If the log entry is not found.
-        """
         try:
             log_entry = db.session.get(Log, log_id)
             if not log_entry:
@@ -84,22 +57,10 @@ class LogHelpers:
             return log_entry
         except LogNotFoundError as e:
             logger.log_to_console("ERROR", str(e), module="log_helpers", meta_data={"log_id": log_id})
-            raise e  # Ensure the correct exception is raised
+            raise e
 
     @staticmethod
     def get_by_user_id(user_id):
-        """
-        Retrieve all logs for a given user ID.
-
-        Args:
-            user_id (int): The user ID to filter logs by.
-
-        Returns:
-            list[Log]: A list of log entries for the user.
-
-        Raises:
-            LogQueryError: If there is an error querying the logs.
-        """
         try:
             logs = Log.query.filter_by(user_id=user_id).all()
             logger.log_to_console("DEBUG", "Retrieved logs by user ID", user_id=user_id, count=len(logs))
@@ -109,18 +70,6 @@ class LogHelpers:
 
     @staticmethod
     def get_by_module(module):
-        """
-        Retrieve all logs for a given module.
-
-        Args:
-            module (str): The module to filter logs by.
-
-        Returns:
-            list[Log]: A list of log entries for the module.
-
-        Raises:
-            LogQueryError: If there is an error querying the logs.
-        """
         try:
             logs = Log.query.filter_by(module=module).all()
             logger.log_to_console("DEBUG", "Retrieved logs by module", module=module, count=len(logs))
@@ -130,18 +79,6 @@ class LogHelpers:
 
     @staticmethod
     def get_by_level(level):
-        """
-        Retrieve all logs for a given log level.
-
-        Args:
-            level (str): The log level to filter logs by.
-
-        Returns:
-            list[Log]: A list of log entries for the level.
-
-        Raises:
-            LogQueryError: If there is an error querying the logs.
-        """
         try:
             logs = Log.query.filter_by(level=level).all()
             logger.log_to_console("DEBUG", "Retrieved logs by level", count=len(logs), log_level=level)
@@ -151,18 +88,6 @@ class LogHelpers:
 
     @staticmethod
     def get_recent_logs(limit=10):
-        """
-        Retrieve the most recent log entries.
-
-        Args:
-            limit (int): The maximum number of log entries to retrieve.
-
-        Returns:
-            list[Log]: A list of the most recent log entries.
-
-        Raises:
-            LogQueryError: If there is an error querying the logs.
-        """
         try:
             logs = Log.query.order_by(Log.timestamp.desc()).limit(limit).all()
             logger.log_to_console("DEBUG", "Retrieved recent logs", count=len(logs))
@@ -172,18 +97,6 @@ class LogHelpers:
 
     @staticmethod
     def delete_log(log_id):
-        """
-        Delete a log entry by its ID.
-
-        Args:
-            log_id (int): The ID of the log to delete.
-
-        Returns:
-            bool: True if deletion was successful, False otherwise.
-
-        Raises:
-            LogDeletionError: If there is an error deleting the log.
-        """
         try:
             log_entry = db.session.get(Log, log_id)
             if not log_entry:
@@ -202,15 +115,6 @@ class LogHelpers:
 
     @staticmethod
     def count():
-        """
-        Count the total number of logs.
-
-        Returns:
-            int: The total count of logs.
-
-        Raises:
-            LogQueryError: If there is an error querying the logs.
-        """
         try:
             log_count = Log.query.count()
             logger.log_to_console("DEBUG", "Counted logs", count=log_count)
@@ -220,18 +124,6 @@ class LogHelpers:
 
     @staticmethod
     def exists(**filters):
-        """
-        Check if a log entry exists based on given filters.
-
-        Args:
-            **filters: Filters as key-value pairs for the query.
-
-        Returns:
-            bool: True if a log entry exists, False otherwise.
-
-        Raises:
-            LogQueryError: If there is an error querying the logs.
-        """
         try:
             exists_query = Log.query.filter_by(**filters).first() is not None
             logger.log_to_console(
@@ -243,20 +135,9 @@ class LogHelpers:
 
     @staticmethod
     def get_logs_with_metadata_key(key):
-        """
-        Retrieve logs containing a specific metadata key.
-
-        Args:
-            key (str): The metadata key to filter logs by.
-
-        Returns:
-            list[Log]: A list of log entries containing the key.
-
-        Raises:
-            LogMetadataError: If there is an issue querying metadata.
-        """
         try:
-            logs = Log.query.filter(text(f"json_extract(meta_data, '$.{key}') IS NOT NULL")).all()
+            # Changed 'meta_data' to 'log_metadata'
+            logs = Log.query.filter(text(f"json_extract(log_metadata, '$.{key}') IS NOT NULL")).all()
             logger.log_to_console("DEBUG", "Retrieved logs by metadata key", key=key, count=len(logs))
             return logs
         except Exception as e:
@@ -264,20 +145,10 @@ class LogHelpers:
 
     @staticmethod
     def get_logs_with_metadata_value(key, value):
-        """
-        Retrieve logs where a specific metadata key matches a value.
-
-        Args:
-            key (str): The metadata key to filter logs by.
-            value (Any): The value of the metadata key to filter logs by.
-
-        Returns:
-            list[Log]: A list of log entries containing the key-value pair.
-        """
         try:
-            # Adjusted for SQLite JSON filtering
+            # Changed 'meta_data' to 'log_metadata'
             logs = Log.query.filter(
-                text(f"json_extract(meta_data, '$.{key}') = :value")
+                text(f"json_extract(log_metadata, '$.{key}') = :value")
             ).params(value=value).all()
             logger.log_to_console(
                 "DEBUG",

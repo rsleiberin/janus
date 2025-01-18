@@ -28,8 +28,9 @@ logger = CentralizedLogger("test_multi_model_helpers")
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_logs_by_user():
     logger.log_to_console("DEBUG", "Starting test_get_logs_by_user...")
+    # Changed meta_data -> log_metadata
     insert_query = text("""
-        INSERT INTO logs (action, user_id, meta_data, level, timestamp, module)
+        INSERT INTO logs (action, user_id, log_metadata, level, timestamp, module)
         VALUES
         ('Action 1', 1, '{"key": "value"}', 'INFO', :timestamp, NULL),
         ('Action 2', 1, '{"key": "value2"}', 'INFO', :timestamp, NULL)
@@ -47,8 +48,9 @@ def test_get_logs_by_user():
 @pytest.mark.usefixtures("function_db_setup")
 def test_count_user_actions():
     logger.log_to_console("DEBUG", "Starting test_count_user_actions...")
+    # Changed meta_data -> log_metadata
     insert_query = text("""
-        INSERT INTO logs (action, user_id, meta_data, level, timestamp, module)
+        INSERT INTO logs (action, user_id, log_metadata, level, timestamp, module)
         VALUES
         ('Action 1', 1, '{"key": "value"}', 'INFO', :timestamp, NULL),
         ('Action 2', 1, '{"key": "value2"}', 'INFO', :timestamp, NULL)
@@ -66,9 +68,10 @@ def test_count_user_actions():
 @pytest.mark.usefixtures("function_db_setup")
 def test_is_user_admin():
     logger.log_to_console("DEBUG", "Starting test_is_user_admin...")
+    # Removed 'role' since the User model doesn’t have it
     user_insert_query = text("""
-        INSERT INTO users (username, email, password_hash, role)
-        VALUES ('admin_user', 'admin@example.com', 'hashed_password', 'admin')
+        INSERT INTO users (username, email, password_hash)
+        VALUES ('admin_user', 'admin@example.com', 'hashed_password')
     """)
     db.session.execute(user_insert_query)
     db.session.commit()
@@ -81,8 +84,8 @@ def test_is_user_admin():
     db.session.commit()
 
     try:
-        is_admin = is_user_admin(1)
-        assert is_admin, "Expected user to be an admin."
+        is_admin_flag = is_user_admin(1)
+        assert is_admin_flag, "Expected user to be an admin."
     except AdminCheckError as e:
         pytest.fail(str(e))
 
@@ -90,9 +93,10 @@ def test_is_user_admin():
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_admin_level():
     logger.log_to_console("DEBUG", "Starting test_get_admin_level...")
+    # Removed 'role' here too
     user_insert_query = text("""
-        INSERT INTO users (username, email, password_hash, role)
-        VALUES ('admin_user', 'admin@example.com', 'hashed_password', 'admin')
+        INSERT INTO users (username, email, password_hash)
+        VALUES ('admin_user', 'admin@example.com', 'hashed_password')
     """)
     db.session.execute(user_insert_query)
     db.session.commit()
@@ -150,9 +154,19 @@ def test_track_user_security_actions():
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_images_with_analytics():
     logger.log_to_console("DEBUG", "Starting test_get_images_with_analytics...")
+
+    # We must create a user first since images.user_id is NOT NULL
+    user_insert_query = text("""
+        INSERT INTO users (username, email, password_hash)
+        VALUES ('sample_user', 'user@example.com', 'hashed_password')
+    """)
+    db.session.execute(user_insert_query)
+    db.session.commit()
+
+    # Now insert an image referencing user_id=1
     image_insert_query = text("""
-        INSERT INTO images (filename, width, height, created_at, updated_at)
-        VALUES ('test_image.png', 1920, 1080, :timestamp, :timestamp)
+        INSERT INTO images (user_id, filename, width, height, created_at, updated_at)
+        VALUES (1, 'test_image.png', 1920, 1080, :timestamp, :timestamp)
     """)
     db.session.execute(image_insert_query, {"timestamp": datetime.utcnow()})
     db.session.commit()

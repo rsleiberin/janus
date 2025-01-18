@@ -14,8 +14,8 @@ def test_create_user():
     user_data = {
         "username": "testuser",
         "email": "test@example.com",
-        "password_hash": "somehash",
-        "role": "user"
+        "password_hash": "somehash"
+        # Removed "role"
     }
     new_user = UserHelpers.create(user_data)
     assert new_user.id is not None, "User was not assigned an ID."
@@ -29,8 +29,8 @@ def test_get_by_id():
     user_data = {
         "username": "getbyid_user",
         "email": "getbyid@example.com",
-        "password_hash": "hash123",
-        "role": "user"
+        "password_hash": "hash123"
+        # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
     db.session.flush()
@@ -53,8 +53,8 @@ def test_get_by_email():
     user_data = {
         "username": "email_user",
         "email": "emailtest@example.com",
-        "password_hash": "abc123",
-        "role": "user"
+        "password_hash": "abc123"
+        # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
 
@@ -76,8 +76,8 @@ def test_update_user():
     user_data = {
         "username": "updateuser",
         "email": "update@example.com",
-        "password_hash": "oldhash",
-        "role": "user"
+        "password_hash": "oldhash"
+        # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
     updated_data = {
@@ -97,8 +97,8 @@ def test_delete_user():
     user_data = {
         "username": "deleteuser",
         "email": "delete@example.com",
-        "password_hash": "deletehash",
-        "role": "user"
+        "password_hash": "deletehash"
+        # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
     user_id = created_user.id
@@ -117,14 +117,14 @@ def test_count_users():
     user_data_1 = {
         "username": "countuser1",
         "email": "count1@example.com",
-        "password_hash": "hash1",
-        "role": "user"
+        "password_hash": "hash1"
+        # Removed "role"
     }
     user_data_2 = {
         "username": "countuser2",
         "email": "count2@example.com",
-        "password_hash": "hash2",
-        "role": "user"
+        "password_hash": "hash2"
+        # Removed "role"
     }
     UserHelpers.create(user_data_1)
     UserHelpers.create(user_data_2)
@@ -140,8 +140,8 @@ def test_exists_user():
     user_data = {
         "username": "existsuser",
         "email": "exists@example.com",
-        "password_hash": "exists_hash",
-        "role": "user"
+        "password_hash": "exists_hash"
+        # Removed "role"
     }
     new_user = UserHelpers.create(user_data)
     user_exists = UserHelpers.exists(new_user.id)
