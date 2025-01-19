@@ -2,6 +2,7 @@
 max-line-length = 88
 exclude =
     image_processing,
+    research,
     backend/migrations,
     .git,
     __pycache__,
