@@ -2,10 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import re
 
+
 def load_luminosity_data(file_path):
     luminosities = []
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, "r") as file:
             header = next(file)  # Skip the header
             print(f"Header: {header.strip()}")
             for line in file:
@@ -26,7 +27,10 @@ def load_luminosity_data(file_path):
         print(f"File not found: {file_path}")
     return np.array(luminosities)
 
-def plot_luminosity_distribution(luminosities, bin_size=0.1, output_file="luminosity_distribution.png"):
+
+def plot_luminosity_distribution(
+    luminosities, bin_size=0.1, output_file="luminosity_distribution.png"
+):
     if len(luminosities) == 0:
         print("No luminosity data to plot.")
         return
@@ -40,24 +44,31 @@ def plot_luminosity_distribution(luminosities, bin_size=0.1, output_file="lumino
     counts = counts[::-1]
 
     plt.figure(figsize=(10, 12))
-    plt.barh(bin_edges[:-1], counts, height=bin_size, color='skyblue', edgecolor='black')
-    plt.xlabel('Count')
-    plt.ylabel('Luminosity (L)')
-    plt.title('Distribution of Luminosity (L) Values')
-    plt.grid(axis='x', linestyle='--', alpha=0.7)
+    plt.barh(
+        bin_edges[:-1], counts, height=bin_size, color="skyblue", edgecolor="black"
+    )
+    plt.xlabel("Count")
+    plt.ylabel("Luminosity (L)")
+    plt.title("Distribution of Luminosity (L) Values")
+    plt.grid(axis="x", linestyle="--", alpha=0.7)
 
     # Label each bar with the count if the count is significant
     for i, count in enumerate(counts):
         if count > 0:
-            plt.text(count, bin_edges[i] + bin_size / 2, str(count), va='center', fontsize=6)
+            plt.text(
+                count, bin_edges[i] + bin_size / 2, str(count), va="center", fontsize=6
+            )
 
-    plt.savefig(output_file, dpi=300, bbox_inches='tight')
+    plt.savefig(output_file, dpi=300, bbox_inches="tight")
     print(f"Saved chart to {output_file}")
+
 
 if __name__ == "__main__":
     input_path = "clustered_lab_data.txt"
     luminosities = load_luminosity_data(input_path)
     if len(luminosities) > 0:
-        plot_luminosity_distribution(luminosities, bin_size=0.1, output_file="luminosity_distribution.png")
+        plot_luminosity_distribution(
+            luminosities, bin_size=0.1, output_file="luminosity_distribution.png"
+        )
     else:
         print("No valid luminosity data found.")

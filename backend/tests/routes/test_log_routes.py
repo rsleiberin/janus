@@ -1,4 +1,3 @@
-
 def test_get_logs_success(client, user_with_token):
     """Test successful retrieval of logs."""
     _, token = user_with_token

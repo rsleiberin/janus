@@ -97,9 +97,7 @@ class UserHelpers:
                 )
                 return user
             else:
-                raise UserNotFoundError(
-                    f"User with ID {user_id} not found for update."
-                )
+                raise UserNotFoundError(f"User with ID {user_id} not found for update.")
         except SQLAlchemyError as e:
             logger.log_to_console(
                 "ERROR",

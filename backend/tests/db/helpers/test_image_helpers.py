@@ -188,9 +188,7 @@ def test_count_images():
         total = ImageHelpers.count()
 
         # Verify logging
-        mock_console_log.assert_called_with(
-            "INFO", "Counted all images", count=2
-        )
+        mock_console_log.assert_called_with("INFO", "Counted all images", count=2)
 
         assert total == 2, f"Expected 2 images, but found {total}."
 
@@ -225,9 +223,9 @@ def test_get_images_by_metadata():
         )
 
         assert len(results) == 1, "Expected exactly 1 image with the given metadata."
-        assert results[0].filename == "metadata.png", (
-            "Wrong image returned for metadata filter."
-        )
+        assert (
+            results[0].filename == "metadata.png"
+        ), "Wrong image returned for metadata filter."
 
 
 @pytest.mark.usefixtures("function_db_setup")

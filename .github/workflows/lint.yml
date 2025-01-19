@@ -22,7 +22,7 @@ jobs:
         run: flake8 .
 
       - name: Run Black
-        run: black --check .
+        run: black --check --exclude '/(image_processing|research)/' .
 
       - name: Run Pylint
         run: pylint backend/

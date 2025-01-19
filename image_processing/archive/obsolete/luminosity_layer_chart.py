@@ -16,11 +16,12 @@ first_layer_upper = 0.0653794236
 # Initialize a list to store luminosity values
 luminosity_values = []
 
+
 def parse_luminosity_data(file_path):
     """Parses the color_data_lab.txt file and extracts luminosity (L) values."""
     line_number = 0  # Track line numbers for debugging
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, "r") as file:
             for line in file:
                 line_number += 1
 
@@ -30,15 +31,22 @@ def parse_luminosity_data(file_path):
 
                 try:
                     # Split the line using regex to handle various cases
-                    parts = re.split(r',\s*(?![^()]*\))', line.strip())
+                    parts = re.split(r",\s*(?![^()]*\))", line.strip())
 
                     # Extract LAB values enclosed in parentheses after "LAB Color"
-                    lab_part = next((part for part in parts if part.startswith('(') and ')' in part and '.' in part), None)
+                    lab_part = next(
+                        (
+                            part
+                            for part in parts
+                            if part.startswith("(") and ")" in part and "." in part
+                        ),
+                        None,
+                    )
                     if lab_part is None:
                         raise ValueError("LAB values not found")
 
                     lab_values = lab_part.strip()[1:-1]  # Remove parentheses
-                    lab_components = lab_values.split(',')
+                    lab_components = lab_values.split(",")
 
                     if len(lab_components) != 3:
                         raise ValueError("Incomplete LAB values")
@@ -55,6 +63,7 @@ def parse_luminosity_data(file_path):
 
     return luminosity_values
 
+
 def plot_luminosity_chart(luminosity_values):
     """Plots the luminosity distribution with layer boundaries and saves the chart as an image."""
     # Create bins for luminosity values
@@ -65,21 +74,73 @@ def plot_luminosity_chart(luminosity_values):
 
     # Plot the histogram
     plt.figure(figsize=(10, 8))
-    plt.barh(bin_edges[:-1], counts, height=np.diff(bin_edges), color="gray", edgecolor="black")
+    plt.barh(
+        bin_edges[:-1],
+        counts,
+        height=np.diff(bin_edges),
+        color="gray",
+        edgecolor="black",
+    )
 
     # Add color-filled zones
-    plt.axhspan(0, first_layer_lower * 100, color='red', alpha=0.3, label="Hardware Boundary")  # Hardware Boundary
-    plt.axhspan(first_layer_lower * 100, first_layer_upper * 100, color='blue', alpha=0.3, label="Background Zone")  # Background Zone
-    plt.axhspan(second_layer_lower * 100, second_layer_upper * 100, color='green', alpha=0.3, label="Card Zone")  # Card Zone
-    plt.axhspan(third_layer_lower * 100, 100, color='yellow', alpha=0.3, label="Action Zone")  # Action Zone
+    plt.axhspan(
+        0, first_layer_lower * 100, color="red", alpha=0.3, label="Hardware Boundary"
+    )  # Hardware Boundary
+    plt.axhspan(
+        first_layer_lower * 100,
+        first_layer_upper * 100,
+        color="blue",
+        alpha=0.3,
+        label="Background Zone",
+    )  # Background Zone
+    plt.axhspan(
+        second_layer_lower * 100,
+        second_layer_upper * 100,
+        color="green",
+        alpha=0.3,
+        label="Card Zone",
+    )  # Card Zone
+    plt.axhspan(
+        third_layer_lower * 100, 100, color="yellow", alpha=0.3, label="Action Zone"
+    )  # Action Zone
 
     # Add layer boundaries
-    plt.axhline(y=hardware_boundary * 100, color='red', linestyle='--', label="Hardware Boundary Line")
-    plt.axhline(y=first_layer_lower * 100, color='blue', linestyle='--', label="First Layer Lower Boundary")
-    plt.axhline(y=first_layer_upper * 100, color='cyan', linestyle='--', label="First Layer Upper Boundary")
-    plt.axhline(y=second_layer_lower * 100, color='green', linestyle='--', label="Second Layer Lower Boundary")
-    plt.axhline(y=second_layer_upper * 100, color='lime', linestyle='--', label="Second Layer Upper Boundary")
-    plt.axhline(y=third_layer_lower * 100, color='purple', linestyle='--', label="Third Layer Lower Boundary")
+    plt.axhline(
+        y=hardware_boundary * 100,
+        color="red",
+        linestyle="--",
+        label="Hardware Boundary Line",
+    )
+    plt.axhline(
+        y=first_layer_lower * 100,
+        color="blue",
+        linestyle="--",
+        label="First Layer Lower Boundary",
+    )
+    plt.axhline(
+        y=first_layer_upper * 100,
+        color="cyan",
+        linestyle="--",
+        label="First Layer Upper Boundary",
+    )
+    plt.axhline(
+        y=second_layer_lower * 100,
+        color="green",
+        linestyle="--",
+        label="Second Layer Lower Boundary",
+    )
+    plt.axhline(
+        y=second_layer_upper * 100,
+        color="lime",
+        linestyle="--",
+        label="Second Layer Upper Boundary",
+    )
+    plt.axhline(
+        y=third_layer_lower * 100,
+        color="purple",
+        linestyle="--",
+        label="Third Layer Lower Boundary",
+    )
 
     # Add labels and legend
     plt.xlabel("Count")
@@ -89,7 +150,10 @@ def plot_luminosity_chart(luminosity_values):
 
     # Save the chart as an image
     plt.savefig("luminosity_layer_zones.png")
-    print("Luminosity layer distribution chart with zones saved as luminosity_layer_zones.png")
+    print(
+        "Luminosity layer distribution chart with zones saved as luminosity_layer_zones.png"
+    )
+
 
 # Main program execution
 if __name__ == "__main__":

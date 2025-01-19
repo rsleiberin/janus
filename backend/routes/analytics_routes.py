@@ -29,10 +29,15 @@ def create_analytics_entry():
         db.session.commit()
 
         logger.log_to_console("INFO", "Analytics record created successfully.")
-        return jsonify({
-            "id": analytics_entry.id,
-            "message": "Analytics entry created successfully."
-        }), 201
+        return (
+            jsonify(
+                {
+                    "id": analytics_entry.id,
+                    "message": "Analytics entry created successfully.",
+                }
+            ),
+            201,
+        )
 
     except Exception as e:
         logger.log_to_console(
@@ -85,10 +90,15 @@ def fetch_single_analytics_entry(record_id):
             logger.log_to_console(
                 "WARNING", f"Analytics record with ID {record_id} not found."
             )
-            return jsonify({
-                "error_code": "RECORD_NOT_FOUND",
-                "message": f"Analytics record with ID {record_id} not found."
-            }), 404
+            return (
+                jsonify(
+                    {
+                        "error_code": "RECORD_NOT_FOUND",
+                        "message": f"Analytics record with ID {record_id} not found.",
+                    }
+                ),
+                404,
+            )
 
         serialized_record = {
             "id": record.id,
@@ -96,15 +106,11 @@ def fetch_single_analytics_entry(record_id):
             "research_topic": record.research_topic,
             "created_at": record.created_at.isoformat(),
         }
-        logger.log_to_console(
-            "INFO", f"Fetched analytics record with ID: {record_id}."
-        )
+        logger.log_to_console("INFO", f"Fetched analytics record with ID: {record_id}.")
         return jsonify(serialized_record), 200
 
     except Exception as e:
-        logger.log_to_console(
-            "ERROR", "Error fetching analytics record.", error=str(e)
-        )
+        logger.log_to_console("ERROR", "Error fetching analytics record.", error=str(e))
         return handle_route_error(e)
 
 
@@ -130,9 +136,7 @@ def delete_analytics_record(record_id):
         return jsonify({"message": "Analytics entry deleted successfully."}), 200
 
     except Exception as e:
-        logger.log_to_console(
-            "ERROR", "Error deleting analytics record.", error=str(e)
-        )
+        logger.log_to_console("ERROR", "Error deleting analytics record.", error=str(e))
         return handle_route_error(e)
 
 

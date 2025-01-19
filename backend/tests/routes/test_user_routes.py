@@ -54,9 +54,7 @@ def test_update_user_profile_success(client, mocker, access_token, function_db_s
     assert updated_user.username == "updateduser"
 
 
-def test_update_user_profile_invalid_data(
-    client, access_token, function_db_setup
-):
+def test_update_user_profile_invalid_data(client, access_token, function_db_setup):
     user = User(
         id=1,
         username="testuser",

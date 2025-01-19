@@ -97,9 +97,7 @@ def fetch_logs():
             for log in logs
         ]
 
-        logger.log_to_console(
-            "INFO", "Successfully fetched logs", count=len(log_list)
-        )
+        logger.log_to_console("INFO", "Successfully fetched logs", count=len(log_list))
         return jsonify(log_list), 200
     except Exception as e:
         logger.log_to_console("ERROR", "Error fetching logs", error=str(e))

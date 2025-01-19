@@ -57,9 +57,7 @@ class CentralizedLogger:
         if log_method:
             log_method(formatted_message)
         else:
-            self.logger.warning(
-                f"Invalid log level '{level}': {formatted_message}"
-            )
+            self.logger.warning(f"Invalid log level '{level}': {formatted_message}")
 
     def log_to_db(self, level, message, module=None, user_id=None, meta_data=None):
         """
