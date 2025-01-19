@@ -1,6 +1,10 @@
+"""
+This module initializes and runs the Flask application, setting up database migrations.
+"""
+
+from flask_migrate import Migrate
 from backend import create_app
 from backend.db import db
-from flask_migrate import Migrate
 
 # Create the Flask application
 app = create_app()

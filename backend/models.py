@@ -1,9 +1,23 @@
+"""
+This module defines SQLAlchemy models for the application, including:
+- Image
+- ImageAnalysis
+- User
+- Admin
+- Log
+- Analytics
+- Security
+"""
+
 from datetime import datetime
 from backend.db import db
 
 
 class Image(db.Model):
-    """Model for storing image metadata."""
+    """Model for storing image metadata.
+
+    pylint: disable=too-few-public-methods
+    """
 
     __tablename__ = "images"
 
@@ -17,7 +31,7 @@ class Image(db.Model):
     compression_method = db.Column(db.String(50), nullable=True)
     image_metadata = db.Column(
         db.JSON, nullable=True
-    )  # JSON metadata specific to images
+    )
     created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     updated_at = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
@@ -30,13 +44,16 @@ class Image(db.Model):
 
 
 class ImageAnalysis(db.Model):
-    """Model for storing analysis results linked to images."""
+    """Model for storing analysis results linked to images.
+
+    pylint: disable=too-few-public-methods
+    """
 
     __tablename__ = "image_analysis"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     image_id = db.Column(db.Integer, db.ForeignKey("images.id"), nullable=False)
-    analysis_results = db.Column(db.JSON, nullable=False)  # Stores analysis results
+    analysis_results = db.Column(db.JSON, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
@@ -51,7 +68,10 @@ class ImageAnalysis(db.Model):
 
 
 class User(db.Model):
-    """Model for storing user information."""
+    """Model for storing user information.
+
+    pylint: disable=too-few-public-methods
+    """
 
     __tablename__ = "users"
 
@@ -65,17 +85,17 @@ class User(db.Model):
 
 
 class Admin(db.Model):
-    """Model for admin users, extending User model."""
+    """Model for admin users, extending User model.
+
+    pylint: disable=too-few-public-methods
+    """
 
     __tablename__ = "admins"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    admin_level = db.Column(
-        db.String(50), nullable=False
-    )  # e.g., 'superadmin', 'moderator'
+    admin_level = db.Column(db.String(50), nullable=False)
 
-    # Relationship with User
     user = db.relationship(
         "User", backref=db.backref("admin_profile", uselist=False, lazy=True)
     )
@@ -85,7 +105,10 @@ class Admin(db.Model):
 
 
 class Log(db.Model):
-    """Model for storing logs of user actions."""
+    """Model for storing logs of user actions.
+
+    pylint: disable=too-few-public-methods
+    """
 
     __tablename__ = "logs"
 
@@ -96,11 +119,9 @@ class Log(db.Model):
     updated_at = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
-    module = db.Column(db.String(100), nullable=True)  # Optional module name
-    level = db.Column(db.String(50), nullable=True)  # Log level (INFO, DEBUG, etc.)
-    log_metadata = db.Column(
-        db.JSON, nullable=True
-    )  # Renamed for consistency and clarity
+    module = db.Column(db.String(100), nullable=True)
+    level = db.Column(db.String(50), nullable=True)
+    log_metadata = db.Column(db.JSON, nullable=True)
 
     user = db.relationship("User", backref=db.backref("logs", lazy=True))
 
@@ -112,15 +133,16 @@ class Log(db.Model):
 
 
 class Analytics(db.Model):
-    """Model for storing research and analytical data."""
+    """Model for storing research and analytical data.
+
+    pylint: disable=too-few-public-methods
+    """
 
     __tablename__ = "analytics"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     data = db.Column(db.JSON, nullable=False)
-    research_topic = db.Column(
-        db.String(255), nullable=True
-    )  # Optional field to differentiate research
+    research_topic = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
@@ -131,7 +153,10 @@ class Analytics(db.Model):
 
 
 class Security(db.Model):
-    """Model for storing security-related events for users."""
+    """Model for storing security-related events for users.
+
+    pylint: disable=too-few-public-methods
+    """
 
     __tablename__ = "security"
 

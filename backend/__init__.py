@@ -1,70 +1,51 @@
+"""
+This module initializes the Flask application, sets up configurations,
+and registers blueprints and extensions for the backend.
+"""
+
 import os
 from flask import Flask
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from backend.db import db
-from backend.config import DevelopmentConfig  # Change to ProductionConfig as needed
+from backend.config import DevelopmentConfig
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.error_handling import (
     format_error_response,
     handle_general_error,
 )
 
-# Initialize logger for this module
+# Blueprints
+from backend.routes.status_routes import status_bp
+from backend.routes.file_routes import file_bp
+from backend.routes.authentication_routes import auth_bp
+from backend.routes.user_routes import user_bp
+from backend.routes.admin_routes import admin_bp
+from backend.routes.error_and_health_monitoring_routes import error_and_health_bp
+from backend.routes.analytics_routes import analytics_bp
+from backend.routes.security_routes import security_bp
+from backend.routes.log_routes import log_bp
+from backend.routes.image_routes import image_bp
+
+# Initialize logger
 logger = CentralizedLogger("backend_init")
 
 # Initialize Flask-Migrate
 migrate = Migrate(directory=os.path.join(os.path.dirname(__file__), "migrations"))
 
 
-def create_app():
-    """Factory function to create and configure the Flask application."""
-    logger.log_to_console("INFO", "Starting app creation...")
-    app = Flask(__name__)
-
-    # Log the created app instance
-    logger.log_to_console("DEBUG", "Created Flask app instance", instance=str(app))
-
-    # Correctly resolve the database file path
+def configure_database(app):
+    """Configure the database for the app."""
     base_dir = os.path.abspath(os.path.dirname(__file__))
     db_path = os.path.join(base_dir, "instance", "backend.db")
-    logger.log_to_console("DEBUG", "Resolved database path", path=db_path)
-
-    # Apply configuration
-    app.config.from_object(
-        DevelopmentConfig
-    )  # Use DevelopmentConfig for local development
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["JWT_SECRET_KEY"] = "your_test_secret_key"  # Add a secure JWT secret key
 
-    logger.log_to_console(
-        "DEBUG", "Database URI set", uri=app.config["SQLALCHEMY_DATABASE_URI"]
-    )
 
-    # Initialize the database
-    try:
-        logger.log_to_console("INFO", "Initializing the database...")
-        db.init_app(app)
-        migrate.init_app(app, db)
-        logger.log_to_console(
-            "INFO", "db.init_app() and migrate.init_app() completed successfully."
-        )
-    except Exception as e:
-        logger.log_to_console(
-            "ERROR", "Error during database initialization", error=str(e)
-        )
-        raise
+def configure_jwt(app):
+    """Configure JWT and error handlers."""
+    jwt = JWTManager(app)
 
-    # Initialize JWTManager
-    try:
-        jwt = JWTManager(app)
-        logger.log_to_console("INFO", "JWTManager initialized successfully.")
-    except Exception as e:
-        logger.log_to_console("ERROR", "Error initializing JWTManager", error=str(e))
-        raise
-
-    # Register JWT error handlers
     @jwt.unauthorized_loader
     def handle_no_authorization_error(e):
         return (
@@ -89,49 +70,42 @@ def create_app():
             401,
         )
 
-    # Register a global error handler for unhandled exceptions
+
+def register_blueprints(app):
+    """Register all blueprints."""
+    app.register_blueprint(status_bp)
+    app.register_blueprint(file_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(user_bp)
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(error_and_health_bp)
+    app.register_blueprint(analytics_bp)
+    app.register_blueprint(security_bp)
+    app.register_blueprint(log_bp)
+    app.register_blueprint(image_bp, url_prefix="/images")
+
+
+def create_app():
+    """Factory function to create and configure the Flask application."""
+    logger.log_to_console("INFO", "Starting app creation...")
+    app = Flask(__name__)
+    app.config.from_object(DevelopmentConfig)
+
+    configure_database(app)
+
+    # Initialize extensions
+    db.init_app(app)
+    migrate.init_app(app, db)
+    configure_jwt(app)
+
+    # Register global error handler
     @app.errorhandler(Exception)
     def handle_unhandled_exception(e):
         logger.log_to_console("ERROR", str(e), module="general")
         return handle_general_error(e)
 
-    # Import and register blueprints
-    try:
-        from backend.routes.status_routes import status_bp
-        from backend.routes.file_routes import file_bp
-        from backend.routes.authentication_routes import auth_bp
-        from backend.routes.user_routes import user_bp
-        from backend.routes.admin_routes import admin_bp
-        from backend.routes.error_and_health_monitoring_routes import (
-            error_and_health_bp,
-        )
-        from backend.routes.analytics_routes import analytics_bp
-        from backend.routes.security_routes import security_bp
-        from backend.routes.log_routes import log_bp
-        from backend.routes.image_routes import (
-            image_bp,
-        )  # Corrected blueprint name to `image_bp`
-
-        logger.log_to_console("INFO", "Blueprints imported successfully.")
-    except ImportError as e:
-        logger.log_to_console("ERROR", "Error importing blueprints", error=str(e))
-        raise
-
-    try:
-        app.register_blueprint(status_bp)
-        app.register_blueprint(file_bp)
-        app.register_blueprint(auth_bp)
-        app.register_blueprint(user_bp)
-        app.register_blueprint(admin_bp)
-        app.register_blueprint(error_and_health_bp)
-        app.register_blueprint(analytics_bp)
-        app.register_blueprint(security_bp)
-        app.register_blueprint(log_bp)
-        app.register_blueprint(image_bp, url_prefix="/images")
-        logger.log_to_console("INFO", "Blueprints registered successfully.")
-    except Exception as e:
-        logger.log_to_console("ERROR", "Error registering blueprints", error=str(e))
-        raise
+    # Register blueprints
+    register_blueprints(app)
 
     logger.log_to_console("INFO", "App creation complete.")
     return app
