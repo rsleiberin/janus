@@ -1,0 +1,31 @@
+name: Lint Code Base
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          pip install flake8 black pylint pytest coverage
+
+      - name: Run Flake8
+        run: flake8 .
+
+      - name: Run Black
+        run: black --check .
+
+      - name: Run Pylint
+        run: pylint backend/
+
+      - name: Run Code Quality Module
+        run: python backend/utils/code_quality.py
