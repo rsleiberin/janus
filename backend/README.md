@@ -1,214 +1,126 @@
 # Backend Directory
 
+---
+
+## Purpose
+
+The Flask application in this directory serves as the **primary backend** for the Janus framework. Janus focuses on **user interface and experience research**, particularly analyzing images for accessibility and design token generation. The backend handles:
+
+- **Data Management**: Storing and managing user accounts, logs, and image metadata.  
+- **API Endpoints**: Offering secured routes for authentication, image operations, and administrative tasks.  
+- **Integration**: Serving as the foundation for further expansions, such as design token calculations, advanced image analysis, and future front-end integrations.
+
+---
+
 ## Overview
-This directory contains the Flask backend for the Janus project, responsible for handling API requests, database operations, and backend logic. It integrates seamlessly with the `image_processing` module and the Next.js frontend. The backend is designed to be modular, scalable, and ready for future extensions.
+
+This directory contains all backend-related components for Janus, including:
+
+- **Routes** for user management, security, admin tasks, image handling, and more.
+- **Models** describing the database schema (e.g., users, images, logs, analytics).
+- **Utilities** for error handling, file operations, and logging.
+- **Tests** ensuring stable, predictable behavior across all core functionalities.
+- **Migrations** (managed by Flask-Migrate) to track schema changes and streamline updates.
+
+Through a modular structure, the backend is easily extensible for advanced functionalities like machine learning, real-time data analytics, or future design token expansions.
 
 ---
 
-## Goals
+## Phases (Project Roadmap)
 
-### Current Goals (MVP)
-1. Provide a modular structure for handling API routes and database operations.
-2. Facilitate interaction between the frontend and backend via RESTful API endpoints.
-3. Enable integration with `image_processing` scripts for metadata extraction and analysis.
+### Status: Phase 1 MVP Completed
 
-### Future Goals (Post-MVP)
-1. Add API authentication and security mechanisms.
-2. Integrate advanced features like machine learning and data analytics.
-3. Scale database operations to handle larger datasets and real-time queries.
-4. Support admin and user-specific functionalities.
+This backend has successfully reached MVP status, implementing core routes and database models with comprehensive testing and error handling. Additional features and advanced integrations will follow in subsequent phases.
 
----
+1. **Phase 1 (Completed)**  
+   - Established core routes (admin, authentication, user, security, logs, images).  
+   - Implemented database models, migrations, and foundational tests.  
+   - Achieved MVP with consistent error handling and JWT-based security.
 
-## Directory Structure with Implementation Stages
+2. **Phase 2**  
+   - Introduce advanced image analysis (image_analysis_routes, helpers).  
+   - Enhance utility scripts for modular CRUD operations.  
+   - Refine performance and testing, laying groundwork for next-stage features.
 
-### **backend/**
-- **app.py**: Main Flask application entry point **[✅ Completed]**
-- **config.py**: Backend configuration settings **[✅ Completed]**
-- **models.py**: SQLAlchemy models for database schema **[✅ Completed]**
-- **.flaskenv**: This file contains Flask-specific environment variables **[✅ Completed]**
-- **routes/**: Modularized Flask routes **[🚧 In Progress]**
-- **templates/**: Flask templates for rendering views **[❌ Pending | Phase 3]**
-- **static/**: Static files for serving assets **[❌ Pending | Phase 3]**
-- **extensions/**: Placeholder for future capabilities **[🚧 In Progress]**
-- **tests/**: Test cases for backend modules **[✅ Completed]**
-- **utils/**: Shared utility scripts **[🚧 In Progress]**
-- **db/**: Database-specific scripts and helpers **[✅ Completed]**
-- **migrations/**: Tracks database schema changes using Flask-Migrate **[🔄 Managed | Flask-Migrate]**
-- **api/**: API-related extensions **[❌ Pending | Phase 4]**
+3. **Phase 3**  
+   - Integrate with the Next.js frontend (optional SSR templates, static assets).  
+   - Offer expanded user/admin flows, e.g., multi-tenant design tokens or real-time dashboards.
+
+4. **Phase 4**  
+   - Focus on scalability and specialized integrations (machine learning modules, large-scale analytics, or third-party APIs).  
+   - Optionally migrate from SQLite to a production-grade database, aligning with usage demands.
 
 ---
 
-## Database Schema
+## Directory Structure
 
-The database schema is defined using SQLAlchemy models in `models.py`. Below is a high-level overview of the tables:
+- **app.py**  
+  Main Flask application entry point (completed).
 
-### **images Table**
-- **Purpose**: Stores metadata for uploaded images.
-- **Key Columns**:
-  - `id`: Unique identifier for each image.
-  - `filename`: Name of the image file, must be unique.
-  - `user_id`: References the user who uploaded the image.
-  - `width`, `height`: Dimensions of the image.
-  - `bit_depth`: Bit depth of the image.
-  - `color_type`: Color type (e.g., RGB, CMYK).
-  - `compression_method`: Compression method used for the image.
-  - `image_metadata`: Additional metadata stored in JSON format.
-  - `created_at`: Timestamp for when the image was created.
-  - `updated_at`: Timestamp for when the image was last modified.
-- **Relationships**:
-  - Linked to the `users` table via `user_id`.
-  - Referenced by the `image_analysis` table.
+- **config.py**  
+  Centralized configuration settings (completed).
 
-### **image_analysis Table**
-- **Purpose**: Stores analysis results for images.
-- **Key Columns**:
-  - `id`: Unique identifier for each analysis entry.
-  - `image_id`: References the associated image.
-  - `analysis_results`: JSON data containing the analysis results (e.g., dominant colors, patterns).
-  - `created_at`: Timestamp for when the analysis was created.
-  - `updated_at`: Timestamp for when the analysis was last modified.
-- **Relationships**:
-  - Linked to the `images` table via `image_id`.
+- **models.py**  
+  SQLAlchemy models for defining the database schema (completed).
 
-### **users Table**
-- **Purpose**: Stores user information.
-- **Key Columns**:
-  - `id`: Unique identifier for each user.
-  - `username`: Unique username for the user.
-  - `email`: Unique email address.
-  - `password_hash`: Hashed password for authentication.
-- **Relationships**:
-  - Referenced by `images`, `logs`, `admins`, and `security` tables.
+- **routes/**  
+  - admin_routes.py (completed)  
+  - authentication_routes.py (completed)  
+  - user_routes.py (completed)  
+  - security_routes.py (completed)  
+  - log_routes.py (completed)  
+  - image_routes.py (completed)  
+  - image_analysis_routes.py (pending)  
 
-### **admins Table**
-- **Purpose**: Stores administrative user information.
-- **Key Columns**:
-  - `id`: Unique identifier for each admin.
-  - `user_id`: References the user this admin entry is associated with.
-  - `admin_level`: The level of admin privileges (e.g., superadmin, moderator).
-- **Relationships**:
-  - Linked to the `users` table via `user_id`.
+- **utils/**  
+  Utility scripts (completed except for any image_analysis-specific needs).
 
-### **logs Table**
-- **Purpose**: Stores logs of user actions.
-- **Key Columns**:
-  - `id`: Unique identifier for each log entry.
-  - `user_id`: References the user who performed the action.
-  - `action`: Description of the action performed.
-  - `module`: The system module where the action originated.
-  - `level`: Log level (e.g., INFO, DEBUG).
-  - `log_metadata`: Additional metadata about the action (stored in JSON format).
-  - `timestamp`: Timestamp of the log entry creation.
-  - `updated_at`: Timestamp for when the log entry was last modified.
-- **Relationships**:
-  - Linked to the `users` table via `user_id`.
+- **db/**  
+  Database scripts/helpers (completed except for image_analysis_helpers, pending).
 
-### **analytics Table**
-- **Purpose**: Stores analytical and research data.
-- **Key Columns**:
-  - `id`: Unique identifier for each analytics entry.
-  - `data`: JSON data containing the analytics or research information.
-  - `research_topic`: Optional field for categorizing the research topic.
-  - `created_at`: Timestamp for when the entry was created.
-  - `updated_at`: Timestamp for when the entry was last modified.
-- **Relationships**: None.
+- **migrations/**  
+  Managed by Flask-Migrate for applying/rolling back schema updates.
 
-### **security Table**
-- **Purpose**: Tracks security-related actions for users.
-- **Key Columns**:
-  - `id`: Unique identifier for each security action.
-  - `user_id`: References the user who triggered the security action.
-  - `action`: Description of the security event.
-  - `timestamp`: Timestamp for when the security event occurred.
-  - `updated_at`: Timestamp for when the security event was last modified.
-- **Relationships**:
-  - Linked to the `users` table via `user_id`.
+- **tests/**  
+  Test suites covering each route and utility (completed except for planned image_analysis tests).
 
+- **templates/** and **static/**  
+  Placeholder directories if server-side rendering or asset management is needed in later phases (phase 3).
 
-## Managed Schemas
-
-### **alembic_version Table**
-
-- **Purpose**: Tracks the current state of database migrations managed by Alembic.
-- **Key Columns**:
-  - `version_num`: Unique identifier for the current migration applied to the database.
-- **Relationships**: None (managed automatically by Alembic).
-
+- **extensions/**  
+  Reserved for advanced or external integrations (future).
 
 ---
 
-### **Notes on Changes**
-- Added the `migrations/` directory with a new status symbol **[🔄 Managed | Flask-Migrate]**, reflecting its automatic and tool-driven nature.
-- Updated the `logs` schema to include `module`, `level`, and `meta_data` fields as discussed and implemented.
-- Maintained other schema details as they were confirmed to be accurate.
+## Usage
 
+- **Install Dependencies**  
+  Use `pip install -r requirements.txt` to install required packages.
 
----
+- **Environment Variables** (optional)  
+  - `FLASK_ENV=development`  
+  - `UPLOAD_FOLDER=backend/uploads`  
+  - `DATABASE_URL=sqlite:///backend/instance/backend.db`  
 
-## Workflow Phases and Rationale
+- **Initialize the DB**  
+  Run `flask db upgrade` to apply migrations (if needed).
 
-### **Phase 1: Core Backend Implementation (Completed)**
-- Focus: Establish the foundation for the backend, including database setup, basic routing, and initial file handling utilities.
-- **Completed**:
-  - `app.py`: Main Flask application setup.
-  - `models.py`: SQLAlchemy models for the database.
-  - `db/`: Database scripts and helpers.
-  - Basic route setup (`status_routes.py`, `file_routes.py`).
-- **In Progress**:
-  - `image_routes.py`: API for image-related operations **[🚧 In Progress | Ticket #5]**.
-  - Utilities: File handler and logging utilities **[🚧 In Progress | Tickets #8, #9]**.
+- **Start the Server**  
+  - `flask run`  
+  or  
+  - `python3 backend/app.py`
 
----
-
-### **Phase 2: Utility Refinement and Integration**
-- Focus: Finalize utility scripts, test them, and ensure consistent usage across the backend.
-- **Current Goals**:
-  - Finalize and test `utils/` **[🚧 In Progress | Tickets #8, #9, #30]**.
-  - Ensure all existing routes and database helpers integrate with finalized utilities.
-  - Begin testing for database and utility scripts **[🚧 In Progress | Ticket #40]**.
-- **Pending**:
-  - Security utilities (`security.py`) **[❌ Pending | Ticket #32]**.
-  - User management (`user_routes.py`) **[❌ Pending | Ticket #11]**.
+- **Test the Application**  
+  - `pytest backend/tests`
 
 ---
 
-### **Phase 3: Frontend Integration and Advanced Routing**
-- Focus: Add frontend rendering support and advanced routes for user and admin functionalities.
-- **Planned Goals**:
-  - Integrate `templates/` and `static/` directories for frontend rendering **[❌ Pending | Tickets #15, #17, #16]**.
-  - Implement `admin_routes.py` and finalize `user_routes.py` **[❌ Pending | Tickets #15, #11]**.
+## Best Practices and Additional Notes
+
+- **Error Handling**: Custom exceptions and centralized handlers yield consistent JSON responses and logs.
+- **Testing**: We rely on pytest for end-to-end coverage across routes, models, and utilities.
+- **DB Helpers**: Routes currently handle model interactions directly. As logic expands, consider consolidating reusable queries in helpers.
+- **Logging**: A centralized logger allows console and optional database logging, aiding troubleshooting and audits.
+- **Modularity**: The project structure supports adding new routes or entire modules without significant refactoring, ensuring ongoing scalability.
 
 ---
-
-### **Phase 4: Scalability and Extensions**
-- Focus: Prepare the backend for advanced use cases, scalability, and external integrations.
-- **Planned Goals**:
-  - API enhancements:
-    - API authentication **[❌ Pending | Ticket #18]**.
-    - API throttling **[❌ Pending | Ticket #19]**.
-    - OpenAPI documentation **[❌ Pending | Ticket #20]**.
-  - Extensions:
-    - Machine learning utilities **[❌ Pending | Ticket #21]**.
-    - Data analytics tools **[❌ Pending | Ticket #22]**.
-    - Third-party integrations **[❌ Pending | Ticket #23]**.
-  - Database scalability enhancements (e.g., PostgreSQL migration) **[❌ Pending | Ticket #24]**.
-
----
-
-### Updated Rationale
-1. **Foundation First**: The foundational components (database, models, basic routes) are completed, providing a stable backend core.
-2. **Utility Refinement**: Utilities are actively being refined and tested to standardize backend operations.
-3. **Frontend Readiness**: Once utilities are stable, efforts will shift toward integrating frontend rendering capabilities and user/admin routes.
-4. **Advanced Features**: Scalability, security, and advanced analytics will be addressed in later phases after core functionality is finalized.
-
----
-
-## Workflow: Development from Root Directory
-
-### **Working Context**
-All commands should be executed from the project root (`janus/`):
-```bash
-cd ~/janus
-python3 backend/app.py
-

@@ -1,7 +1,8 @@
 # Database Directory
 
 ## Overview
-The `db/` directory contains all database-related scripts and files for the Janus project. It handles schema creation, helper functions, seed data, and database configuration. By default, SQLite is used for development, with support for scaling to more robust databases such as PostgreSQL.
+
+The `db/` directory centralizes scripts and helpers that manage Janus’s data. It ensures consistent schema handling (via Flask-Migrate), provides seed data for testing and development, and offers helper modules for more complex database operations. This structure keeps database logic organized and flexible, simplifying future additions like image analysis, advanced logging, or analytics.
 
 ---
 
@@ -10,47 +11,22 @@ The `db/` directory contains all database-related scripts and files for the Janu
 ### **backend/db/**
 - **README.md**: Documentation
 - **\_\_init\_\_.py**: Module initialization
-- **db_schema_creation.py**: Handles schema creation **[✅ Completed]**
-- **db_setup.py**: Configures database connections **[✅ Completed]**
-- **seed_data.py**: Seeds the database with initial data **[✅ Completed]**
+- **db_schema_creation.py**: Handles schema creation **[Completed]**
+- **db_setup.py**: Configures database connections **[Completed]**
+- **seed_data.py**: Seeds the database with initial data **[Completed]**
 - **helpers/**: Contains helper modules for database operations
-  - **admin_helpers.py**: Admin-specific logic **[✅ Completed]**
-  - **analytics_helpers.py**: Analytics-related utilities **[✅ Completed]**
-  - **image_helpers.py**: Image-related utilities **[✅ Completed]**
-  - **log_helpers.py**: Log-related utilities **[✅ Completed]**
-  - **multi_model_helpers.py**: Cross-model operations **[✅ Completed]**
-  - **security_helpers.py**: Security-related utilities **[✅ Completed]**
-  - **user_helpers.py**: User-related utilities **[✅ Completed]**
-- **migrations/**: Auto-managed folder for Alembic migrations **[↺ Managed]**
+  - **admin_helpers.py**: Admin-specific logic **[Completed]**
+  - **analytics_helpers.py**: Analytics-related utilities **[Completed]**
+  - **image_helpers.py**: Image-related utilities **[Completed]**
+  - **log_helpers.py**: Log-related utilities **[Completed]**
+  - **multi_model_helpers.py**: Cross-model operations **[Completed]**
+  - **security_helpers.py**: Security-related utilities **[Completed]**
+  - **user_helpers.py**: User-related utilities **[Completed]**
+  - **image_analysis_helpers.py**: Advanced image analysis queries.**[Pending]**
+- **migrations/**: Auto-managed folder for Alembic migrations **[Managed]**
 
 ---
 
-## Files and Their Purpose
-
-### **db_schema_creation.py**
-- **Purpose**: Creates the database schema by initializing all tables defined in `models.py`.
-- **Details**:
-  - Uses the Flask app context to call `db.create_all()`.
-  - Logs the creation process and lists all tables in the database for debugging.
-- **Status**: Complete and verified.
-
-### **db_setup.py**
-- **Purpose**: Configures and initializes the database connection for the Flask app.
-- **Details**:
-  - Uses `DevelopmentConfig` for the database URI during development.
-  - Ensures the SQLite database file is created and reports its path and size in logs.
-- **Status**: Complete and verified.
-
-### **seed_data.py**
-- **Purpose**: Seeds the database with initial data, such as users, images, and logs.
-- **Details**:
-  - Adds default admin and user accounts.
-  - Creates sample images with metadata.
-  - Logs user actions and security events.
-  - Populates analytics data with JSON-based structures.
-- **Status**: Complete and verified.
-
----
 ## Database Schema
 
 The database schema is defined in `models.py`. Below is a detailed description of each table, its columns, and relationships.
@@ -144,3 +120,4 @@ The database schema is defined in `models.py`. Below is a detailed description o
 | Column       | Type      | Attributes   | Description                                    |
 |--------------|-----------|--------------|------------------------------------------------|
 | `version_num`| String(32)| Primary Key  | Tracks the current state of database migrations.|
+
