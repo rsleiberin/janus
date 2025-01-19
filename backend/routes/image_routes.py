@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
 from backend.db import db
@@ -12,8 +12,10 @@ logger = CentralizedLogger("image_routes")
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
+
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @image_bp.route("/upload", methods=["POST"])
 @jwt_required()
@@ -50,14 +52,26 @@ def upload_image():
             db.session.commit()
 
             logger.log_to_console(
-                "INFO", "Image uploaded successfully.", user_id=user_id, filename=unique_filename
+                "INFO",
+                "Image uploaded successfully.",
+                user_id=user_id,
+                filename=unique_filename,
             )
-            return jsonify({"message": "Image uploaded successfully.", "image_id": new_image.id}), 201
+            return (
+                jsonify(
+                    {
+                        "message": "Image uploaded successfully.",
+                        "image_id": new_image.id,
+                    }
+                ),
+                201,
+            )
 
         return jsonify({"error": "Unsupported file type."}), 400
     except Exception as e:
         logger.log_to_console("ERROR", "Error during image upload.", error=str(e))
         return jsonify({"error": "An error occurred while uploading the image."}), 500
+
 
 @image_bp.route("/<int:image_id>", methods=["GET"])
 @jwt_required()
@@ -66,23 +80,33 @@ def get_image(image_id):
     Retrieve metadata for an image by its ID.
     """
     try:
-        current_user = get_jwt_identity()
-        # Optionally, you can enforce ownership here by comparing current_user["id"] == image.user_id
+        # Removed 'current_user = get_jwt_identity()' since it's unused
         image = db.session.get(Image, image_id)
         if not image:
             return jsonify({"error": "Image not found."}), 404
 
         file_path = construct_file_path(image.user_id, image.filename)
-        return jsonify({
-            "id": image.id,
-            "filename": image.filename,
-            "path": file_path,
-            "uploaded_by": image.user_id,
-            "uploaded_at": image.created_at
-        }), 200
+        return (
+            jsonify(
+                {
+                    "id": image.id,
+                    "filename": image.filename,
+                    "path": file_path,
+                    "uploaded_by": image.user_id,
+                    "uploaded_at": image.created_at.isoformat(),
+                }
+            ),
+            200,
+        )
     except Exception as e:
         logger.log_to_console("ERROR", "Error retrieving image metadata.", error=str(e))
-        return jsonify({"error": "An error occurred while retrieving the image metadata."}), 500
+        return (
+            jsonify(
+                {"error": "An error occurred while retrieving the image metadata."}
+            ),
+            500,
+        )
+
 
 @image_bp.route("/<int:image_id>", methods=["DELETE"])
 @jwt_required()
@@ -116,3 +140,10 @@ def delete_image(image_id):
     except Exception as e:
         logger.log_to_console("ERROR", "Error during image deletion.", error=str(e))
         return jsonify({"error": "An error occurred while deleting the image."}), 500
+
+
+# Future Expansion
+# System monitoring features, including CPU, memory, and disk usage metrics.
+# Evaluate psutil or alternative libraries before implementation.
+# These features will require dedicated helper functions and schema updates
+# if needed.

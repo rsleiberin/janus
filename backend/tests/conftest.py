@@ -1,7 +1,5 @@
 import pytest
 import logging
-from flask import Flask
-from sqlalchemy import create_engine
 from backend import create_app
 from backend.db import db  # SQLAlchemy instance
 
@@ -9,7 +7,7 @@ from backend.db import db  # SQLAlchemy instance
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler()]
+    handlers=[logging.StreamHandler()],
 )
 test_logger = logging.getLogger("test_logger")
 
@@ -54,7 +52,6 @@ def function_db_setup(app):
         test_logger.debug("[FUNCTION] Database cleaned up successfully.")
 
 
-
 @pytest.fixture(scope="function")
 def user_with_token(app, function_db_setup):
     """Creates a user and provides a valid JWT token for testing."""
@@ -63,16 +60,15 @@ def user_with_token(app, function_db_setup):
     from werkzeug.security import generate_password_hash
 
     with app.app_context():
-        # Create a user with a hashed password (removed role="user")
+        # Create a user with a hashed password
         hashed_password = generate_password_hash("testpassword123")
         user = User(
             username="testuser",
             email="testuser@example.com",
-            password_hash=hashed_password
+            password_hash=hashed_password,
         )
         db.session.add(user)
         db.session.commit()
 
         token = create_access_token(identity={"id": user.id, "email": user.email})
         return user, token
-

@@ -4,7 +4,7 @@ from backend.utils.error_handling.error_handling import (
     log_error,
     handle_general_error,
     handle_http_error,
-    error_context
+    error_context,
 )
 
 
@@ -15,14 +15,14 @@ def test_format_error_response():
         error_code="BAD_REQUEST",
         message="Invalid input",
         details="Field 'email' is required",
-        meta_data={"field": "email"}
+        meta_data={"field": "email"},
     )
     assert response == {
         "status": 400,
         "error_code": "BAD_REQUEST",
         "message": "Invalid input",
         "details": "Field 'email' is required",
-        "meta_data": {"field": "email"}
+        "meta_data": {"field": "email"},
     }
 
 
@@ -59,7 +59,7 @@ def test_handle_http_error():
         status=404,
         error_code="NOT_FOUND",
         message="Resource not found",
-        meta_data={"endpoint": "/api/resource"}
+        meta_data={"endpoint": "/api/resource"},
     )
     assert status == 404
     assert response["status"] == 404
@@ -73,5 +73,7 @@ def test_error_context(app):
     """Test the error_context manager."""
     with app.app_context():
         with pytest.raises(ValueError, match="This is a test error"):
-            with error_context(module="test_context", user_id=42, meta_data={"test": "data"}):
+            with error_context(
+                module="test_context", user_id=42, meta_data={"test": "data"}
+            ):
                 raise ValueError("This is a test error")

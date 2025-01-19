@@ -1,4 +1,3 @@
-import pytest
 from flask import json
 from backend.utils.logger import CentralizedLogger
 

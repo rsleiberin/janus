@@ -2,11 +2,11 @@
 
 import re
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.error_handling import error_context, log_error
+from backend.utils.error_handling.error_handling import error_context
 from backend.utils.error_handling.utils.errors import (
     AuthenticationError,
     AuthorizationError,
-    ValidationError
+    ValidationError,
 )
 
 logger = CentralizedLogger(name="security_logger")
@@ -17,7 +17,7 @@ def check_authentication(credentials):
     Verifies user credentials. Raises AuthenticationError if invalid.
 
     Args:
-        credentials (dict): A dictionary containing authentication info, 
+        credentials (dict): A dictionary containing authentication info,
                             e.g., {"username": "...", "password": "..."}
 
     Returns:
@@ -60,7 +60,9 @@ def check_authorization(user_role, required_role):
     with error_context(module="security", meta_data={"operation": "authorization"}):
         # Example logic: only 'admin' can access certain resources
         if user_role != required_role:
-            raise AuthorizationError(f"User role '{user_role}' does not meet requirement '{required_role}'.")
+            raise AuthorizationError(
+                f"User role '{user_role}' does not meet requirement '{required_role}'."
+            )
 
         logger.log_to_console("INFO", "User authorized successfully.")
         return True
@@ -83,7 +85,9 @@ def validate_input(input_data, pattern=r"^[a-zA-Z0-9_]+$"):
     """
     with error_context(module="security", meta_data={"operation": "validate_input"}):
         if not re.match(pattern, input_data or ""):
-            raise ValidationError(f"Input '{input_data}' does not match required pattern.")
+            raise ValidationError(
+                f"Input '{input_data}' does not match required pattern."
+            )
 
         logger.log_to_console("INFO", f"Input validation succeeded for: {input_data}")
         return True
@@ -103,5 +107,7 @@ def sanitize_input(input_string):
         # Very simplistic HTML tag remover
         sanitized = re.sub(r"<[^>]*>", "", input_string or "")
 
-        logger.log_to_console("DEBUG", f"Input sanitized from '{input_string}' to '{sanitized}'.")
+        logger.log_to_console(
+            "DEBUG", f"Input sanitized from '{input_string}' to '{sanitized}'."
+        )
         return sanitized

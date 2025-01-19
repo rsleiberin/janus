@@ -13,8 +13,11 @@ def test_create_admin():
     """
     admin_data = {"user_id": 1, "admin_level": "superadmin"}
 
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log, \
-         patch("backend.utils.logger.CentralizedLogger.log_to_db") as mock_db_log:
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log, patch(
+        "backend.utils.logger.CentralizedLogger.log_to_db"
+    ) as mock_db_log:
         # Create admin
         admin = AdminHelpers.create(admin_data)
 
@@ -25,15 +28,13 @@ def test_create_admin():
 
         # Verify logging
         mock_console_log.assert_called_with(
-            "INFO",
-            "Admin created successfully.",
-            admin_data=admin_data
+            "INFO", "Admin created successfully.", admin_data=admin_data
         )
         mock_db_log.assert_called_with(
             "INFO",
             "Admin created.",
             module="admin_helpers",
-            meta_data={"admin_data": admin_data}
+            meta_data={"admin_data": admin_data},
         )
 
 
@@ -46,7 +47,9 @@ def test_get_by_id():
     admin_data = {"user_id": 1, "admin_level": "superadmin"}
     admin = AdminHelpers.create(admin_data)
 
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log:
         fetched_admin = AdminHelpers.get_by_id(admin.id)
 
         # Verify admin retrieval
@@ -54,10 +57,7 @@ def test_get_by_id():
         assert fetched_admin.id == admin.id, "Admin ID mismatch."
 
         # Verify logging
-        mock_console_log.assert_any_call(
-            "INFO",
-            f"Fetched admin by ID: {admin.id}"
-        )
+        mock_console_log.assert_any_call("INFO", f"Fetched admin by ID: {admin.id}")
 
 
 @pytest.mark.usefixtures("function_db_setup")
@@ -69,8 +69,11 @@ def test_delete_admin():
     admin_data = {"user_id": 1, "admin_level": "superadmin"}
     admin = AdminHelpers.create(admin_data)
 
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log, \
-         patch("backend.utils.logger.CentralizedLogger.log_to_db") as mock_db_log:
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log, patch(
+        "backend.utils.logger.CentralizedLogger.log_to_db"
+    ) as mock_db_log:
         AdminHelpers.delete(admin.id)
 
         # Verify deletion
@@ -79,14 +82,13 @@ def test_delete_admin():
 
         # Verify logging
         mock_console_log.assert_called_with(
-            "INFO",
-            f"Admin {admin.id} deleted successfully."
+            "INFO", f"Admin {admin.id} deleted successfully."
         )
         mock_db_log.assert_called_with(
             "INFO",
             "Admin deleted.",
             module="admin_helpers",
-            meta_data={"admin_id": admin.id}
+            meta_data={"admin_id": admin.id},
         )
 
 
@@ -99,7 +101,9 @@ def test_exists_admin():
     admin_data = {"user_id": 1, "admin_level": "superadmin"}
     admin = AdminHelpers.create(admin_data)
 
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log:
         admin_exists = AdminHelpers.exists(admin.id)
 
         # Verify existence check
@@ -107,6 +111,5 @@ def test_exists_admin():
 
         # Verify logging includes the result
         mock_console_log.assert_called_with(
-            "INFO",
-            f"Admin existence check for ID {admin.id}: {admin_exists}"
+            "INFO", f"Admin existence check for ID {admin.id}: {admin_exists}"
         )

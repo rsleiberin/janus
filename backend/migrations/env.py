@@ -10,11 +10,13 @@ config = context.config
 fileConfig(config.config_file_name)
 logger = logging.getLogger("alembic.env")
 
+
 def get_engine():
     try:
         return current_app.extensions["migrate"].db.get_engine()
     except (TypeError, AttributeError, KeyError):
         return current_app.extensions["migrate"].db.engine
+
 
 def get_engine_url():
     try:
@@ -22,8 +24,10 @@ def get_engine_url():
     except AttributeError:
         return str(get_engine().url).replace("%", "%%")
 
+
 config.set_main_option("sqlalchemy.url", get_engine_url())
 target_metadata = current_app.extensions["migrate"].db.metadata
+
 
 def run_migrations_offline():
     url = config.get_main_option("sqlalchemy.url")
@@ -36,6 +40,7 @@ def run_migrations_offline():
     with context.begin_transaction():
         context.run_migrations()
 
+
 def run_migrations_online():
     connectable = get_engine()
 
@@ -43,13 +48,14 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            process_revision_directives=current_app.extensions["migrate"].configure_args.get(
-                "process_revision_directives"
-            ),
+            process_revision_directives=current_app.extensions[
+                "migrate"
+            ].configure_args.get("process_revision_directives"),
         )
 
         with context.begin_transaction():
             context.run_migrations()
+
 
 if context.is_offline_mode():
     run_migrations_offline()

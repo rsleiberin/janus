@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import patch
 
+
 @pytest.mark.usefixtures("client")
 def test_files_endpoint(client, mocker):
     with patch("os.walk") as mock_os_walk:
@@ -14,9 +15,15 @@ def test_files_endpoint(client, mocker):
         data = response.get_json()
 
         assert response.status_code == 200
-        assert data["files"] == ["/home/tank/janus/file1.txt", "/home/tank/janus/file2.txt"]
+        assert data["files"] == [
+            "/home/tank/janus/file1.txt",
+            "/home/tank/janus/file2.txt",
+        ]
 
-        mock_logger.assert_called_once_with("INFO", "Listed all files in the directory.")
+        mock_logger.assert_called_once_with(
+            "INFO", "Listed all files in the directory."
+        )
+
 
 @pytest.mark.usefixtures("client")
 @patch("os.path.abspath")
@@ -36,6 +43,7 @@ def test_files_content_endpoint_invalid_path(mock_abspath, client, mocker):
         "ERROR", "File access error", exc_info=mocker.ANY
     )
 
+
 @pytest.mark.usefixtures("client")
 @patch("builtins.open", side_effect=FileNotFoundError)
 def test_files_content_endpoint_nonexistent_file(mock_open_func, client, mocker):
@@ -50,7 +58,10 @@ def test_files_content_endpoint_nonexistent_file(mock_open_func, client, mocker)
     assert data["error_code"] == "FILE_NOT_FOUND"
 
     # Update the expected log message
-    mock_logger.assert_called_once_with("WARNING", f"The requested file was not found: {nonexistent_file_path}")
+    mock_logger.assert_called_once_with(
+        "WARNING", f"The requested file was not found: {nonexistent_file_path}"
+    )
+
 
 @pytest.mark.usefixtures("client")
 @patch("builtins.open", side_effect=Exception("Mock unexpected error"))

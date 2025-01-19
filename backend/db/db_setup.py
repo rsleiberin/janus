@@ -7,6 +7,7 @@ from backend.utils.error_handling.db.errors import DatabaseConnectionError
 
 logger = CentralizedLogger()
 
+
 def create_app():
     """Factory function to create and configure the Flask application."""
     app = Flask(__name__)
@@ -14,10 +15,9 @@ def create_app():
     # Apply configuration
     config = DevelopmentConfig()  # Explicitly instantiate the config class
     app.config.from_object(config)
-    app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
+    app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
     logger.log_to_console(
-        "DEBUG",
-        f"Using database URI: {app.config['SQLALCHEMY_DATABASE_URI']}"
+        "DEBUG", f"Using database URI: {app.config['SQLALCHEMY_DATABASE_URI']}"
     )
 
     # Initialize the database
@@ -28,6 +28,7 @@ def create_app():
 
     return app
 
+
 if __name__ == "__main__":
     app = create_app()
 
@@ -37,13 +38,9 @@ if __name__ == "__main__":
     )
     if os.path.exists(db_path):
         logger.log_to_console(
-            "DEBUG",
-            f"Database file created successfully at {db_path}"
+            "DEBUG", f"Database file created successfully at {db_path}"
         )
-        logger.log_to_console(
-            "DEBUG",
-            f"File size: {os.path.getsize(db_path)} bytes"
-        )
+        logger.log_to_console("DEBUG", f"File size: {os.path.getsize(db_path)} bytes")
     else:
         error_message = "ERROR: Database file not created!"
         logger.log_to_console("ERROR", error_message)
@@ -51,5 +48,5 @@ if __name__ == "__main__":
             level="ERROR",
             message=error_message,
             module="db_setup",
-            meta_data={"db_path": db_path}
+            meta_data={"db_path": db_path},
         )

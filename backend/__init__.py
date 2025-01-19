@@ -2,19 +2,20 @@ import os
 from flask import Flask
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
-from flask_jwt_extended.exceptions import NoAuthorizationError, InvalidHeaderError
-from werkzeug.exceptions import UnprocessableEntity
 from backend.db import db
 from backend.config import DevelopmentConfig  # Change to ProductionConfig as needed
-from backend.models import *  # Import all models
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.error_handling import format_error_response, handle_general_error
+from backend.utils.error_handling.error_handling import (
+    format_error_response,
+    handle_general_error,
+)
 
 # Initialize logger for this module
 logger = CentralizedLogger("backend_init")
 
 # Initialize Flask-Migrate
 migrate = Migrate(directory=os.path.join(os.path.dirname(__file__), "migrations"))
+
 
 def create_app():
     """Factory function to create and configure the Flask application."""
@@ -30,21 +31,29 @@ def create_app():
     logger.log_to_console("DEBUG", "Resolved database path", path=db_path)
 
     # Apply configuration
-    app.config.from_object(DevelopmentConfig)  # Use DevelopmentConfig for local development
+    app.config.from_object(
+        DevelopmentConfig
+    )  # Use DevelopmentConfig for local development
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["JWT_SECRET_KEY"] = "your_test_secret_key"  # Add a secure JWT secret key
 
-    logger.log_to_console("DEBUG", "Database URI set", uri=app.config["SQLALCHEMY_DATABASE_URI"])
+    logger.log_to_console(
+        "DEBUG", "Database URI set", uri=app.config["SQLALCHEMY_DATABASE_URI"]
+    )
 
     # Initialize the database
     try:
         logger.log_to_console("INFO", "Initializing the database...")
         db.init_app(app)
         migrate.init_app(app, db)
-        logger.log_to_console("INFO", "db.init_app() and migrate.init_app() completed successfully.")
+        logger.log_to_console(
+            "INFO", "db.init_app() and migrate.init_app() completed successfully."
+        )
     except Exception as e:
-        logger.log_to_console("ERROR", "Error during database initialization", error=str(e))
+        logger.log_to_console(
+            "ERROR", "Error during database initialization", error=str(e)
+        )
         raise
 
     # Initialize JWTManager
@@ -58,21 +67,27 @@ def create_app():
     # Register JWT error handlers
     @jwt.unauthorized_loader
     def handle_no_authorization_error(e):
-        return format_error_response(
-            status=401,
-            error_code="AUTHENTICATION_FAILED",
-            message="Authentication failed. Please log in.",
-            details=e,
-        ), 401
+        return (
+            format_error_response(
+                status=401,
+                error_code="AUTHENTICATION_FAILED",
+                message="Authentication failed. Please log in.",
+                details=e,
+            ),
+            401,
+        )
 
     @jwt.invalid_token_loader
     def handle_invalid_token_error(e):
-        return format_error_response(
-            status=401,
-            error_code="INVALID_TOKEN",
-            message="Token is invalid or expired.",
-            details=e,
-        ), 401
+        return (
+            format_error_response(
+                status=401,
+                error_code="INVALID_TOKEN",
+                message="Token is invalid or expired.",
+                details=e,
+            ),
+            401,
+        )
 
     # Register a global error handler for unhandled exceptions
     @app.errorhandler(Exception)
@@ -87,11 +102,15 @@ def create_app():
         from backend.routes.authentication_routes import auth_bp
         from backend.routes.user_routes import user_bp
         from backend.routes.admin_routes import admin_bp
-        from backend.routes.error_and_health_monitoring_routes import error_and_health_bp
+        from backend.routes.error_and_health_monitoring_routes import (
+            error_and_health_bp,
+        )
         from backend.routes.analytics_routes import analytics_bp
         from backend.routes.security_routes import security_bp
         from backend.routes.log_routes import log_bp
-        from backend.routes.image_routes import image_bp  # Corrected blueprint name to `image_bp`
+        from backend.routes.image_routes import (
+            image_bp,
+        )  # Corrected blueprint name to `image_bp`
 
         logger.log_to_console("INFO", "Blueprints imported successfully.")
     except ImportError as e:

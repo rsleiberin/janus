@@ -34,11 +34,18 @@ def login():
         if not user or not check_password_hash(user.password_hash, data["password"]):
             raise AuthenticationError("Invalid email or password.")
 
-        access_token = create_access_token(identity={"id": user.id, "email": user.email})
-        refresh_token = create_refresh_token(identity={"id": user.id, "email": user.email})
+        access_token = create_access_token(
+            identity={"id": user.id, "email": user.email}
+        )
+        refresh_token = create_refresh_token(
+            identity={"id": user.id, "email": user.email}
+        )
 
         logger.log_to_console("INFO", f"User {user.email} logged in successfully.")
-        return jsonify({"access_token": access_token, "refresh_token": refresh_token}), 200
+        return (
+            jsonify({"access_token": access_token, "refresh_token": refresh_token}),
+            200,
+        )
     except Exception as e:
         logger.log_to_console("ERROR", "Error during login.", details=str(e))
         return handle_route_error(e)
@@ -68,7 +75,9 @@ def refresh_token():
     try:
         current_user = get_jwt_identity()
         new_access_token = create_access_token(identity=current_user)
-        logger.log_to_console("INFO", f"Token refreshed for user {current_user['email']}.")
+        logger.log_to_console(
+            "INFO", f"Token refreshed for user {current_user['email']}."
+        )
         return jsonify({"access_token": new_access_token}), 200
     except Exception as e:
         logger.log_to_console("ERROR", "Error refreshing token.", details=str(e))
@@ -85,7 +94,9 @@ def reset_password():
         if not data or "email" not in data:
             raise AuthenticationError("Email is required.")
 
-        logger.log_to_console("INFO", f"Password reset requested for email: {data['email']}.")
+        logger.log_to_console(
+            "INFO", f"Password reset requested for email: {data['email']}."
+        )
         # Note: Add actual email sending logic here
         return jsonify({"message": "Password reset email sent."}), 200
     except Exception as e:
@@ -107,7 +118,9 @@ def change_password():
             raise AuthenticationError("Old and new passwords are required.")
 
         user = User.query.get(current_user["id"])
-        if not user or not check_password_hash(user.password_hash, data["old_password"]):
+        if not user or not check_password_hash(
+            user.password_hash, data["old_password"]
+        ):
             raise UnauthorizedError("Old password is incorrect.")
 
         if len(data["new_password"]) < 8:
@@ -116,7 +129,9 @@ def change_password():
         user.password_hash = generate_password_hash(data["new_password"])
         db.session.commit()
 
-        logger.log_to_console("INFO", f"Password changed successfully for user {current_user['email']}.")
+        logger.log_to_console(
+            "INFO", f"Password changed successfully for user {current_user['email']}."
+        )
         return jsonify({"message": "Password changed successfully."}), 200
     except Exception as e:
         logger.log_to_console("ERROR", "Error changing password.", details=str(e))
@@ -133,5 +148,7 @@ def protected():
         current_user = get_jwt_identity()
         return jsonify({"message": f"Welcome {current_user['email']}!"}), 200
     except Exception as e:
-        logger.log_to_console("ERROR", "Error accessing protected route.", details=str(e))
+        logger.log_to_console(
+            "ERROR", "Error accessing protected route.", details=str(e)
+        )
         return handle_route_error(e)

@@ -7,17 +7,22 @@ from backend.utils.error_handling.utils.errors import FileHandlerError
 logger = CentralizedLogger(name="file_handler_logger")
 UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", "backend/uploads")
 
+
 def construct_file_path(user_id, filename):
     base_folder = UPLOAD_FOLDER
     user_folder = os.path.join(base_folder, f"user_{user_id}")
     return os.path.join(user_folder, filename)
 
+
 def is_valid_filename(filename):
     return not re.search(r"(\.\.|\/)", filename)
 
+
 def read_file(user_id, filename):
     file_path = construct_file_path(user_id, filename)
-    with error_context(module="file_handler", meta_data={"operation": "read", "file_path": file_path}):
+    with error_context(
+        module="file_handler", meta_data={"operation": "read", "file_path": file_path}
+    ):
         if not os.path.exists(file_path):
             raise FileHandlerError(f"File does not exist: {file_path}")
         try:
@@ -29,6 +34,7 @@ def read_file(user_id, filename):
             log_error(e, module="file_handler", meta_data={"file_path": file_path})
             raise FileHandlerError(f"Failed to read file: {file_path}") from e
 
+
 def write_file(user_id, filename, content, mode="wb"):
     if not is_valid_filename(filename):
         raise FileHandlerError(f"Invalid filename: {filename}")
@@ -36,7 +42,9 @@ def write_file(user_id, filename, content, mode="wb"):
     file_path = construct_file_path(user_id, filename)
     user_directory = os.path.dirname(file_path)
 
-    with error_context(module="file_handler", meta_data={"operation": "write", "file_path": file_path}):
+    with error_context(
+        module="file_handler", meta_data={"operation": "write", "file_path": file_path}
+    ):
         if not os.path.exists(user_directory):
             os.makedirs(user_directory)
         try:
@@ -47,11 +55,16 @@ def write_file(user_id, filename, content, mode="wb"):
             log_error(e, module="file_handler", meta_data={"file_path": file_path})
             raise FileHandlerError(f"Failed to write file: {file_path}") from e
 
+
 def delete_file(user_id, filename):
     file_path = construct_file_path(user_id, filename)
-    with error_context(module="file_handler", meta_data={"operation": "delete", "file_path": file_path}):
+    with error_context(
+        module="file_handler", meta_data={"operation": "delete", "file_path": file_path}
+    ):
         if not os.path.exists(file_path):
-            logger.log_to_console("WARNING", f"File does not exist for deletion: {file_path}")
+            logger.log_to_console(
+                "WARNING", f"File does not exist for deletion: {file_path}"
+            )
             return
         try:
             os.remove(file_path)

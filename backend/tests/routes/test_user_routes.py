@@ -12,14 +12,11 @@ def access_token(app):
 
 
 def test_get_user_profile_success(client, mocker, access_token, function_db_setup):
-    mock_logger = mocker.patch("backend.routes.user_routes.logger.log_to_console")
-
-    # Remove "role"
     user = User(
         id=1,
         username="testuser",
         email="testuser@example.com",
-        password_hash=generate_password_hash("securepassword123")
+        password_hash=generate_password_hash("securepassword123"),
     )
     db.session.add(user)
     db.session.commit()
@@ -31,8 +28,6 @@ def test_get_user_profile_success(client, mocker, access_token, function_db_setu
 
 
 def test_get_user_profile_not_found(client, mocker, access_token, function_db_setup):
-    mock_logger = mocker.patch("backend.routes.user_routes.logger.log_to_console")
-
     headers = {"Authorization": f"Bearer {access_token}"}
     response = client.get("/user/profile", headers=headers)
     assert response.status_code == 404
@@ -40,14 +35,11 @@ def test_get_user_profile_not_found(client, mocker, access_token, function_db_se
 
 
 def test_update_user_profile_success(client, mocker, access_token, function_db_setup):
-    mock_logger = mocker.patch("backend.routes.user_routes.logger.log_to_console")
-
-    # Remove "role"
     user = User(
         id=1,
         username="testuser",
         email="testuser@example.com",
-        password_hash=generate_password_hash("securepassword123")
+        password_hash=generate_password_hash("securepassword123"),
     )
     db.session.add(user)
     db.session.commit()
@@ -62,15 +54,14 @@ def test_update_user_profile_success(client, mocker, access_token, function_db_s
     assert updated_user.username == "updateduser"
 
 
-def test_update_user_profile_invalid_data(client, mocker, access_token, function_db_setup):
-    mock_logger = mocker.patch("backend.routes.user_routes.logger.log_to_console")
-
-    # Remove "role"
+def test_update_user_profile_invalid_data(
+    client, access_token, function_db_setup
+):
     user = User(
         id=1,
         username="testuser",
         email="testuser@example.com",
-        password_hash=generate_password_hash("securepassword123")
+        password_hash=generate_password_hash("securepassword123"),
     )
     db.session.add(user)
     db.session.commit()

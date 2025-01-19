@@ -6,6 +6,7 @@ from backend.utils.error_handling.db.errors import SchemaCreationError
 
 logger = CentralizedLogger()
 
+
 def create_schema():
     """Function to create the database schema."""
     app = create_app()
@@ -18,7 +19,7 @@ def create_schema():
             logger.log_to_db(
                 level="INFO",
                 message="Database schema created successfully",
-                module="db_schema_creation"
+                module="db_schema_creation",
             )
 
             # Optional: Inspect tables for debugging
@@ -29,10 +30,11 @@ def create_schema():
                 level="DEBUG",
                 message="Tables inspected in the database",
                 module="db_schema_creation",
-                meta_data={"tables": tables}
+                meta_data={"tables": tables},
             )
         except Exception as error:
             raise SchemaCreationError("Error while creating the schema.") from error
+
 
 if __name__ == "__main__":
     create_schema()

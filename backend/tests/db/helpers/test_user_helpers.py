@@ -14,7 +14,7 @@ def test_create_user():
     user_data = {
         "username": "testuser",
         "email": "test@example.com",
-        "password_hash": "somehash"
+        "password_hash": "somehash",
         # Removed "role"
     }
     new_user = UserHelpers.create(user_data)
@@ -29,7 +29,7 @@ def test_get_by_id():
     user_data = {
         "username": "getbyid_user",
         "email": "getbyid@example.com",
-        "password_hash": "hash123"
+        "password_hash": "hash123",
         # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
@@ -53,7 +53,7 @@ def test_get_by_email():
     user_data = {
         "username": "email_user",
         "email": "emailtest@example.com",
-        "password_hash": "abc123"
+        "password_hash": "abc123",
         # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
@@ -76,14 +76,11 @@ def test_update_user():
     user_data = {
         "username": "updateuser",
         "email": "update@example.com",
-        "password_hash": "oldhash"
+        "password_hash": "oldhash",
         # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
-    updated_data = {
-        "username": "updateduser",
-        "password_hash": "newhash"
-    }
+    updated_data = {"username": "updateduser", "password_hash": "newhash"}
 
     updated_user = UserHelpers.update(created_user.id, updated_data)
     assert updated_user.username == "updateduser", "Username not updated correctly."
@@ -97,7 +94,7 @@ def test_delete_user():
     user_data = {
         "username": "deleteuser",
         "email": "delete@example.com",
-        "password_hash": "deletehash"
+        "password_hash": "deletehash",
         # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
@@ -117,13 +114,13 @@ def test_count_users():
     user_data_1 = {
         "username": "countuser1",
         "email": "count1@example.com",
-        "password_hash": "hash1"
+        "password_hash": "hash1",
         # Removed "role"
     }
     user_data_2 = {
         "username": "countuser2",
         "email": "count2@example.com",
-        "password_hash": "hash2"
+        "password_hash": "hash2",
         # Removed "role"
     }
     UserHelpers.create(user_data_1)
@@ -140,7 +137,7 @@ def test_exists_user():
     user_data = {
         "username": "existsuser",
         "email": "exists@example.com",
-        "password_hash": "exists_hash"
+        "password_hash": "exists_hash",
         # Removed "role"
     }
     new_user = UserHelpers.create(user_data)
@@ -156,6 +153,8 @@ def test_user_query_error():
     # Simulate a query error by deliberately causing an invalid SQLAlchemy query
     with pytest.raises(UserQueryError):
         try:
-            db.session.query(User).filter_by(nonexistent_field="value").all()  # Invalid attribute
+            db.session.query(User).filter_by(
+                nonexistent_field="value"
+            ).all()  # Invalid attribute
         except Exception as e:
             raise UserQueryError("Simulated query error.") from e

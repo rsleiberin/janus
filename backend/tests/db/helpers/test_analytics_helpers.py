@@ -11,9 +11,14 @@ def test_create_analytics():
     Tests the creation of an Analytics record using AnalyticsHelpers.create_analytics.
     """
     sample_data = {"field": "value", "nested": {"key": 123}}
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log, \
-         patch("backend.utils.logger.CentralizedLogger.log_to_db") as mock_db_log:
-        analytics = AnalyticsHelpers.create_analytics(session=db.session, data=sample_data)
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log, patch(
+        "backend.utils.logger.CentralizedLogger.log_to_db"
+    ) as mock_db_log:
+        analytics = AnalyticsHelpers.create_analytics(
+            session=db.session, data=sample_data
+        )
 
         # Verify creation
         assert analytics.id is not None, "Analytics entry was not assigned an ID."
@@ -21,15 +26,13 @@ def test_create_analytics():
 
         # Verify logging
         mock_console_log.assert_called_with(
-            "INFO",
-            "Analytics entry created",
-            data=sample_data
+            "INFO", "Analytics entry created", data=sample_data
         )
         mock_db_log.assert_called_with(
             level="INFO",
             message="Analytics entry created",
             module="analytics_helpers",
-            meta_data={"data": sample_data}
+            meta_data={"data": sample_data},
         )
 
 
@@ -41,25 +44,32 @@ def test_get_by_id():
     sample_data = {"test": "get_by_id"}
     analytics = AnalyticsHelpers.create_analytics(session=db.session, data=sample_data)
 
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log, \
-         patch("backend.utils.logger.CentralizedLogger.log_to_db") as mock_db_log:
-        fetched_analytics = AnalyticsHelpers.get_by_id(session=db.session, analytics_id=analytics.id)
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log, patch(
+        "backend.utils.logger.CentralizedLogger.log_to_db"
+    ) as mock_db_log:
+        fetched_analytics = AnalyticsHelpers.get_by_id(
+            session=db.session, analytics_id=analytics.id
+        )
 
         # Verify retrieval
-        assert fetched_analytics is not None, "Fetched analytics is None, expected a valid record."
-        assert fetched_analytics.id == analytics.id, "Fetched ID does not match created analytics."
+        assert (
+            fetched_analytics is not None
+        ), "Fetched analytics is None, expected a valid record."
+        assert (
+            fetched_analytics.id == analytics.id
+        ), "Fetched ID does not match created analytics."
 
         # Verify logging
         mock_console_log.assert_called_with(
-            "INFO",
-            f"Retrieved analytics entry by ID: {analytics.id}",
-            found=True
+            "INFO", f"Retrieved analytics entry by ID: {analytics.id}", found=True
         )
         mock_db_log.assert_called_with(
             level="INFO",
             message=f"Retrieved analytics entry by ID: {analytics.id}",
             module="analytics_helpers",
-            meta_data={"analytics_id": analytics.id, "found": True}
+            meta_data={"analytics_id": analytics.id, "found": True},
         )
 
 
@@ -73,24 +83,27 @@ def test_get_all_analytics():
     AnalyticsHelpers.create_analytics(session=db.session, data=sample_data_1)
     AnalyticsHelpers.create_analytics(session=db.session, data=sample_data_2)
 
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log, \
-         patch("backend.utils.logger.CentralizedLogger.log_to_db") as mock_db_log:
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log, patch(
+        "backend.utils.logger.CentralizedLogger.log_to_db"
+    ) as mock_db_log:
         all_analytics = AnalyticsHelpers.get_all_analytics(session=db.session)
 
         # Verify retrieval
-        assert len(all_analytics) == 2, f"Expected 2 analytics entries, found {len(all_analytics)}."
+        assert (
+            len(all_analytics) == 2
+        ), f"Expected 2 analytics entries, found {len(all_analytics)}."
 
         # Verify logging
         mock_console_log.assert_called_with(
-            "INFO",
-            "Retrieved all analytics entries",
-            count=2
+            "INFO", "Retrieved all analytics entries", count=2
         )
         mock_db_log.assert_called_with(
             level="INFO",
             message="Retrieved all analytics entries",
             module="analytics_helpers",
-            meta_data={"count": 2}
+            meta_data={"count": 2},
         )
 
 
@@ -102,24 +115,29 @@ def test_get_recent_analytics():
     for i in range(5):
         AnalyticsHelpers.create_analytics(session=db.session, data={"index": i})
 
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log, \
-         patch("backend.utils.logger.CentralizedLogger.log_to_db") as mock_db_log:
-        recent_entries = AnalyticsHelpers.get_recent_analytics(session=db.session, limit=3)
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log, patch(
+        "backend.utils.logger.CentralizedLogger.log_to_db"
+    ) as mock_db_log:
+        recent_entries = AnalyticsHelpers.get_recent_analytics(
+            session=db.session, limit=3
+        )
 
         # Verify retrieval
-        assert len(recent_entries) == 3, f"Expected 3 most recent entries, found {len(recent_entries)}."
+        assert (
+            len(recent_entries) == 3
+        ), f"Expected 3 most recent entries, found {len(recent_entries)}."
 
         # Verify logging
         mock_console_log.assert_called_with(
-            "INFO",
-            "Retrieved recent analytics entries (limit 3)",
-            count=3
+            "INFO", "Retrieved recent analytics entries (limit 3)", count=3
         )
         mock_db_log.assert_called_with(
             level="INFO",
             message="Retrieved recent analytics entries (limit 3)",
             module="analytics_helpers",
-            meta_data={"limit": 3, "count": 3}
+            meta_data={"limit": 3, "count": 3},
         )
 
 
@@ -131,18 +149,23 @@ def test_delete_analytics():
     sample_data = {"delete": True}
     analytics = AnalyticsHelpers.create_analytics(session=db.session, data=sample_data)
 
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log, \
-         patch("backend.utils.logger.CentralizedLogger.log_to_db") as mock_db_log:
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log, patch(
+        "backend.utils.logger.CentralizedLogger.log_to_db"
+    ) as mock_db_log:
         AnalyticsHelpers.delete_analytics(session=db.session, analytics_id=analytics.id)
 
         # Verify deletion by asserting that get_by_id raises AnalyticsNotFoundError
-        with pytest.raises(AnalyticsNotFoundError, match=f"Analytics entry with ID {analytics.id} not found."):
+        with pytest.raises(
+            AnalyticsNotFoundError,
+            match=f"Analytics entry with ID {analytics.id} not found.",
+        ):
             AnalyticsHelpers.get_by_id(session=db.session, analytics_id=analytics.id)
 
         # Verify logging for console
         mock_console_log.assert_any_call(
-            "INFO",
-            f"Deleted analytics entry with ID: {analytics.id}"
+            "INFO", f"Deleted analytics entry with ID: {analytics.id}"
         )
 
         # Verify logging for database
@@ -150,8 +173,9 @@ def test_delete_analytics():
             level="INFO",
             message=f"Deleted analytics entry with ID: {analytics.id}",
             module="analytics_helpers",
-            meta_data={"analytics_id": analytics.id}
+            meta_data={"analytics_id": analytics.id},
         )
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_count_analytics():
@@ -163,8 +187,11 @@ def test_count_analytics():
     AnalyticsHelpers.create_analytics(session=db.session, data=data1)
     AnalyticsHelpers.create_analytics(session=db.session, data=data2)
 
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log, \
-         patch("backend.utils.logger.CentralizedLogger.log_to_db") as mock_db_log:
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log, patch(
+        "backend.utils.logger.CentralizedLogger.log_to_db"
+    ) as mock_db_log:
         count = AnalyticsHelpers.count(session=db.session)
 
         # Verify count
@@ -172,15 +199,13 @@ def test_count_analytics():
 
         # Verify logging
         mock_console_log.assert_called_with(
-            "INFO",
-            "Total analytics entries count retrieved",
-            count=2
+            "INFO", "Total analytics entries count retrieved", count=2
         )
         mock_db_log.assert_called_with(
             level="INFO",
             message="Total analytics entries count retrieved",
             module="analytics_helpers",
-            meta_data={"count": 2}
+            meta_data={"count": 2},
         )
 
 
@@ -192,8 +217,11 @@ def test_exists_analytics():
     sample_data = {"exists_check": True}
     analytics = AnalyticsHelpers.create_analytics(session=db.session, data=sample_data)
 
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log, \
-         patch("backend.utils.logger.CentralizedLogger.log_to_db") as mock_db_log:
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log, patch(
+        "backend.utils.logger.CentralizedLogger.log_to_db"
+    ) as mock_db_log:
         exists = AnalyticsHelpers.exists(session=db.session, analytics_id=analytics.id)
 
         # Verify existence check
@@ -203,11 +231,11 @@ def test_exists_analytics():
         mock_console_log.assert_called_with(
             "INFO",
             f"Analytics entry existence check for ID: {analytics.id}",
-            exists=True
+            exists=True,
         )
         mock_db_log.assert_called_with(
             level="INFO",
             message=f"Analytics entry existence check for ID: {analytics.id}",
             module="analytics_helpers",
-            meta_data={"analytics_id": analytics.id, "exists": True}
+            meta_data={"analytics_id": analytics.id, "exists": True},
         )

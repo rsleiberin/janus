@@ -8,6 +8,7 @@ from backend.utils.error_handling.db.errors import SchemaCreationError
 # Set up logger for tests
 logger = CentralizedLogger("test_logger", log_level="DEBUG")
 
+
 @pytest.mark.usefixtures("function_db_setup")
 def test_create_schema():
     """
@@ -27,5 +28,7 @@ def test_create_schema():
 
         logger.log_to_console("DEBUG", "test_create_schema passed successfully.")
     except SchemaCreationError as e:
-        logger.log_to_console("ERROR", "SchemaCreationError caught in test", details=str(e))
+        logger.log_to_console(
+            "ERROR", "SchemaCreationError caught in test", details=str(e)
+        )
         pytest.fail(f"SchemaCreationError: {str(e)}")

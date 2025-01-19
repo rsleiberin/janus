@@ -5,13 +5,14 @@ from backend.utils.security import (
     check_authentication,
     check_authorization,
     validate_input,
-    sanitize_input
+    sanitize_input,
 )
 from backend.utils.error_handling.utils.errors import (
     AuthenticationError,
     AuthorizationError,
-    ValidationError
+    ValidationError,
 )
+
 
 @pytest.mark.usefixtures("function_db_setup")
 class TestSecurity:
@@ -53,7 +54,9 @@ class TestSecurity:
         """
         with pytest.raises(AuthorizationError) as exc_info:
             check_authorization("user", "admin")
-        assert "User role 'user' does not meet requirement 'admin'." in str(exc_info.value)
+        assert "User role 'user' does not meet requirement 'admin'." in str(
+            exc_info.value
+        )
 
     def test_validate_input_success(self):
         """

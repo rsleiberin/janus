@@ -40,7 +40,9 @@ def read_file(user_id, filename):
     Reads the contents of a file in text mode (UTF-8).
     """
     file_path = construct_file_path(user_id, filename)
-    with error_context(module="file_handler", meta_data={"operation": "read", "file_path": file_path}):
+    with error_context(
+        module="file_handler", meta_data={"operation": "read", "file_path": file_path}
+    ):
         if not os.path.exists(file_path):
             raise FileHandlerError(f"File does not exist: {file_path}")
         try:
@@ -56,12 +58,12 @@ def read_file(user_id, filename):
 def write_file(user_id, filename, content, mode="w"):
     """
     Writes content to a file. If mode is binary (e.g. "wb"), omit encoding.
-    
+
     Args:
         user_id (str): The ID of the user.
         filename (str): The name of the file.
         content (str/bytes): The data to write.
-        mode (str, optional): File open mode, defaults to "w" (text). 
+        mode (str, optional): File open mode, defaults to "w" (text).
                               Use "wb" for binary data (e.g. images).
     """
     if not is_valid_filename(filename):
@@ -70,7 +72,9 @@ def write_file(user_id, filename, content, mode="w"):
     file_path = construct_file_path(user_id, filename)
     user_directory = os.path.dirname(file_path)
 
-    with error_context(module="file_handler", meta_data={"operation": "write", "file_path": file_path}):
+    with error_context(
+        module="file_handler", meta_data={"operation": "write", "file_path": file_path}
+    ):
         if not os.path.exists(user_directory):
             os.makedirs(user_directory)  # Ensure the user's directory exists
         try:
@@ -93,9 +97,13 @@ def delete_file(user_id, filename):
     Deletes a file if it exists.
     """
     file_path = construct_file_path(user_id, filename)
-    with error_context(module="file_handler", meta_data={"operation": "delete", "file_path": file_path}):
+    with error_context(
+        module="file_handler", meta_data={"operation": "delete", "file_path": file_path}
+    ):
         if not os.path.exists(file_path):
-            logger.log_to_console("WARNING", f"File does not exist for deletion: {file_path}")
+            logger.log_to_console(
+                "WARNING", f"File does not exist for deletion: {file_path}"
+            )
             return
         try:
             os.remove(file_path)

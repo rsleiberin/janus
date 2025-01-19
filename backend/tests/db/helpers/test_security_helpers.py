@@ -46,7 +46,9 @@ def test_get_security_by_id():
     assert fetched_security.id == security_entry.id, "Mismatch security entry ID."
 
     # Test failure for non-existent ID
-    with pytest.raises(SecurityEntryNotFoundError, match="Security entry with ID 9999 not found."):
+    with pytest.raises(
+        SecurityEntryNotFoundError, match="Security entry with ID 9999 not found."
+    ):
         SecurityHelpers.get_security_by_id(9999)
 
     logger.log_to_console("DEBUG", "test_get_security_by_id passed successfully.")
@@ -86,7 +88,10 @@ def test_get_recent_security_entries():
     with pytest.raises(SecurityQueryError, match="Limit must be a positive integer."):
         SecurityHelpers.get_recent_security_entries(limit=None)
 
-    logger.log_to_console("DEBUG", "test_get_recent_security_entries passed successfully.")
+    logger.log_to_console(
+        "DEBUG", "test_get_recent_security_entries passed successfully."
+    )
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_delete_security_entry():

@@ -1,18 +1,15 @@
-import pytest
 from flask import json
 from backend.utils.logger import CentralizedLogger
 
 # Initialize a logger for the test
 logger = CentralizedLogger("test_analytics_routes")
 
+
 def test_create_analytics_entry(client, function_db_setup):
     """Test creating a new analytics entry."""
     logger.log_to_console("INFO", "Testing create analytics entry endpoint...")
 
-    payload = {
-        "data": {"key": "value"},
-        "research_topic": "Test Topic"
-    }
+    payload = {"data": {"key": "value"}, "research_topic": "Test Topic"}
 
     response = client.post("/analytics", json=payload)
     assert response.status_code == 201
@@ -31,7 +28,7 @@ def test_fetch_all_analytics(client, function_db_setup):
     # Create sample data
     sample_payload = [
         {"data": {"key1": "value1"}, "research_topic": "Topic 1"},
-        {"data": {"key2": "value2"}, "research_topic": "Topic 2"}
+        {"data": {"key2": "value2"}, "research_topic": "Topic 2"},
     ]
     for payload in sample_payload:
         client.post("/analytics", json=payload)

@@ -1,9 +1,12 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.error_handling import handle_general_error, log_error, format_error_response
+from backend.utils.error_handling.error_handling import (
+    handle_general_error,
+    log_error,
+    format_error_response,
+)
 from backend.utils.error_handling.routes.errors import LogRetrievalError
-from backend.db import db
 
 # Initialize logger for log routes
 logger = CentralizedLogger("log_routes")
@@ -18,14 +21,18 @@ def get_logs():
     """Retrieve logs."""
     try:
         user_identity = get_jwt_identity()
-        logger.log_to_console("INFO", f"Log retrieval initiated by user: {user_identity}")
+        logger.log_to_console(
+            "INFO", f"Log retrieval initiated by user: {user_identity}"
+        )
 
         # Example: Simulated log retrieval logic
         logs = [
             {"id": 1, "message": "System started."},
-            {"id": 2, "message": "User logged in."}
+            {"id": 2, "message": "User logged in."},
         ]
-        logger.log_to_console("INFO", "Logs retrieved successfully.", meta_data={"user_id": user_identity})
+        logger.log_to_console(
+            "INFO", "Logs retrieved successfully.", meta_data={"user_id": user_identity}
+        )
 
         return jsonify({"logs": logs}), 200
     except LogRetrievalError as e:
@@ -40,28 +47,43 @@ def get_log_by_id(log_id):
     """Retrieve a specific log by its ID."""
     try:
         user_identity = get_jwt_identity()
-        logger.log_to_console("INFO", f"Log detail retrieval by user: {user_identity}", meta_data={"log_id": log_id})
+        logger.log_to_console(
+            "INFO",
+            f"Log detail retrieval by user: {user_identity}",
+            meta_data={"log_id": log_id},
+        )
 
         # Example: Simulated log retrieval logic
         if log_id not in [1, 2]:  # Simulated check for existing log IDs
             logger.log_to_console(
                 "WARNING",
                 "Log not found.",
-                meta_data={"log_id": log_id, "user_id": user_identity}
+                meta_data={"log_id": log_id, "user_id": user_identity},
             )
-            return format_error_response(
-                status=404,
-                error_code="LOG_NOT_FOUND",
-                message=f"Log with ID {log_id} not found.",
-                meta_data={"log_id": log_id},
-            ), 404
+            return (
+                format_error_response(
+                    status=404,
+                    error_code="LOG_NOT_FOUND",
+                    message=f"Log with ID {log_id} not found.",
+                    meta_data={"log_id": log_id},
+                ),
+                404,
+            )
 
         log = {"id": log_id, "message": f"Log entry {log_id}"}
-        logger.log_to_console("INFO", "Log retrieved successfully.", meta_data={"log_id": log_id, "user_id": user_identity})
+        logger.log_to_console(
+            "INFO",
+            "Log retrieved successfully.",
+            meta_data={"log_id": log_id, "user_id": user_identity},
+        )
 
         return jsonify({"log": log}), 200
     except LogRetrievalError as e:
-        return handle_general_error(e, meta_data={"route": "get_log_by_id", "log_id": log_id})
+        return handle_general_error(
+            e, meta_data={"route": "get_log_by_id", "log_id": log_id}
+        )
     except Exception as e:
         log_error(e, module="log_routes", meta_data={"log_id": log_id})
-        return handle_general_error(e, meta_data={"route": "get_log_by_id", "log_id": log_id})
+        return handle_general_error(
+            e, meta_data={"route": "get_log_by_id", "log_id": log_id}
+        )

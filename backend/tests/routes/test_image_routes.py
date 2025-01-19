@@ -1,6 +1,6 @@
-import pytest
 from flask import url_for
 from backend.models import Image, db
+
 
 def test_upload_image_success(client, user_with_token):
     """
@@ -16,7 +16,7 @@ def test_upload_image_success(client, user_with_token):
             url_for("image_routes.upload_image"),
             data=data,
             headers=headers,
-            content_type="multipart/form-data"
+            content_type="multipart/form-data",
         )
 
     assert response.status_code == 201
@@ -29,6 +29,7 @@ def test_upload_image_success(client, user_with_token):
     assert uploaded_image is not None
     assert uploaded_image.user_id == user.id
 
+
 def test_upload_image_no_file(client, user_with_token):
     """
     Test when no file is provided in the form-data.
@@ -40,11 +41,12 @@ def test_upload_image_no_file(client, user_with_token):
         url_for("image_routes.upload_image"),
         data={},
         headers=headers,
-        content_type="multipart/form-data"
+        content_type="multipart/form-data",
     )
 
     assert response.status_code == 400
     assert response.json["error"] == "No file part in the request."
+
 
 def test_get_image_metadata_success(client, user_with_token):
     """
@@ -59,8 +61,7 @@ def test_get_image_metadata_success(client, user_with_token):
     db.session.commit()
 
     response = client.get(
-        url_for("image_routes.get_image", image_id=image.id),
-        headers=headers
+        url_for("image_routes.get_image", image_id=image.id), headers=headers
     )
 
     assert response.status_code == 200
@@ -68,6 +69,7 @@ def test_get_image_metadata_success(client, user_with_token):
     assert data["id"] == image.id
     assert data["filename"] == "test.png"
     assert data["uploaded_by"] == user.id
+
 
 def test_get_image_not_found(client, user_with_token):
     """
@@ -77,12 +79,12 @@ def test_get_image_not_found(client, user_with_token):
     headers = {"Authorization": f"Bearer {token}"}
 
     response = client.get(
-        url_for("image_routes.get_image", image_id=9999),
-        headers=headers
+        url_for("image_routes.get_image", image_id=9999), headers=headers
     )
 
     assert response.status_code == 404
     assert response.json["error"] == "Image not found."
+
 
 def test_delete_image_success(client, user_with_token, mocker):
     """
@@ -99,8 +101,7 @@ def test_delete_image_success(client, user_with_token, mocker):
     db.session.commit()
 
     response = client.delete(
-        url_for("image_routes.delete_image", image_id=image.id),
-        headers=headers
+        url_for("image_routes.delete_image", image_id=image.id), headers=headers
     )
 
     assert response.status_code == 200
@@ -113,6 +114,7 @@ def test_delete_image_success(client, user_with_token, mocker):
     # Verify the file was "deleted"
     mock_delete_file.assert_called_once_with(user.id, "test.png")
 
+
 def test_delete_image_not_found(client, user_with_token):
     """
     Test deleting a non-existent image.
@@ -121,8 +123,7 @@ def test_delete_image_not_found(client, user_with_token):
     headers = {"Authorization": f"Bearer {token}"}
 
     response = client.delete(
-        url_for("image_routes.delete_image", image_id=9999),
-        headers=headers
+        url_for("image_routes.delete_image", image_id=9999), headers=headers
     )
 
     assert response.status_code == 404

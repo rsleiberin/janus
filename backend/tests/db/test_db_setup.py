@@ -8,6 +8,7 @@ from backend.utils.error_handling.db.errors import DatabaseConnectionError
 # Set up logger for tests
 logger = CentralizedLogger("test_logger", log_level="DEBUG")
 
+
 def test_create_app():
     """
     Tests that create_app returns a Flask application with the expected configuration.
@@ -19,8 +20,14 @@ def test_create_app():
         assert isinstance(app, Flask), "create_app did not return a Flask instance."
 
         # Check that the config is loaded
-        assert "SQLALCHEMY_DATABASE_URI" in app.config, "Missing SQLALCHEMY_DATABASE_URI in config."
-        logger.log_to_console("DEBUG", "Database URI from config", db_uri=app.config["SQLALCHEMY_DATABASE_URI"])
+        assert (
+            "SQLALCHEMY_DATABASE_URI" in app.config
+        ), "Missing SQLALCHEMY_DATABASE_URI in config."
+        logger.log_to_console(
+            "DEBUG",
+            "Database URI from config",
+            db_uri=app.config["SQLALCHEMY_DATABASE_URI"],
+        )
 
         # Check that db is initialized
         with app.app_context():
@@ -28,5 +35,7 @@ def test_create_app():
 
         logger.log_to_console("DEBUG", "test_create_app passed successfully.")
     except DatabaseConnectionError as e:
-        logger.log_to_console("ERROR", "DatabaseConnectionError caught in test", details=str(e))
+        logger.log_to_console(
+            "ERROR", "DatabaseConnectionError caught in test", details=str(e)
+        )
         pytest.fail(f"DatabaseConnectionError: {str(e)}")

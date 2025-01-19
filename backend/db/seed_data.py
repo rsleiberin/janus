@@ -6,6 +6,7 @@ from backend.utils.logger import CentralizedLogger
 
 logger = CentralizedLogger()
 
+
 def seed_data():
     """
     Seed the database with initial data.
@@ -159,4 +160,6 @@ def seed_data():
 
 
 if __name__ == "__main__":
-    logger.log_to_console("WARNING", "Ensure this script is run within a Flask app context.")
+    logger.log_to_console(
+        "WARNING", "Ensure this script is run within a Flask app context."
+    )

@@ -4,7 +4,10 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from sqlalchemy.exc import IntegrityError
 from backend.db import db
 from backend.models import User
-from backend.utils.error_handling.error_handling import handle_authentication_error, handle_unauthorized_error
+from backend.utils.error_handling.error_handling import (
+    handle_authentication_error,
+    handle_unauthorized_error,
+)
 from backend.utils.logger import CentralizedLogger
 
 logger = CentralizedLogger("authentication_routes")
@@ -29,7 +32,7 @@ def register_user():
         new_user = User(
             username=data["username"],
             email=data["email"],
-            password_hash=hashed_password
+            password_hash=hashed_password,
         )
         db.session.add(new_user)
         db.session.commit()
@@ -64,7 +67,9 @@ def login_user():
             return jsonify({"error": "Authentication error."}), 401
 
         # Identity just has id and username, no "role" in the DB
-        access_token = create_access_token(identity={"id": user.id, "username": user.username})
+        access_token = create_access_token(
+            identity={"id": user.id, "username": user.username}
+        )
         logger.log_to_console("INFO", f"User logged in: {user.username}")
         return jsonify({"access_token": access_token}), 200
 
@@ -87,8 +92,13 @@ def user_profile():
             return handle_unauthorized_error(details="User not found.")
 
         logger.log_to_console("INFO", f"Profile accessed: {user.username}")
-        return jsonify({"id": user.id, "username": user.username, "email": user.email}), 200
+        return (
+            jsonify({"id": user.id, "username": user.username, "email": user.email}),
+            200,
+        )
 
     except Exception as e:
         logger.log_to_console("ERROR", "Error retrieving user profile.", exc_info=e)
-        return handle_authentication_error(details="An error occurred while retrieving the user profile.")
+        return handle_authentication_error(
+            details="An error occurred while retrieving the user profile."
+        )

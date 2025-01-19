@@ -27,7 +27,9 @@ def get_user_profile():
         logger.log_to_console("WARNING", "User not found.", details=str(e))
         return handle_route_error(e)
     except Exception as e:
-        logger.log_to_console("ERROR", "Unexpected error fetching user profile.", exc_info=e)
+        logger.log_to_console(
+            "ERROR", "Unexpected error fetching user profile.", exc_info=e
+        )
         return handle_route_error(e)
 
 
@@ -55,5 +57,7 @@ def update_user_profile():
         logger.log_to_console("ERROR", "Invalid user data.", details=str(e))
         return handle_route_error(e)
     except Exception as e:
-        logger.log_to_console("ERROR", "Unexpected error updating user profile.", exc_info=e)
+        logger.log_to_console(
+            "ERROR", "Unexpected error updating user profile.", exc_info=e
+        )
         return handle_route_error(e)

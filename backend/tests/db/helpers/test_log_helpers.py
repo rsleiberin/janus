@@ -1,23 +1,17 @@
 import pytest
 from unittest.mock import patch
 from backend.db.helpers.log_helpers import LogHelpers
-from backend.utils.error_handling.db.errors import (
-    LogNotFoundError,
-    LogCreationError,
-    LogDeletionError,
-    LogQueryError,
-    LogMetadataError,
-)
-from backend.db import db
-from sqlalchemy.sql import text
-from datetime import datetime
+from backend.utils.error_handling.db.errors import LogNotFoundError
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_create_log():
     """
     Test creating a log entry.
     """
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_console_log:
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log:
         log = LogHelpers.create_log(
             action="Test Create",
             user_id=1,
@@ -36,6 +30,7 @@ def test_create_log():
             module="test_module",
             meta_data={"key": "value"},
         )
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_by_id():
@@ -60,9 +55,11 @@ def test_delete_log():
     """
     log = LogHelpers.create_log(action="Test Delete", user_id=1)
     assert LogHelpers.delete_log(log.id), "Failed to delete log."
+
     # Test deletion of nonexistent log
     with pytest.raises(LogNotFoundError, match="Log with ID 9999 not found."):
         LogHelpers.delete_log(9999)
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_by_user_id():
@@ -75,6 +72,7 @@ def test_get_by_user_id():
     assert len(logs) == 2, "Expected 2 logs for user ID 1."
     assert logs[0].user_id == 1, "User ID mismatch."
 
+
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_by_module():
     """
@@ -84,6 +82,7 @@ def test_get_by_module():
     LogHelpers.create_log(action="Action B", user_id=2, module="module1")
     logs = LogHelpers.get_by_module("module1")
     assert len(logs) == 2, "Expected 2 logs for module1."
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_by_level():
@@ -95,6 +94,7 @@ def test_get_by_level():
     logs = LogHelpers.get_by_level("DEBUG")
     assert len(logs) == 1, "Expected 1 debug log."
 
+
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_recent_logs():
     """
@@ -104,6 +104,7 @@ def test_get_recent_logs():
         LogHelpers.create_log(action=f"Recent {i}", user_id=1)
     recent_logs = LogHelpers.get_recent_logs(limit=3)
     assert len(recent_logs) == 3, "Expected 3 recent logs."
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_count_logs():
@@ -115,6 +116,7 @@ def test_count_logs():
     count = LogHelpers.count()
     assert count == 2, "Expected log count to be 2."
 
+
 @pytest.mark.usefixtures("function_db_setup")
 def test_exists_logs():
     """
@@ -124,25 +126,33 @@ def test_exists_logs():
     assert LogHelpers.exists(action="Check Exists"), "Expected log to exist."
     assert not LogHelpers.exists(action="Nonexistent"), "Log should not exist."
 
+
 @pytest.mark.usefixtures("function_db_setup")
 def test_logs_with_metadata_key():
     """
     Test retrieving logs with a specific metadata key.
     """
-    LogHelpers.create_log(action="Meta Key Test", user_id=1, meta_data={"key1": "value1"})
+    LogHelpers.create_log(
+        action="Meta Key Test", user_id=1, meta_data={"key1": "value1"}
+    )
     logs = LogHelpers.get_logs_with_metadata_key("key1")
     assert len(logs) == 1, "Expected 1 log with metadata key 'key1'."
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_logs_with_metadata_value():
     """
     Test retrieving logs with a specific metadata key-value pair.
     """
-    LogHelpers.create_log(action="Meta Value Test", user_id=1, meta_data={"key1": "value1"})
+    LogHelpers.create_log(
+        action="Meta Value Test", user_id=1, meta_data={"key1": "value1"}
+    )
 
     # Valid retrieval
     logs = LogHelpers.get_logs_with_metadata_value("key1", "value1")
-    assert len(logs) == 1, f"Expected 1 log with metadata value 'value1', found {len(logs)}."
+    assert (
+        len(logs) == 1
+    ), f"Expected 1 log with metadata value 'value1', found {len(logs)}."
 
     # Invalid retrieval
     logs = LogHelpers.get_logs_with_metadata_value("key1", "nonexistent_value")

@@ -12,9 +12,12 @@ class CentralizedLogger:
 
     Args:
         name (str): The logger's name.
-        log_level (str, optional): Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL).
-                                   If not provided, the value is read from the environment variable `LOG_LEVEL`.
+        log_level (str, optional): Logging level (DEBUG, INFO, WARNING,
+        ERROR, CRITICAL).
+            If not provided, the value is read from the environment
+            variable `LOG_LEVEL`.
     """
+
     VALID_LOG_LEVELS = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
 
     def __init__(self, name="app", log_level=None):
@@ -23,14 +26,14 @@ class CentralizedLogger:
 
         Args:
             name (str): The logger's name.
-            log_level (str, optional): Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL).
-                                       If not provided, the value is read from the environment.
+            log_level (str, optional): Logging level (DEBUG, INFO, WARNING, ERROR,
+                CRITICAL). If not provided, the value is read from the environment.
         """
         self.logger = logging.getLogger(name)
 
         if not self.logger.handlers:
             handler = logging.StreamHandler()
-            formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+            formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
 
@@ -43,6 +46,7 @@ class CentralizedLogger:
     def log_to_console(self, level, message, **kwargs):
         """
         Logs messages to the console with optional metadata.
+
         Args:
             level (str): Logging level (INFO, DEBUG, WARNING, ERROR, CRITICAL).
             message (str): The log message.
@@ -53,11 +57,14 @@ class CentralizedLogger:
         if log_method:
             log_method(formatted_message)
         else:
-            self.logger.warning(f"Invalid log level '{level}': {formatted_message}")
+            self.logger.warning(
+                f"Invalid log level '{level}': {formatted_message}"
+            )
 
     def log_to_db(self, level, message, module=None, user_id=None, meta_data=None):
         """
         Logs messages to the database.
+
         Args:
             level (str): Logging level.
             message (str): The log message.
@@ -72,7 +79,6 @@ class CentralizedLogger:
                 module=module,
                 user_id=user_id,
                 timestamp=datetime.utcnow(),
-                # Use 'log_metadata' instead of 'meta_data'
                 log_metadata=meta_data,
             )
             db.session.add(log_entry)
@@ -84,12 +90,15 @@ class CentralizedLogger:
     def format_message(self, message, **kwargs):
         """
         Formats messages to include additional context.
+
         Args:
             message (str): The base log message.
             kwargs: Additional context as key-value pairs.
+
         Returns:
             str: Formatted message with optional context.
         """
         if kwargs:
-            return f"{message} | Context: {json.dumps(kwargs, default=str)}"
+            context = json.dumps(kwargs, default=str)
+            return f"{message} | Context: {context}"
         return message

@@ -1,7 +1,5 @@
-import pytest
 from sqlalchemy.exc import OperationalError
-from backend.utils.error_handling.routes.errors import DatabaseUnavailableError
-from unittest.mock import patch
+
 
 def test_health_check_success(client, mocker):
     """
@@ -19,7 +17,10 @@ def test_health_check_success(client, mocker):
     assert data["status"] == "ok"
     assert data["database"] == "connected"
 
-    mock_logger.assert_called_once_with("INFO", "Health check passed: Database connected.")
+    mock_logger.assert_called_once_with(
+        "INFO", "Health check passed: Database connected."
+    )
+
 
 def test_health_check_database_error(client, mocker):
     """
@@ -37,5 +38,6 @@ def test_health_check_database_error(client, mocker):
     assert data["error_code"] == "DATABASE_UNAVAILABLE"
     assert data["message"] == "The database is not accessible at this time."
 
-    mock_logger.assert_any_call("ERROR", "Database connection failed.", exc_info=mocker.ANY)
-
+    mock_logger.assert_any_call(
+        "ERROR", "Database connection failed.", exc_info=mocker.ANY
+    )

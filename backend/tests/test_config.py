@@ -5,6 +5,7 @@ from backend.utils.logger import CentralizedLogger
 # Set up logger for tests
 logger = CentralizedLogger("test_logger", log_level="DEBUG")
 
+
 def test_development_config(monkeypatch):
     """Test the DevelopmentConfig class."""
     # Mock the environment variable for SECRET_KEY
@@ -17,6 +18,7 @@ def test_development_config(monkeypatch):
     assert config.SECRET_KEY == "dev_secret_key"
     assert "sqlite" in config.SQLALCHEMY_DATABASE_URI  # Ensure SQLite is used
 
+
 def test_testing_config():
     """Test the TestingConfig class."""
     config = TestingConfig()
@@ -24,7 +26,10 @@ def test_testing_config():
     logger.log_to_console("DEBUG", "Testing TestingConfig initialization.")
 
     assert config.TESTING is True
-    assert config.SQLALCHEMY_DATABASE_URI == "sqlite:///:memory:"  # Ensure in-memory SQLite is used
+    assert (
+        config.SQLALCHEMY_DATABASE_URI == "sqlite:///:memory:"
+    )  # Ensure in-memory SQLite is used
+
 
 def test_production_config_missing_database_url(monkeypatch):
     """Test the ProductionConfig class with missing DATABASE_URL."""
@@ -35,6 +40,7 @@ def test_production_config_missing_database_url(monkeypatch):
         config.validate()
 
     assert "DATABASE_URL must be set" in str(excinfo.value)
+
 
 def test_production_config_with_database_url(monkeypatch):
     """Test the ProductionConfig class with a valid DATABASE_URL."""

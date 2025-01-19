@@ -9,7 +9,7 @@ from backend.models import User, Admin, Image, Log, Analytics, Security
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler()]
+    handlers=[logging.StreamHandler()],
 )
 logger = logging.getLogger("test_logger")
 
@@ -44,10 +44,14 @@ def test_seed_data():
 
     # Verify analytics entries
     analytics_entries = db.session.query(Analytics).all()
-    assert len(analytics_entries) == 2, f"Expected 2 analytics entries, found {len(analytics_entries)}."
+    assert (
+        len(analytics_entries) == 2
+    ), f"Expected 2 analytics entries, found {len(analytics_entries)}."
 
     # Verify security entries
     security_entries = db.session.query(Security).all()
-    assert len(security_entries) == 2, f"Expected 2 security entries, found {len(security_entries)}."
+    assert (
+        len(security_entries) == 2
+    ), f"Expected 2 security entries, found {len(security_entries)}."
 
     logger.debug("test_seed_data passed successfully.")

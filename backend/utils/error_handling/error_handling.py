@@ -1,4 +1,3 @@
-import uuid
 from backend.utils.logger import CentralizedLogger
 
 # Initialize the centralized logger
@@ -40,13 +39,16 @@ def handle_general_error(error, meta_data=None):
     Handles general exceptions with standardized logging and response.
     """
     log_error(error, module="general", meta_data=meta_data)
-    return format_error_response(
-        status=500,
-        error_code="GENERAL_ERROR",
-        message="An unexpected error occurred.",
-        details=str(error),
-        meta_data=meta_data,
-    ), 500
+    return (
+        format_error_response(
+            status=500,
+            error_code="GENERAL_ERROR",
+            message="An unexpected error occurred.",
+            details=str(error),
+            meta_data=meta_data,
+        ),
+        500,
+    )
 
 
 def handle_http_error(status, error_code, message, meta_data=None):
@@ -54,18 +56,22 @@ def handle_http_error(status, error_code, message, meta_data=None):
     Handles predefined HTTP errors with standardized responses.
     """
     logger.log_to_console("WARNING", f"{status} - {message}", meta_data=meta_data)
-    return format_error_response(
-        status=status,
-        error_code=error_code,
-        message=message,
-        meta_data=meta_data,
-    ), status
+    return (
+        format_error_response(
+            status=status,
+            error_code=error_code,
+            message=message,
+            meta_data=meta_data,
+        ),
+        status,
+    )
 
 
 class error_context:
     """
     Context manager for simplified error handling.
     """
+
     def __init__(self, module, user_id=None, meta_data=None):
         self.module = module
         self.user_id = user_id
@@ -76,7 +82,13 @@ class error_context:
 
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_value:
-            log_error(exc_value, module=self.module, user_id=self.user_id, meta_data=self.meta_data)
+            log_error(
+                exc_value,
+                module=self.module,
+                user_id=self.user_id,
+                meta_data=self.meta_data,
+            )
+
 
 # Add new handlers for authentication and authorization errors
 def handle_authentication_error(details=None, meta_data=None):
@@ -91,13 +103,17 @@ def handle_authentication_error(details=None, meta_data=None):
         tuple: JSON response and HTTP status code.
     """
     log_error("Authentication failed.", module="authentication", meta_data=meta_data)
-    return format_error_response(
-        status=401,
-        error_code="AUTHENTICATION_FAILED",
-        message="Authentication failed. Please check your credentials.",
-        details=details,
-        meta_data=meta_data,
-    ), 401
+    return (
+        format_error_response(
+            status=401,
+            error_code="AUTHENTICATION_FAILED",
+            message="Authentication failed. Please check your credentials.",
+            details=details,
+            meta_data=meta_data,
+        ),
+        401,
+    )
+
 
 def handle_unauthorized_error(details=None, meta_data=None):
     """
@@ -110,11 +126,16 @@ def handle_unauthorized_error(details=None, meta_data=None):
     Returns:
         tuple: JSON response and HTTP status code.
     """
-    log_error("Unauthorized access attempt.", module="authorization", meta_data=meta_data)
-    return format_error_response(
-        status=403,
-        error_code="UNAUTHORIZED_ACCESS",
-        message="You are not authorized to access this resource.",
-        details=details,
-        meta_data=meta_data,
-    ), 403
+    log_error(
+        "Unauthorized access attempt.", module="authorization", meta_data=meta_data
+    )
+    return (
+        format_error_response(
+            status=403,
+            error_code="UNAUTHORIZED_ACCESS",
+            message="You are not authorized to access this resource.",
+            details=details,
+            meta_data=meta_data,
+        ),
+        403,
+    )

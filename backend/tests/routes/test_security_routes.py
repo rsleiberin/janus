@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash
 from flask_jwt_extended import create_access_token
 from backend.models import User, db
 
+
 @pytest.fixture
 def user_with_token(app, function_db_setup):
     """Fixture to create a user and return a valid JWT token."""
@@ -15,7 +16,7 @@ def user_with_token(app, function_db_setup):
         user = User(
             username="testuser",
             email="testuser@example.com",
-            password_hash=generate_password_hash("password123")
+            password_hash=generate_password_hash("password123"),
         )
         db.session.add(user)
         db.session.commit()
