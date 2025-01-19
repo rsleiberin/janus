@@ -12,9 +12,14 @@ def run_flake8():
         print("Flake8: No issues found.")
 
 def run_black():
-    """Run Black to format code."""
-    result = subprocess.run(['black', 'backend/'], capture_output=True, text=True)
-    print(result.stdout)
+    """Run Black to check code for PEP 8 compliance."""
+    result = subprocess.run(['black', '--check', 'backend/'], capture_output=True, text=True)
+    if result.returncode != 0:
+        print("reformatted")
+        print(result.stdout)
+    else:
+        print("unchanged")
+
 
 if __name__ == "__main__":
     run_flake8()
