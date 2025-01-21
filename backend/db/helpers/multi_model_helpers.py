@@ -1,3 +1,5 @@
+from typing import List, Optional, Dict
+from datetime import datetime
 from backend.db import db
 from backend.models import Image, Admin, Log, Analytics, Security
 from backend.utils.logger import CentralizedLogger
@@ -6,7 +8,7 @@ from backend.utils.error_handling.db.errors import handle_database_error
 logger = CentralizedLogger("multi_model_helpers")
 
 
-def get_logs_by_user(user_id: int) -> list[Log]:
+def get_logs_by_user(user_id: int) -> List[Log]:
     """
     Fetch all logs associated with a user.
     """
@@ -42,7 +44,7 @@ def is_user_admin(user_id: int) -> bool:
         raise handle_database_error(e, module="multi_model_helpers", meta_data={"user_id": user_id})
 
 
-def get_admin_level(user_id: int) -> str | None:
+def get_admin_level(user_id: int) -> Optional[str]:
     """
     Fetch the admin level of a user.
     """
@@ -55,7 +57,7 @@ def get_admin_level(user_id: int) -> str | None:
         raise handle_database_error(e, module="multi_model_helpers", meta_data={"user_id": user_id})
 
 
-def get_analytics_data_for_image(image_id: int) -> list[Analytics]:
+def get_analytics_data_for_image(image_id: int) -> List[Analytics]:
     """
     Fetch analytics data associated with a specific image.
     """
@@ -67,7 +69,7 @@ def get_analytics_data_for_image(image_id: int) -> list[Analytics]:
         raise handle_database_error(e, module="multi_model_helpers", meta_data={"image_id": image_id})
 
 
-def track_user_security_actions(user_id: int) -> list[Security]:
+def track_user_security_actions(user_id: int) -> List[Security]:
     """
     Fetch all security-related actions for a specific user.
     """
@@ -79,7 +81,7 @@ def track_user_security_actions(user_id: int) -> list[Security]:
         raise handle_database_error(e, module="multi_model_helpers", meta_data={"user_id": user_id})
 
 
-def get_images_with_analytics() -> list[dict]:
+def get_images_with_analytics() -> List[Dict[str, object]]:
     """
     Fetch all images with associated analytics data.
     """
@@ -89,7 +91,10 @@ def get_images_with_analytics() -> list[dict]:
             .join(Analytics, Image.id == Analytics.id)
             .all()
         )
-        result = [{"image": image, "analytics": analytics} for image, analytics in images_with_analytics]
+        result = [
+            {"image": image, "analytics": analytics}
+            for image, analytics in images_with_analytics
+        ]
         logger.log_to_console("DEBUG", f"Fetched {len(result)} images with analytics data.")
         return result
     except Exception as e:

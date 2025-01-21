@@ -2,6 +2,7 @@ from backend.db import db
 from backend.models import Security
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.db.errors import handle_database_error
+from typing import List
 
 logger = CentralizedLogger("security_helpers")
 
@@ -44,7 +45,7 @@ class SecurityHelpers:
             )
 
     @staticmethod
-    def get_security_by_user(user_id: int) -> list[Security]:
+    def get_security_by_user(user_id: int) -> List[Security]:
         """
         Get all security entries for a specific user.
         """
@@ -60,7 +61,7 @@ class SecurityHelpers:
             )
 
     @staticmethod
-    def get_recent_security_entries(limit: int = 10) -> list[Security]:
+    def get_recent_security_entries(limit: int = 10) -> List[Security]:
         """
         Get the most recent security entries.
         """

@@ -1,8 +1,9 @@
 from datetime import datetime
+from typing import List  # Import List from typing for type annotations
+from sqlalchemy import text
 from backend.utils.logger import CentralizedLogger
 from backend.db import db
 from backend.models import Log
-from sqlalchemy import text
 from backend.utils.error_handling.db.errors import handle_database_error, LogNotFoundError
 
 logger = CentralizedLogger("log_helpers")
@@ -49,7 +50,7 @@ class LogHelpers:
             raise handle_database_error(e, module="log_helpers", meta_data={"log_id": log_id})
 
     @staticmethod
-    def get_by_user_id(user_id: int) -> list[Log]:
+    def get_by_user_id(user_id: int) -> List[Log]:
         """
         Retrieve all logs for a specific user.
         """
@@ -61,7 +62,7 @@ class LogHelpers:
             raise handle_database_error(e, module="log_helpers", meta_data={"user_id": user_id})
 
     @staticmethod
-    def get_recent_logs(limit: int = 10) -> list[Log]:
+    def get_recent_logs(limit: int = 10) -> List[Log]:
         """
         Retrieve the most recent logs up to a specified limit.
         """
@@ -103,7 +104,7 @@ class LogHelpers:
             raise handle_database_error(e, module="log_helpers")
 
     @staticmethod
-    def get_logs_with_metadata_key(key: str) -> list[Log]:
+    def get_logs_with_metadata_key(key: str) -> List[Log]:
         """
         Retrieve logs containing a specific metadata key.
         """
@@ -115,7 +116,7 @@ class LogHelpers:
             raise handle_database_error(e, module="log_helpers", meta_data={"key": key})
 
     @staticmethod
-    def get_logs_with_metadata_value(key: str, value: str) -> list[Log]:
+    def get_logs_with_metadata_value(key: str, value: str) -> List[Log]:
         """
         Retrieve logs with a specific metadata key-value pair.
         """

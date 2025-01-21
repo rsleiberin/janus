@@ -1,3 +1,5 @@
+from datetime import datetime
+from typing import List
 from backend.db import db
 from backend.models import Image
 from backend.utils.logger import CentralizedLogger
@@ -11,7 +13,7 @@ logger = CentralizedLogger(name="image_helpers")
 
 class ImageHelpers:
     @staticmethod
-    def create(image_data):
+    def create(image_data: dict) -> Image:
         """Create a new image record."""
         try:
             image = Image(**image_data)
@@ -27,7 +29,22 @@ class ImageHelpers:
             raise ImageError("Failed to create image.") from e
 
     @staticmethod
-    def get_by_id(image_id):
+    def get_images_by_size(min_width: int, min_height: int) -> List[Image]:
+        """Retrieve images larger than specified dimensions."""
+        try:
+            images = db.session.query(Image).filter(
+                Image.width >= min_width, Image.height >= min_height
+            ).all()
+            logger.log_to_console(
+                "INFO", f"Retrieved {len(images)} images larger than {min_width}x{min_height}.",
+                min_width=min_width, min_height=min_height
+            )
+            return images
+        except Exception as e:
+            raise handle_database_error(e, module="image_helpers", meta_data={"min_width": min_width, "min_height": min_height})
+
+    @staticmethod
+    def get_by_id(image_id: int) -> Image:
         """Retrieve an image by its ID."""
         try:
             image = db.session.get(Image, image_id)
@@ -40,7 +57,7 @@ class ImageHelpers:
             raise handle_database_error(e, module="image_helpers", meta_data={"image_id": image_id})
 
     @staticmethod
-    def update(image_id, updated_data):
+    def update(image_id: int, updated_data: dict) -> Image:
         """Update an existing image record."""
         try:
             image = db.session.get(Image, image_id)
@@ -60,7 +77,7 @@ class ImageHelpers:
             raise handle_database_error(e, module="image_helpers", meta_data={"image_id": image_id, "updates": updated_data})
 
     @staticmethod
-    def delete(image_id):
+    def delete(image_id: int) -> None:
         """Delete an image by its ID."""
         try:
             image = db.session.get(Image, image_id)
@@ -76,7 +93,7 @@ class ImageHelpers:
             raise handle_database_error(e, module="image_helpers", meta_data={"image_id": image_id})
 
     @staticmethod
-    def get_all():
+    def get_all() -> List[Image]:
         """Retrieve all image records."""
         try:
             images = db.session.query(Image).all()
@@ -87,7 +104,7 @@ class ImageHelpers:
             raise handle_database_error(e, module="image_helpers")
 
     @staticmethod
-    def exists(image_id):
+    def exists(image_id: int) -> bool:
         """Check if an image with a specific ID exists."""
         try:
             exists = db.session.query(Image).filter_by(id=image_id).first() is not None
@@ -96,3 +113,14 @@ class ImageHelpers:
             return exists
         except Exception as e:
             raise handle_database_error(e, module="image_helpers", meta_data={"image_id": image_id})
+
+    @staticmethod
+    def get_images_by_date_range(start_date: datetime, end_date: datetime) -> List[Image]:
+        """Retrieve images created within a specific date range."""
+        try:
+            images = db.session.query(Image).filter(Image.created_at.between(start_date, end_date)).all()
+            logger.log_to_console("INFO", f"Retrieved {len(images)} images within the date range.", start_date=start_date, end_date=end_date)
+            return images
+        except Exception as e:
+            raise handle_database_error(e, module="image_helpers", meta_data={"start_date": start_date, "end_date": end_date})
+

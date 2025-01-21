@@ -3,68 +3,87 @@ from backend.utils.error_handling.error_handling import format_error_response, l
 
 # Base Database Error
 class DatabaseError(Exception):
-    """Base class for all database-related exceptions."""
+    """Base exception for all database-related errors."""
     pass
 
-# Centralized Error Types
+
+# Specific Database Errors
 class DatabaseConnectionError(DatabaseError):
-    """Raised when there is a database connection error."""
+    """Raised for database connection issues."""
     pass
+
 
 class SchemaCreationError(DatabaseError):
-    """Raised when there is an error creating the database schema."""
+    """Raised for database schema creation errors."""
     pass
+
 
 class SessionCommitError(DatabaseError):
-    """Raised when there is an error committing a session."""
+    """Raised for errors during database session commits."""
     pass
+
 
 class UserError(DatabaseError):
-    """Base class for user-related exceptions."""
+    """Raised for user-related database errors."""
     pass
+
 
 class SecurityError(DatabaseError):
-    """Base class for security-related exceptions."""
+    """Raised for security-related database errors."""
     pass
+
+
+class LogNotFoundError(DatabaseError):
+    """Raised when a log entry is not found."""
+    pass
+
 
 class LogError(DatabaseError):
-    """Base class for log-related exceptions."""
+    """Raised for log-related database errors."""
     pass
+
 
 class AnalyticsError(DatabaseError):
-    """Base class for analytics-related exceptions."""
+    """Raised for analytics-related database errors."""
     pass
 
-class MultiModelError(DatabaseError):
-    """Base class for multi-model-related exceptions."""
+
+class ImageError(DatabaseError):
+    """Raised for image-related database errors."""
     pass
 
-# Error Handling Function
+
+# Centralized Error Handler
 def handle_database_error(error: Exception, module: str = None, meta_data: dict = None):
     """
     Handles database-related exceptions by logging them and returning a standardized response.
 
     Args:
-        error (Exception): The raised exception.
-        module (str, optional): The module where the error occurred.
-        meta_data (dict, optional): Additional metadata for context.
+        error (Exception): The exception that was raised.
+        module (str, optional): The module or context where the error occurred.
+        meta_data (dict, optional): Additional metadata to provide context.
 
     Returns:
-        tuple: JSON response and HTTP status code.
+        tuple: A formatted error response (JSON) and HTTP status code.
     """
+    # Log the error with context
     log_error(error, module=module, meta_data=meta_data)
 
-    # Map common SQLAlchemy and database-specific errors
+    # Map common database-related errors to responses
     error_mapping = {
         DatabaseConnectionError: ("DB_CONNECTION_ERROR", "Failed to connect to the database."),
-        SchemaCreationError: ("SCHEMA_CREATION_ERROR", "Failed to create the database schema."),
-        SessionCommitError: ("SESSION_COMMIT_ERROR", "Failed to commit changes to the database."),
-        SQLAlchemyError: ("SQLALCHEMY_ERROR", "A general database error occurred."),
+        SchemaCreationError: ("SCHEMA_CREATION_ERROR", "Error creating database schema."),
+        SessionCommitError: ("SESSION_COMMIT_ERROR", "Failed to commit database session."),
+        LogNotFoundError: ("LOG_NOT_FOUND", "Requested log entry was not found."),
+        SQLAlchemyError: ("SQLALCHEMY_ERROR", "An unexpected database error occurred."),
     }
 
-    # Default error response
-    error_code, message = error_mapping.get(type(error), ("UNKNOWN_DB_ERROR", "An unknown database error occurred."))
-    
+    # Fallback for unknown error types
+    error_code, message = error_mapping.get(
+        type(error), ("UNKNOWN_DB_ERROR", "An unknown database error occurred.")
+    )
+
+    # Build and return the standardized error response
     response = format_error_response(
         status=500,
         error_code=error_code,
