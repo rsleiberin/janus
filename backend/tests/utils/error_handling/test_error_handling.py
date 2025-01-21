@@ -1,11 +1,14 @@
+# File: backend/tests/utils/error_handling/test_error_handling.py
+
 import pytest
 from backend.utils.error_handling.error_handling import (
     format_error_response,
     log_error,
     handle_general_error,
     handle_http_error,
-    error_context,
+    ErrorContext,
 )
+from backend.utils.error_handling.utils.errors import FileHandlerError
 
 
 def test_format_error_response():
@@ -30,11 +33,13 @@ def test_format_error_response():
 def test_log_error(app):
     """Test the log_error function."""
     with app.app_context():
-        try:
-            raise ValueError("Test error")
-        except ValueError as e:
-            log_error(e, module="test_module", user_id=42, meta_data={"action": "test"})
-        # No assertion needed; ensure no unhandled exceptions are raised.
+        with pytest.raises(FileHandlerError, match="Test error"):
+            try:
+                raise ValueError("Test error")
+            except ValueError as e:
+                log_error(e, module="test_module", user_id=42, meta_data={"action": "test"})
+                raise FileHandlerError("Test error") from e
+        # Ensure no unhandled exceptions are raised.
 
 
 @pytest.mark.usefixtures("function_db_setup")
@@ -50,6 +55,7 @@ def test_handle_general_error(app):
             assert response["error_code"] == "GENERAL_ERROR"
             assert response["message"] == "An unexpected error occurred."
             assert response["details"] == "Something went wrong!"
+            assert response["meta_data"] == {"info": "test"}
 
 
 @pytest.mark.usefixtures("function_db_setup")
@@ -70,10 +76,10 @@ def test_handle_http_error():
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_error_context(app):
-    """Test the error_context manager."""
+    """Test the ErrorContext manager."""
     with app.app_context():
         with pytest.raises(ValueError, match="This is a test error"):
-            with error_context(
+            with ErrorContext(
                 module="test_context", user_id=42, meta_data={"test": "data"}
             ):
                 raise ValueError("This is a test error")

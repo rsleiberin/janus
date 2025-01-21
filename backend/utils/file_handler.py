@@ -1,7 +1,9 @@
+# File: backend/utils/file_handler.py
+
 import os
 import re
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.error_handling import error_context, log_error
+from backend.utils.error_handling.error_handling import ErrorContext, log_error
 from backend.utils.error_handling.utils.errors import FileHandlerError
 
 # Logger setup
@@ -40,7 +42,7 @@ def read_file(user_id, filename):
     Reads the contents of a file in text mode (UTF-8).
     """
     file_path = construct_file_path(user_id, filename)
-    with error_context(
+    with ErrorContext(
         module="file_handler", meta_data={"operation": "read", "file_path": file_path}
     ):
         if not os.path.exists(file_path):
@@ -72,7 +74,7 @@ def write_file(user_id, filename, content, mode="w"):
     file_path = construct_file_path(user_id, filename)
     user_directory = os.path.dirname(file_path)
 
-    with error_context(
+    with ErrorContext(
         module="file_handler", meta_data={"operation": "write", "file_path": file_path}
     ):
         if not os.path.exists(user_directory):
@@ -80,7 +82,7 @@ def write_file(user_id, filename, content, mode="w"):
         try:
             # Omit encoding if we're in binary mode
             if "b" in mode:
-                with open(file_path, mode) as f:
+                with open(file_path, mode) as f:  # pylint: disable=unspecified-encoding
                     f.write(content)  # content should be bytes
             else:
                 with open(file_path, mode, encoding="utf-8") as f:
@@ -97,7 +99,7 @@ def delete_file(user_id, filename):
     Deletes a file if it exists.
     """
     file_path = construct_file_path(user_id, filename)
-    with error_context(
+    with ErrorContext(
         module="file_handler", meta_data={"operation": "delete", "file_path": file_path}
     ):
         if not os.path.exists(file_path):

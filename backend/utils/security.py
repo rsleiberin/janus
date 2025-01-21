@@ -1,8 +1,8 @@
-# security.py
+# File: backend/utils/security.py
 
 import re
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.error_handling import error_context
+from backend.utils.error_handling.error_handling import ErrorContext
 from backend.utils.error_handling.utils.errors import (
     AuthenticationError,
     AuthorizationError,
@@ -19,14 +19,14 @@ def check_authentication(credentials):
     Args:
         credentials (dict): A dictionary containing authentication info,
                             e.g., {"username": "...", "password": "..."}
-
+    
     Returns:
         bool: True if authentication succeeds.
-
+    
     Raises:
         AuthenticationError: If credentials are invalid.
     """
-    with error_context(module="security", meta_data={"operation": "authentication"}):
+    with ErrorContext(module="security", meta_data={"operation": "authentication"}):
         # Example check (replace with real authentication logic)
         username = credentials.get("username")
         password = credentials.get("password")
@@ -57,7 +57,7 @@ def check_authorization(user_role, required_role):
     Raises:
         AuthorizationError: If user_role is insufficient to meet required_role.
     """
-    with error_context(module="security", meta_data={"operation": "authorization"}):
+    with ErrorContext(module="security", meta_data={"operation": "authorization"}):
         # Example logic: only 'admin' can access certain resources
         if user_role != required_role:
             raise AuthorizationError(
@@ -83,7 +83,7 @@ def validate_input(input_data, pattern=r"^[a-zA-Z0-9_]+$"):
     Raises:
         ValidationError: If input fails the specified pattern.
     """
-    with error_context(module="security", meta_data={"operation": "validate_input"}):
+    with ErrorContext(module="security", meta_data={"operation": "validate_input"}):
         if not re.match(pattern, input_data or ""):
             raise ValidationError(
                 f"Input '{input_data}' does not match required pattern."
@@ -103,7 +103,7 @@ def sanitize_input(input_string):
     Returns:
         str: The sanitized string.
     """
-    with error_context(module="security", meta_data={"operation": "sanitize_input"}):
+    with ErrorContext(module="security", meta_data={"operation": "sanitize_input"}):
         # Very simplistic HTML tag remover
         sanitized = re.sub(r"<[^>]*>", "", input_string or "")
 

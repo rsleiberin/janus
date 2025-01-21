@@ -10,14 +10,12 @@ This module defines SQLAlchemy models for the application, including:
 """
 
 from datetime import datetime
+
 from backend.db import db
 
 
-class Image(db.Model):
-    """Model for storing image metadata.
-
-    pylint: disable=too-few-public-methods
-    """
+class Image(db.Model):  # pylint: disable=too-few-public-methods
+    """Model for storing image metadata."""
 
     __tablename__ = "images"
 
@@ -29,9 +27,7 @@ class Image(db.Model):
     bit_depth = db.Column(db.Integer, nullable=True)
     color_type = db.Column(db.String(50), nullable=True)
     compression_method = db.Column(db.String(50), nullable=True)
-    image_metadata = db.Column(
-        db.JSON, nullable=True
-    )
+    image_metadata = db.Column(db.JSON, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     updated_at = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
@@ -43,11 +39,8 @@ class Image(db.Model):
         return f"<Image {self.filename}>"
 
 
-class ImageAnalysis(db.Model):
-    """Model for storing analysis results linked to images.
-
-    pylint: disable=too-few-public-methods
-    """
+class ImageAnalysis(db.Model):  # pylint: disable=too-few-public-methods
+    """Model for storing analysis results linked to images."""
 
     __tablename__ = "image_analysis"
 
@@ -67,11 +60,8 @@ class ImageAnalysis(db.Model):
         return f"<ImageAnalysis {self.id} for Image {self.image_id}>"
 
 
-class User(db.Model):
-    """Model for storing user information.
-
-    pylint: disable=too-few-public-methods
-    """
+class User(db.Model):  # pylint: disable=too-few-public-methods
+    """Model for storing user information."""
 
     __tablename__ = "users"
 
@@ -84,11 +74,8 @@ class User(db.Model):
         return f"<User {self.username}>"
 
 
-class Admin(db.Model):
-    """Model for admin users, extending User model.
-
-    pylint: disable=too-few-public-methods
-    """
+class Admin(db.Model):  # pylint: disable=too-few-public-methods
+    """Model for admin users, extending User model."""
 
     __tablename__ = "admins"
 
@@ -104,11 +91,8 @@ class Admin(db.Model):
         return f"<Admin id={self.id}, user_id={self.user_id}, level={self.admin_level}>"
 
 
-class Log(db.Model):
-    """Model for storing logs of user actions.
-
-    pylint: disable=too-few-public-methods
-    """
+class Log(db.Model):  # pylint: disable=too-few-public-methods
+    """Model for storing logs of user actions."""
 
     __tablename__ = "logs"
 
@@ -132,11 +116,8 @@ class Log(db.Model):
         )
 
 
-class Analytics(db.Model):
-    """Model for storing research and analytical data.
-
-    pylint: disable=too-few-public-methods
-    """
+class Analytics(db.Model):  # pylint: disable=too-few-public-methods
+    """Model for storing research and analytical data."""
 
     __tablename__ = "analytics"
 
@@ -152,11 +133,8 @@ class Analytics(db.Model):
         return f"<Analytics {self.created_at} - {self.research_topic}>"
 
 
-class Security(db.Model):
-    """Model for storing security-related events for users.
-
-    pylint: disable=too-few-public-methods
-    """
+class Security(db.Model):  # pylint: disable=too-few-public-methods
+    """Model for storing security-related events for users."""
 
     __tablename__ = "security"
 

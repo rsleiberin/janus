@@ -1,71 +1,74 @@
-# errors.py
+# File: backend/utils/error_handling/utils/errors.py
 
-from backend.utils.error_handling.error_handling import log_error
+from backend.utils.errors import GeneralError  # Import base error class if central system exists.
 
-
-class UtilityBaseError(Exception):
+class UtilityError(GeneralError):
     """
-    Base exception for utility-related errors.
+    Base exception for all utility-related errors.
     """
-
     pass
 
 
-class FileHandlerError(UtilityBaseError):
+class FileHandlerError(UtilityError):
     """
-    Exception for file handler-related errors.
-    """
+    Exception raised for file handler-related errors.
 
+    Causes:
+    - File not found
+    - Permission denied
+    - Read/write errors
+    """
     pass
 
 
-class SecurityError(UtilityBaseError):
+class SecurityError(UtilityError):
     """
-    Base exception for security-related errors.
+    Base exception for all security-related errors.
     """
-
     pass
 
 
 class AuthenticationError(SecurityError):
     """
-    Exception for authentication-related issues.
-    (e.g., invalid credentials, missing tokens)
-    """
+    Exception raised for authentication-related issues.
 
+    Causes:
+    - Invalid credentials
+    - Missing or expired tokens
+    - Malformed authentication headers
+    """
     pass
 
 
 class AuthorizationError(SecurityError):
     """
-    Exception for authorization-related issues.
-    (e.g., insufficient privileges, forbidden actions)
-    """
+    Exception raised for authorization-related issues.
 
+    Causes:
+    - Insufficient privileges
+    - Forbidden actions
+    """
     pass
 
 
-class ValidationError(SecurityError):
+class ValidationError(UtilityError):
     """
-    Exception for input validation-related issues.
-    (e.g., unsafe input, format violations)
-    """
+    Exception raised for input validation issues.
 
+    Causes:
+    - Invalid data format
+    - Unsafe input
+    - Business rule violations
+    """
     pass
 
 
-def handle_utility_error(error, module=None, user_id=None, meta_data=None):
+class HealthCheckError(UtilityError):
     """
-    Logs and raises or returns a standardized error for utility operations.
+    Exception raised for health check-related issues.
 
-    Args:
-        error (Exception): The utility-related exception.
-        module (str, optional): The module where the error originated.
-        user_id (int, optional): ID of the user encountering the error.
-        meta_data (dict, optional): Additional context or metadata.
-
-    Raises:
-        Exception: Re-raises the original error after logging.
+    Causes:
+    - Failed system health checks
+    - Dependency failures
     """
-    log_error(error, module=module, user_id=user_id, meta_data=meta_data)
-    raise error
+    pass

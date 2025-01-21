@@ -1,7 +1,9 @@
+# File: backend/tests/utils/test_file_handler.py
+
 import os
 import re
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.error_handling import error_context, log_error
+from backend.utils.error_handling.error_handling import ErrorContext, log_error
 from backend.utils.error_handling.utils.errors import FileHandlerError
 
 logger = CentralizedLogger(name="file_handler_logger")
@@ -20,7 +22,7 @@ def is_valid_filename(filename):
 
 def read_file(user_id, filename):
     file_path = construct_file_path(user_id, filename)
-    with error_context(
+    with ErrorContext(
         module="file_handler", meta_data={"operation": "read", "file_path": file_path}
     ):
         if not os.path.exists(file_path):
@@ -42,7 +44,7 @@ def write_file(user_id, filename, content, mode="wb"):
     file_path = construct_file_path(user_id, filename)
     user_directory = os.path.dirname(file_path)
 
-    with error_context(
+    with ErrorContext(
         module="file_handler", meta_data={"operation": "write", "file_path": file_path}
     ):
         if not os.path.exists(user_directory):
@@ -58,7 +60,7 @@ def write_file(user_id, filename, content, mode="wb"):
 
 def delete_file(user_id, filename):
     file_path = construct_file_path(user_id, filename)
-    with error_context(
+    with ErrorContext(
         module="file_handler", meta_data={"operation": "delete", "file_path": file_path}
     ):
         if not os.path.exists(file_path):

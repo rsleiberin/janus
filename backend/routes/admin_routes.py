@@ -39,7 +39,7 @@ def list_users():
             "INFO", "Successfully fetched user list", count=len(user_list)
         )
         return jsonify(user_list), 200
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.log_to_console("ERROR", "Error fetching user list", error=str(e))
         return handle_general_error(e)
 
@@ -69,7 +69,7 @@ def delete_user(user_id):
 
         logger.log_to_console("INFO", "User deleted successfully", target_user=user_id)
         return jsonify({"message": "User deleted successfully."}), 200
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.log_to_console("ERROR", "Error deleting user", error=str(e))
         return handle_general_error(e)
 
@@ -99,6 +99,13 @@ def fetch_logs():
 
         logger.log_to_console("INFO", "Successfully fetched logs", count=len(log_list))
         return jsonify(log_list), 200
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.log_to_console("ERROR", "Error fetching logs", error=str(e))
         return handle_general_error(e)
+
+
+# Future Expansion
+# System monitoring features, including CPU, memory, and disk usage metrics.
+# Evaluate psutil or alternative libraries before implementation.
+# These features will require dedicated helper functions and schema updates
+# if needed.

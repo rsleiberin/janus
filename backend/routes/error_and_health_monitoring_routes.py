@@ -1,10 +1,14 @@
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from backend.utils.logger import CentralizedLogger
+from backend.utils.error_handling.error_handling import (
+    log_error,
+    format_error_response,
+)
 from backend.utils.error_handling.routes.errors import (
     handle_route_error,
     HealthCheckError,
 )
-from backend.utils.error_handling.error_handling import log_error, format_error_response
 
 # Initialize blueprint
 error_and_health_bp = Blueprint("error_and_health", __name__)
@@ -31,9 +35,9 @@ def health_check():
         )
         return jsonify({"status": "healthy", "details": status}), 200
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         log_error(e, module="health_check")
-        raise HealthCheckError("Health check failed.") from e
+        raise HealthCheckError("Health check failed.") from e  # pylint: disable=broad-exception-raised
 
 
 @error_and_health_bp.route("/simulate-error", methods=["POST"])
@@ -48,12 +52,12 @@ def simulate_error():
         if error_type == "custom":
             logger.log_to_console("INFO", "Simulating custom error.")
             raise ValueError("This is a simulated custom error.")
-        elif error_type == "db":
+        if error_type == "db":  # Changed 'elif' to 'if' to comply with no-else-raise
             logger.log_to_console("INFO", "Simulating database health check failure.")
             raise HealthCheckError("Simulated database health check failure.")
         else:
             logger.log_to_console("INFO", "Simulating generic error.")
-            raise Exception("Simulated generic error.")
+            raise Exception("Simulated generic error.")  # pylint: disable=broad-exception-raised
     except ValueError as e:
         logger.log_to_console(
             "ERROR", "Simulated custom error occurred.", details=str(e)
@@ -67,16 +71,16 @@ def simulate_error():
             ),
             500,
         )
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         return handle_route_error(e)
 
 
-@error_and_health_bp.route("/health/simulate-unhandled-error", methods=["GET"])
+@error_and_health_bp.route("/simulate-unhandled-error", methods=["GET"])
 def simulate_unhandled_error():
     """
     Endpoint to simulate an unhandled exception for testing purposes.
     Raises:
-        Exception: Simulated unhandled exception.
+        HealthCheckError: Simulated unhandled exception.
     """
     try:
         logger.log_to_console("ERROR", "Simulating unhandled exception.")

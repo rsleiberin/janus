@@ -1,7 +1,10 @@
+# File: backend/utils/logger.py
+
 import logging
 import json
 import os
 from datetime import datetime
+from sqlalchemy.exc import SQLAlchemyError
 from backend.db import db
 from backend.models import Log
 
@@ -57,7 +60,7 @@ class CentralizedLogger:
         if log_method:
             log_method(formatted_message)
         else:
-            self.logger.warning(f"Invalid log level '{level}': {formatted_message}")
+            self.logger.warning("Invalid log level '%s': %s", level, formatted_message)
 
     def log_to_db(self, level, message, module=None, user_id=None, meta_data=None):
         """
@@ -81,8 +84,8 @@ class CentralizedLogger:
             )
             db.session.add(log_entry)
             db.session.commit()
-        except Exception as e:
-            self.logger.error(f"Failed to log to database: {str(e)}")
+        except SQLAlchemyError as e:
+            self.logger.error("Failed to log to database: %s", str(e))
             db.session.rollback()
 
     def format_message(self, message, **kwargs):

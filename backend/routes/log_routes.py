@@ -6,7 +6,6 @@ from backend.utils.error_handling.error_handling import (
     log_error,
     format_error_response,
 )
-from backend.utils.error_handling.routes.errors import LogRetrievalError
 
 # Initialize logger for log routes
 logger = CentralizedLogger("log_routes")
@@ -35,9 +34,7 @@ def get_logs():
         )
 
         return jsonify({"logs": logs}), 200
-    except LogRetrievalError as e:
-        return handle_general_error(e, meta_data={"route": "get_logs"})
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         return handle_general_error(e, meta_data={"route": "get_logs"})
 
 
@@ -78,12 +75,15 @@ def get_log_by_id(log_id):
         )
 
         return jsonify({"log": log}), 200
-    except LogRetrievalError as e:
-        return handle_general_error(
-            e, meta_data={"route": "get_log_by_id", "log_id": log_id}
-        )
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         log_error(e, module="log_routes", meta_data={"log_id": log_id})
         return handle_general_error(
             e, meta_data={"route": "get_log_by_id", "log_id": log_id}
         )
+
+
+# Future Expansion
+# System monitoring features, including CPU, memory, and disk usage metrics.
+# Evaluate psutil or alternative libraries before implementation.
+# These features will require dedicated helper functions and schema updates
+# if needed.

@@ -47,7 +47,7 @@ def register_user():
     except ValueError as ve:
         logger.log_to_console("ERROR", str(ve))
         return jsonify({"error": str(ve)}), 400
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.log_to_console("ERROR", "Error registering user.", exc_info=e)
         return jsonify({"error": "An error occurred while registering the user."}), 500
 
@@ -76,7 +76,7 @@ def login_user():
     except ValueError as ve:
         logger.log_to_console("ERROR", str(ve))
         return jsonify({"error": str(ve)}), 400
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.log_to_console("ERROR", "Error logging in user.", exc_info=e)
         return jsonify({"error": "An error occurred while logging in the user."}), 500
 
@@ -97,8 +97,15 @@ def user_profile():
             200,
         )
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.log_to_console("ERROR", "Error retrieving user profile.", exc_info=e)
         return handle_authentication_error(
             details="An error occurred while retrieving the user profile."
         )
+
+
+# Future Expansion
+# System monitoring features, including CPU, memory, and disk usage metrics.
+# Evaluate psutil or alternative libraries before implementation.
+# These features will require dedicated helper functions and schema updates
+# if needed.

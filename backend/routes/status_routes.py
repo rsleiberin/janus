@@ -2,10 +2,7 @@ from flask import Blueprint, jsonify
 from sqlalchemy.sql import text
 from sqlalchemy.exc import OperationalError
 from backend.db import db
-from backend.utils.error_handling.routes.errors import (
-    DatabaseUnavailableError,
-    format_error_response,
-)
+from backend.utils.error_handling.error_handling import format_error_response, log_error
 from backend.utils.logger import CentralizedLogger
 
 # Initialize the logger
@@ -19,31 +16,35 @@ status_bp = Blueprint("status", __name__)
 def health_check():
     """
     Health check endpoint to verify API and database status.
+    Returns:
+        JSON response indicating API and database health.
     """
     try:
         # Check database connection
         db.session.execute(text("SELECT 1"))
         logger.log_to_console("INFO", "Health check passed: Database connected.")
-        return jsonify({"status": "ok", "database": "connected"})
+        return jsonify({"status": "ok", "database": "connected"}), 200
     except OperationalError as e:
         logger.log_to_console("ERROR", "Database connection failed.", exc_info=e)
-        logger.log_to_db("ERROR", "Database connection failed.", module="status_routes")
-        raise DatabaseUnavailableError("Database connection failed.") from e
-
-
-# Error handler for DatabaseUnavailableError
-@status_bp.app_errorhandler(DatabaseUnavailableError)
-def handle_database_unavailable_error(error):
-    """
-    Error handler for DatabaseUnavailableError.
-    """
-    logger.log_to_console("ERROR", f"Database unavailable error: {error}")
-    return (
-        format_error_response(
-            status=500,
-            error_code="DATABASE_UNAVAILABLE",
-            message="The database is not accessible at this time.",
-            details=str(error),
-        ),
-        500,
-    )
+        log_error(e, module="status_routes")
+        return (
+            format_error_response(
+                status=500,
+                error_code="DATABASE_CONNECTION_FAILED",
+                message="The database is not accessible at this time.",
+                details=str(e),
+            ),
+            500,
+        )
+    except Exception as e:
+        logger.log_to_console("ERROR", "Unhandled exception during health check.", exc_info=e)
+        log_error(e, module="status_routes")
+        return (
+            format_error_response(
+                status=500,
+                error_code="HEALTH_CHECK_ERROR",
+                message="An error occurred during the health check.",
+                details=str(e),
+            ),
+            500,
+        )

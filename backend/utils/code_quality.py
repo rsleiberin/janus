@@ -1,11 +1,14 @@
-# backend/utils/code_quality.py
-
 import subprocess
 
 
 def run_flake8():
     """Run Flake8 to check code for PEP 8 compliance."""
-    result = subprocess.run(["flake8", "backend/"], capture_output=True, text=True)
+    result = subprocess.run(
+        ["flake8", "backend/"],
+        capture_output=True,
+        text=True,
+        check=False  # Explicitly define check
+    )
     if result.returncode != 0:
         print("Flake8 Issues Found:")
         print(result.stdout)
@@ -16,7 +19,10 @@ def run_flake8():
 def run_black():
     """Run Black to check code for PEP 8 compliance."""
     result = subprocess.run(
-        ["black", "--check", "backend/"], capture_output=True, text=True
+        ["black", "--check", "backend/"],
+        capture_output=True,
+        text=True,
+        check=False  # Explicitly define check
     )
     if result.returncode != 0:
         print("reformatted")

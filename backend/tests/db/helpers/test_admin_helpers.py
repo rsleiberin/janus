@@ -3,6 +3,7 @@ from unittest.mock import patch
 from backend.db import db
 from backend.models import Admin
 from backend.db.helpers.admin_helpers import AdminHelpers
+from backend.utils.error_handling.db.errors import AdminNotFoundError
 
 
 @pytest.mark.usefixtures("function_db_setup")
@@ -15,9 +16,7 @@ def test_create_admin():
 
     with patch(
         "backend.utils.logger.CentralizedLogger.log_to_console"
-    ) as mock_console_log, patch(
-        "backend.utils.logger.CentralizedLogger.log_to_db"
-    ) as mock_db_log:
+    ) as mock_console_log:
         # Create admin
         admin = AdminHelpers.create(admin_data)
 
@@ -28,13 +27,7 @@ def test_create_admin():
 
         # Verify logging
         mock_console_log.assert_called_with(
-            "INFO", "Admin created successfully.", admin_data=admin_data
-        )
-        mock_db_log.assert_called_with(
-            "INFO",
-            "Admin created.",
-            module="admin_helpers",
-            meta_data={"admin_data": admin_data},
+            "INFO", "Admin created successfully.", meta_data=admin_data
         )
 
 
@@ -57,7 +50,28 @@ def test_get_by_id():
         assert fetched_admin.id == admin.id, "Admin ID mismatch."
 
         # Verify logging
-        mock_console_log.assert_any_call("INFO", f"Fetched admin by ID: {admin.id}")
+        mock_console_log.assert_called_with(
+            "INFO", f"Admin retrieved successfully: ID {admin.id}."
+        )
+
+
+@pytest.mark.usefixtures("function_db_setup")
+def test_get_by_id_not_found():
+    """
+    Tests the behavior when trying to fetch a non-existent Admin record.
+    """
+    invalid_admin_id = 99999
+
+    with patch(
+        "backend.utils.logger.CentralizedLogger.log_to_console"
+    ) as mock_console_log:
+        with pytest.raises(AdminNotFoundError, match="Admin not found."):
+            AdminHelpers.get_by_id(invalid_admin_id)
+
+        # Verify logging
+        mock_console_log.assert_called_with(
+            "WARNING", f"Admin not found: ID {invalid_admin_id}."
+        )
 
 
 @pytest.mark.usefixtures("function_db_setup")
@@ -71,9 +85,7 @@ def test_delete_admin():
 
     with patch(
         "backend.utils.logger.CentralizedLogger.log_to_console"
-    ) as mock_console_log, patch(
-        "backend.utils.logger.CentralizedLogger.log_to_db"
-    ) as mock_db_log:
+    ) as mock_console_log:
         AdminHelpers.delete(admin.id)
 
         # Verify deletion
@@ -83,12 +95,6 @@ def test_delete_admin():
         # Verify logging
         mock_console_log.assert_called_with(
             "INFO", f"Admin {admin.id} deleted successfully."
-        )
-        mock_db_log.assert_called_with(
-            "INFO",
-            "Admin deleted.",
-            module="admin_helpers",
-            meta_data={"admin_id": admin.id},
         )
 
 
@@ -109,7 +115,7 @@ def test_exists_admin():
         # Verify existence check
         assert admin_exists is True, "Admin existence check failed."
 
-        # Verify logging includes the result
+        # Verify logging
         mock_console_log.assert_called_with(
-            "INFO", f"Admin existence check for ID {admin.id}: {admin_exists}"
+            "INFO", f"Admin existence check for ID {admin.id}: {admin_exists}."
         )

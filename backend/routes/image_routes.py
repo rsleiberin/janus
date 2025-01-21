@@ -68,7 +68,7 @@ def upload_image():
             )
 
         return jsonify({"error": "Unsupported file type."}), 400
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.log_to_console("ERROR", "Error during image upload.", error=str(e))
         return jsonify({"error": "An error occurred while uploading the image."}), 500
 
@@ -98,7 +98,7 @@ def get_image(image_id):
             ),
             200,
         )
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.log_to_console("ERROR", "Error retrieving image metadata.", error=str(e))
         return (
             jsonify(
@@ -137,7 +137,7 @@ def delete_image(image_id):
             "INFO", "Image deleted successfully.", user_id=user_id, image_id=image_id
         )
         return jsonify({"message": "Image deleted successfully."}), 200
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.log_to_console("ERROR", "Error during image deletion.", error=str(e))
         return jsonify({"error": "An error occurred while deleting the image."}), 500
 

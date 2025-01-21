@@ -1,0 +1,127 @@
+[MAIN]
+# Basic settings
+jobs=1
+persistent=yes
+py-version=3.8
+suggestion-mode=yes
+
+# Files and paths to ignore
+ignore=CVS,venv,migrations,tests,frontend
+ignore-patterns=^\.#
+
+# Import fallback handling
+analyse-fallback-blocks=no
+
+# Extensions
+ignored-modules=flask,sqlalchemy,flask_migrate,flask_jwt_extended
+
+[MESSAGES CONTROL]
+# Disable specific checks except 'too-few-public-methods'
+disable=missing-docstring,
+        wrong-import-order,
+        raw-checker-failed,
+        bad-inline-option,
+        locally-disabled,
+        file-ignored,
+        suppressed-message,
+        useless-suppression,
+        deprecated-pragma,
+        use-symbolic-message-instead,
+        use-implicit-booleaness-not-comparison-to-string,
+        use-implicit-booleaness-not-comparison-to-zero
+
+[FORMAT]
+# Code formatting rules
+max-line-length=100
+indent-string='    '
+indent-after-paren=4
+expected-line-ending-format=
+ignore-long-lines=^\s*(# )?<?https?://\S+>?$
+max-module-lines=1000
+single-line-class-stmt=no
+single-line-if-stmt=no
+
+[DESIGN]
+# Class and function complexity limits
+max-args=10
+max-locals=20
+max-returns=6
+max-branches=12
+max-statements=50
+max-attributes=15
+max-public-methods=10
+min-public-methods=2
+
+[TYPECHECK]
+# Dynamic member checks
+ignore-none=yes
+ignore-on-opaque-inference=yes
+ignored-classes=optparse.Values,thread._local,_thread._local,argparse.Namespace,backend.db.db.Model
+contextmanager-decorators=contextlib.contextmanager
+mixin-class-rgx=.*[Mm]ixin
+missing-member-hint=yes
+missing-member-hint-distance=1
+missing-member-max-choices=1
+signature-mutators=
+
+[VARIABLES]
+# Variable usage and naming checks
+dummy-variables-rgx=_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_
+allow-global-unused-variables=yes
+ignored-argument-names=_.*|^ignored_|^unused_
+additional-builtins=
+init-import=no
+redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
+
+[REPORTS]
+# Simplify report output
+reports=no
+score=yes
+evaluation=max(0, 0 if fatal else 10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10))
+
+[IMPORTS]
+# Import settings
+allow-any-import-level=no
+allow-reexport-from-package=no
+allow-wildcard-with-all=no
+deprecated-modules=
+known-third-party=enchant
+
+[LOGGING]
+# Logging configuration
+logging-format-style=old
+logging-modules=logging
+
+[MISCELLANEOUS]
+# Tags to consider in comments
+notes=FIXME,XXX,TODO
+
+[EXCEPTIONS]
+# Overgeneral exceptions to warn about
+overgeneral-exceptions=builtins.BaseException,builtins.Exception
+
+[REFACTORING]
+# Refactoring rules
+max-nested-blocks=5
+never-returning-functions=sys.exit,argparse.parse_error
+suggest-join-with-non-empty-separator=yes
+
+[SIMILARITIES]
+# Similarity detection rules
+ignore-comments=yes
+ignore-docstrings=yes
+ignore-imports=yes
+ignore-signatures=yes
+min-similarity-lines=4
+
+[SPELLING]
+# Spell-checking configuration
+max-spelling-suggestions=4
+spelling-ignore-comment-directives=fmt: on,fmt: off,noqa:,noqa,nosec,isort:skip,mypy:
+spelling-private-dict-file=
+spelling-store-unknown-words=no
+
+[STRING]
+# String formatting and concatenation checks
+check-quote-consistency=no
+check-str-concat-over-line-jumps=no

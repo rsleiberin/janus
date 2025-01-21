@@ -1,6 +1,9 @@
+# File: backend/tests/utils/test_logger.py
+
 import logging
 import pytest
 from unittest.mock import patch
+from sqlalchemy.exc import SQLAlchemyError
 from backend.utils.logger import CentralizedLogger
 
 
@@ -44,7 +47,7 @@ def test_invalid_log_level(logger):
     with patch.object(logger.logger, "warning") as mock_warning:
         logger.log_to_console("INVALID", "Test invalid log level.")
         mock_warning.assert_called_once_with(
-            "Invalid log level 'INVALID': Test invalid log level."
+            "Invalid log level '%s': %s", 'INVALID', 'Test invalid log level.'
         )
 
 
@@ -67,7 +70,7 @@ def test_log_to_db(logger):
 def test_log_to_db_handles_exceptions(logger):
     """Test that database logging handles exceptions gracefully."""
     with patch(
-        "backend.db.session.add", side_effect=Exception("DB error")
+        "backend.db.session.add", side_effect=SQLAlchemyError("DB error")
     ) as mock_add, patch.object(logger.logger, "error") as mock_error, patch(
         "backend.db.session.rollback"
     ) as mock_rollback:
@@ -80,7 +83,7 @@ def test_log_to_db_handles_exceptions(logger):
         assert (
             mock_rollback.called
         ), "The database session should be rolled back on error."
-        mock_error.assert_called_once_with("Failed to log to database: DB error")
+        mock_error.assert_called_once_with("Failed to log to database: %s", "DB error")
 
 
 def test_format_message(logger):
