@@ -35,12 +35,13 @@ class AdminHelpers:
             with current_app.app_context():
                 admin = db.session.get(Admin, admin_id)
                 if not admin:
-                    raise ValueError(f"Admin with ID {admin_id} not found.")
+                    raise DatabaseError(f"Admin with ID {admin_id} not found.")
                 logger.log_to_console("INFO", f"Fetched admin by ID: {admin_id}")
                 return admin
         except Exception as e:
             logger.log_to_console("ERROR", "Error fetching admin by ID.", exc_info=e)
             raise handle_database_error(e, module="admin_helpers", meta_data={"admin_id": admin_id})
+
 
     @staticmethod
     def update(admin_id, updated_data):

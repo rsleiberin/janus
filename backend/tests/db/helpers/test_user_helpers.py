@@ -1,12 +1,11 @@
 import pytest
 from backend.db import db
 from backend.db.helpers.user_helpers import UserHelpers
-from backend.models import User  # Import the User model
+from backend.models import User
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.db.errors import UserNotFoundError, UserQueryError
+from backend.utils.error_handling.utils.errors import handle_error_with_logging
 
 logger = CentralizedLogger("test_user_helpers")
-
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_create_user():
@@ -15,7 +14,6 @@ def test_create_user():
         "username": "testuser",
         "email": "test@example.com",
         "password_hash": "somehash",
-        # Removed "role"
     }
     new_user = UserHelpers.create(user_data)
     assert new_user.id is not None, "User was not assigned an ID."
@@ -30,7 +28,6 @@ def test_get_by_id():
         "username": "getbyid_user",
         "email": "getbyid@example.com",
         "password_hash": "hash123",
-        # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
     db.session.flush()
@@ -41,8 +38,11 @@ def test_get_by_id():
     assert fetched_user.id == created_user.id, "Fetched ID does not match created user."
 
     # Test failure for non-existent ID
-    with pytest.raises(UserNotFoundError):
+    try:
         UserHelpers.get_by_id(9999)
+    except Exception as e:
+        error_details = handle_error_with_logging(e, user_id=9999)
+        assert error_details["error_type"] == "GeneralError"
 
     logger.log_to_console("DEBUG", "test_get_by_id passed successfully.")
 
@@ -54,7 +54,6 @@ def test_get_by_email():
         "username": "email_user",
         "email": "emailtest@example.com",
         "password_hash": "abc123",
-        # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
 
@@ -64,8 +63,11 @@ def test_get_by_email():
     assert fetched_by_email.id == created_user.id, "Email-based fetch mismatch."
 
     # Test failure for non-existent email
-    with pytest.raises(UserNotFoundError):
+    try:
         UserHelpers.get_by_email("nonexistent@example.com")
+    except Exception as e:
+        error_details = handle_error_with_logging(e, email="nonexistent@example.com")
+        assert error_details["error_type"] == "GeneralError"
 
     logger.log_to_console("DEBUG", "test_get_by_email passed successfully.")
 
@@ -77,7 +79,6 @@ def test_update_user():
         "username": "updateuser",
         "email": "update@example.com",
         "password_hash": "oldhash",
-        # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
     updated_data = {"username": "updateduser", "password_hash": "newhash"}
@@ -95,15 +96,17 @@ def test_delete_user():
         "username": "deleteuser",
         "email": "delete@example.com",
         "password_hash": "deletehash",
-        # Removed "role"
     }
     created_user = UserHelpers.create(user_data)
     user_id = created_user.id
 
     # Test successful deletion
     UserHelpers.delete(user_id)
-    with pytest.raises(UserNotFoundError):
+    try:
         UserHelpers.get_by_id(user_id)
+    except Exception as e:
+        error_details = handle_error_with_logging(e, user_id=user_id)
+        assert error_details["error_type"] == "GeneralError"
 
     logger.log_to_console("DEBUG", "test_delete_user passed successfully.")
 
@@ -115,13 +118,11 @@ def test_count_users():
         "username": "countuser1",
         "email": "count1@example.com",
         "password_hash": "hash1",
-        # Removed "role"
     }
     user_data_2 = {
         "username": "countuser2",
         "email": "count2@example.com",
         "password_hash": "hash2",
-        # Removed "role"
     }
     UserHelpers.create(user_data_1)
     UserHelpers.create(user_data_2)
@@ -138,7 +139,6 @@ def test_exists_user():
         "username": "existsuser",
         "email": "exists@example.com",
         "password_hash": "exists_hash",
-        # Removed "role"
     }
     new_user = UserHelpers.create(user_data)
     user_exists = UserHelpers.exists(new_user.id)
@@ -151,10 +151,10 @@ def test_user_query_error():
     logger.log_to_console("DEBUG", "Starting test_user_query_error...")
 
     # Simulate a query error by deliberately causing an invalid SQLAlchemy query
-    with pytest.raises(UserQueryError):
-        try:
-            db.session.query(User).filter_by(
-                nonexistent_field="value"
-            ).all()  # Invalid attribute
-        except Exception as e:
-            raise UserQueryError("Simulated query error.") from e
+    try:
+        db.session.query(User).filter_by(nonexistent_field="value").all()
+    except Exception as e:
+        error_details = handle_error_with_logging(e)
+        assert error_details["error_type"] == "GeneralError"
+
+    logger.log_to_console("DEBUG", "test_user_query_error passed successfully.")

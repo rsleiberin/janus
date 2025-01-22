@@ -86,15 +86,15 @@ def get_images_with_analytics() -> List[Dict[str, object]]:
     Fetch all images with associated analytics data.
     """
     try:
-        images_with_analytics = (
-            db.session.query(Image, Analytics)
-            .join(Analytics, Image.id == Analytics.id)
-            .all()
-        )
-        result = [
-            {"image": image, "analytics": analytics}
-            for image, analytics in images_with_analytics
-        ]
+        images = db.session.query(Image).all()
+        result = []
+        for image in images:
+            analytics = (
+                db.session.query(Analytics)
+                .filter(Analytics.id == image.id)
+                .all()
+            )
+            result.append({"image": image, "analytics": analytics})
         logger.log_to_console("DEBUG", f"Fetched {len(result)} images with analytics data.")
         return result
     except Exception as e:
