@@ -1,8 +1,11 @@
+# File: backend/db/helpers/admin_helpers.py
+
 from backend.db import db
 from backend.models import Admin
 from flask import current_app  # To get the current app context
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.db.errors import handle_database_error
+from backend.utils.error_handling.error_handling import handle_database_error
+from backend.utils.error_handling.exceptions import DatabaseError
 
 # Initialize the logger
 logger = CentralizedLogger(name="admin_helpers")
@@ -42,14 +45,13 @@ class AdminHelpers:
             logger.log_to_console("ERROR", "Error fetching admin by ID.", exc_info=e)
             raise handle_database_error(e, module="admin_helpers", meta_data={"admin_id": admin_id})
 
-
     @staticmethod
     def update(admin_id, updated_data):
         """Update an existing admin record."""
         try:
             admin = db.session.get(Admin, admin_id)
             if not admin:
-                raise ValueError(f"Admin with ID {admin_id} not found.")
+                raise DatabaseError(f"Admin with ID {admin_id} not found.")
 
             for key, value in updated_data.items():
                 setattr(admin, key, value)
@@ -77,7 +79,7 @@ class AdminHelpers:
         try:
             admin = db.session.get(Admin, admin_id)
             if not admin:
-                raise ValueError(f"Admin with ID {admin_id} not found.")
+                raise DatabaseError(f"Admin with ID {admin_id} not found.")
 
             db.session.delete(admin)
             db.session.commit()

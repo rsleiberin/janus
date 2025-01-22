@@ -3,10 +3,8 @@ from typing import List
 from backend.db import db
 from backend.models import Image
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.db.errors import (
-    ImageError,
-    handle_database_error,
-)
+from backend.utils.error_handling.error_handling import handle_database_error
+from backend.utils.error_handling.exceptions import ImageError
 
 logger = CentralizedLogger(name="image_helpers")
 
@@ -108,7 +106,9 @@ class ImageHelpers:
         """Check if an image with a specific ID exists."""
         try:
             exists = db.session.query(Image).filter_by(id=image_id).first() is not None
-            logger.log_to_console("INFO", f"Checked existence for image ID: {image_id}", exists=exists)
+            logger.log_to_console(
+                "INFO", f"Checked existence for image ID: {image_id}", exists=exists
+            )
             logger.log_to_db("INFO", "Image existence check performed.", module="image_helpers", meta_data={"image_id": image_id, "exists": exists})
             return exists
         except Exception as e:
@@ -123,4 +123,3 @@ class ImageHelpers:
             return images
         except Exception as e:
             raise handle_database_error(e, module="image_helpers", meta_data={"start_date": start_date, "end_date": end_date})
-

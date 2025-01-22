@@ -3,7 +3,7 @@ from unittest.mock import patch
 from backend.db import db
 from backend.models import Admin
 from backend.db.helpers.admin_helpers import AdminHelpers
-from backend.utils.error_handling.db.errors import DatabaseError  # Update this import
+from backend.utils.error_handling.exceptions import DatabaseError  # Corrected import
 
 
 @pytest.mark.usefixtures("function_db_setup")

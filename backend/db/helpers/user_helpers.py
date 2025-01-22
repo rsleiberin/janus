@@ -1,8 +1,14 @@
-from sqlalchemy.exc import SQLAlchemyError, InvalidRequestError
+# File: backend/db/helpers/user_helpers.py
+
+from sqlalchemy.exc import SQLAlchemyError
 from backend.db import db
 from backend.models import User
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.db.errors import handle_database_error
+from backend.utils.error_handling.error_handling import (
+    handle_database_error,
+    handle_error_with_logging
+)
+from backend.utils.error_handling.exceptions import GeneralError
 
 logger = CentralizedLogger("user_helpers")
 
@@ -22,9 +28,14 @@ class UserHelpers:
             db.session.commit()
             logger.log_to_console("INFO", "User created successfully.", user_id=user.id)
             return user
-        except Exception as e:
+        except SQLAlchemyError as e:
             db.session.rollback()
             raise handle_database_error(
+                e, module="user_helpers", meta_data={"user_data": user_data}
+            )
+        except Exception as e:
+            db.session.rollback()
+            raise handle_error_with_logging(
                 e, module="user_helpers", meta_data={"user_data": user_data}
             )
 
@@ -39,8 +50,16 @@ class UserHelpers:
                 raise ValueError(f"User with ID {user_id} not found.")
             logger.log_to_console("INFO", "User retrieved by ID.", user_id=user_id)
             return user
-        except Exception as e:
+        except SQLAlchemyError as e:
             raise handle_database_error(
+                e, module="user_helpers", meta_data={"user_id": user_id}
+            )
+        except ValueError as e:
+            raise handle_error_with_logging(
+                e, module="user_helpers", meta_data={"user_id": user_id}
+            )
+        except Exception as e:
+            raise handle_error_with_logging(
                 e, module="user_helpers", meta_data={"user_id": user_id}
             )
 
@@ -58,8 +77,16 @@ class UserHelpers:
                 raise ValueError(f"User with email {email} not found.")
             logger.log_to_console("INFO", "User retrieved by email.", email=email)
             return user
-        except Exception as e:
+        except SQLAlchemyError as e:
             raise handle_database_error(
+                e, module="user_helpers", meta_data={"email": email}
+            )
+        except ValueError as e:
+            raise handle_error_with_logging(
+                e, module="user_helpers", meta_data={"email": email}
+            )
+        except Exception as e:
+            raise handle_error_with_logging(
                 e, module="user_helpers", meta_data={"email": email}
             )
 
@@ -84,9 +111,16 @@ class UserHelpers:
                 "INFO", "User updated successfully.", user_id=user_id
             )
             return user
-        except Exception as e:
+        except SQLAlchemyError as e:
             db.session.rollback()
             raise handle_database_error(
+                e,
+                module="user_helpers",
+                meta_data={"user_id": user_id, "updated_data": updated_data},
+            )
+        except Exception as e:
+            db.session.rollback()
+            raise handle_error_with_logging(
                 e,
                 module="user_helpers",
                 meta_data={"user_id": user_id, "updated_data": updated_data},
@@ -105,9 +139,14 @@ class UserHelpers:
             db.session.delete(user)
             db.session.commit()
             logger.log_to_console("INFO", "User deleted successfully.", user_id=user_id)
-        except Exception as e:
+        except SQLAlchemyError as e:
             db.session.rollback()
             raise handle_database_error(
+                e, module="user_helpers", meta_data={"user_id": user_id}
+            )
+        except Exception as e:
+            db.session.rollback()
+            raise handle_error_with_logging(
                 e, module="user_helpers", meta_data={"user_id": user_id}
             )
 
@@ -120,8 +159,10 @@ class UserHelpers:
             total_users = db.session.query(User).count()
             logger.log_to_console("INFO", "Counted total users.", count=total_users)
             return total_users
-        except Exception as e:
+        except SQLAlchemyError as e:
             raise handle_database_error(e, module="user_helpers")
+        except Exception as e:
+            raise handle_error_with_logging(e, module="user_helpers")
 
     @staticmethod
     def exists(user_id: int) -> bool:
@@ -134,7 +175,27 @@ class UserHelpers:
                 "INFO", "Checked if user exists.", user_id=user_id, exists=exists
             )
             return exists
-        except Exception as e:
+        except SQLAlchemyError as e:
             raise handle_database_error(
                 e, module="user_helpers", meta_data={"user_id": user_id}
+            )
+        except Exception as e:
+            raise handle_error_with_logging(
+                e, module="user_helpers", meta_data={"user_id": user_id}
+            )
+
+    @staticmethod
+    def get_user_by_nonexistent_field(value: str) -> None:
+        """
+        Attempt to get a user by a non-existent field to simulate a query error.
+        """
+        try:
+            db.session.query(User).filter_by(nonexistent_field=value).all()
+        except SQLAlchemyError as e:
+            raise handle_database_error(
+                e, module="user_helpers", meta_data={"query": "nonexistent_field"}
+            )
+        except Exception as e:
+            raise handle_error_with_logging(
+                e, module="user_helpers", meta_data={"query": "nonexistent_field"}
             )

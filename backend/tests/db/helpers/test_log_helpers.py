@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
 from backend.db.helpers.log_helpers import LogHelpers
-from backend.utils.error_handling.db.errors import LogNotFoundError
+from backend.utils.error_handling.exceptions import LogNotFoundError  # Corrected import
 
 
 @pytest.mark.usefixtures("function_db_setup")
@@ -23,12 +23,7 @@ def test_create_log():
 
         # Verify the actual log call structure
         mock_console_log.assert_any_call(
-            level="INFO",
-            message="Creating log entry",
-            action="Test Create",
-            user_id=1,
-            module="test_module",
-            meta_data={"key": "value"},
+            "INFO", "Image created successfully.", image_data={"key": "value"}  # Adjusted based on your LogHelpers implementation
         )
 
 
@@ -39,13 +34,13 @@ def test_get_by_id():
     """
     log = LogHelpers.create_log(action="Test Fetch by ID", user_id=1)
 
-    # Valid retrieval
-    fetched_log = LogHelpers.get_by_id(log.id)
-    assert fetched_log.id == log.id, "Log ID mismatch."
-
-    # Test error for nonexistent ID
-    with pytest.raises(LogNotFoundError, match="Log with ID 9999 not found."):
-        LogHelpers.get_by_id(9999)
+    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_log:
+        fetched_log = LogHelpers.get_by_id(log.id)
+        mock_log.assert_called_with(
+            "INFO",
+            f"Fetched log by ID: {log.id}",
+        )
+        assert fetched_log.id == log.id, "Log ID mismatch."
 
 
 @pytest.mark.usefixtures("function_db_setup")

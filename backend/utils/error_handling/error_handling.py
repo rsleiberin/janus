@@ -1,17 +1,22 @@
 # File: backend/utils/error_handling/error_handling.py
 
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.db.errors import (
+from backend.utils.error_handling.exceptions import (
     DatabaseConnectionError,
     SchemaCreationError,
     SessionCommitError,
     LogNotFoundError,
+    GeneralError,
+    HealthCheckError,
+    ImageError,
+    FileHandlerError,
+    SecurityError,
 )
-from backend.utils.error_handling.utils.errors import GeneralError
 from sqlalchemy.exc import SQLAlchemyError
 
 # Initialize the centralized logger
-logger = CentralizedLogger()
+logger = CentralizedLogger("error_handling")
+
 
 def format_error_response(status, error_code, message, details=None, meta_data=None):
     """
@@ -38,6 +43,7 @@ def format_error_response(status, error_code, message, details=None, meta_data=N
         response["meta_data"] = meta_data
     return response
 
+
 def log_error(error, module=None, user_id=None, meta_data=None):
     """
     Logs an error message using the centralized logger.
@@ -56,6 +62,7 @@ def log_error(error, module=None, user_id=None, meta_data=None):
         user_id=user_id,
         meta_data=meta_data,
     )
+
 
 def handle_database_error(error: Exception, module: str = None, meta_data: dict = None):
     """
@@ -82,25 +89,40 @@ def handle_database_error(error: Exception, module: str = None, meta_data: dict 
         SQLAlchemyError: ("SQLALCHEMY_ERROR", "An unexpected database error occurred."),
     }
 
-    # Determine the error code and message based on the exception type
-    error_code, message = error_mapping.get(
-        type(error), ("UNKNOWN_DB_ERROR", "An unknown database error occurred.")
-    )
+    # Iterate through the mapping and check with isinstance to handle subclasses
+    for exc_type, (error_code, message) in error_mapping.items():
+        if isinstance(error, exc_type):
+            if isinstance(error, DatabaseConnectionError):
+                raise DatabaseConnectionError(message) from error
+            elif isinstance(error, SchemaCreationError):
+                raise SchemaCreationError(message) from error
+            elif isinstance(error, SessionCommitError):
+                raise SessionCommitError(message) from error
+            elif isinstance(error, LogNotFoundError):
+                raise LogNotFoundError(message) from error
+            else:
+                # For SQLAlchemyError and its subclasses, include the original error message
+                raise GeneralError(f"An error occurred in {module}: {str(error)}") from error
 
-    # Raise the corresponding exception with the message
-    if type(error) in error_mapping:
-        if isinstance(error, DatabaseConnectionError):
-            raise DatabaseConnectionError(message) from error
-        elif isinstance(error, SchemaCreationError):
-            raise SchemaCreationError(message) from error
-        elif isinstance(error, SessionCommitError):
-            raise SessionCommitError(message) from error
-        elif isinstance(error, LogNotFoundError):
-            raise LogNotFoundError(message) from error
-        else:
-            raise GeneralError(message) from error
-    else:
-        raise GeneralError(message) from error
+    # If no match found in the mapping, raise a GeneralError with the original message
+    raise GeneralError(f"An error occurred in {module}: {str(error)}") from error
+
+
+def handle_error_with_logging(error: Exception, module: str = None, meta_data: dict = None):
+    """
+    Handles general errors by logging them and raising a standardized GeneralError.
+
+    Args:
+        error (Exception): The exception to handle.
+        module (str, optional): The module or context where the error occurred.
+        meta_data (dict, optional): Additional metadata to provide context.
+
+    Raises:
+        GeneralError: A standardized general error.
+    """
+    log_error(error, module=module, meta_data=meta_data)
+    raise GeneralError(f"An error occurred in {module}: {str(error)}") from error
+
 
 def handle_general_error(error, meta_data=None):
     """
@@ -123,6 +145,75 @@ def handle_general_error(error, meta_data=None):
     )
     return response, 500
 
+
+def handle_authentication_error(details=None, meta_data=None):
+    """
+    Handles authentication errors and logs them.
+
+    Args:
+        details (str, optional): Detailed information about the error.
+        meta_data (dict, optional): Additional context for the error.
+
+    Returns:
+        tuple: JSON response and HTTP status code.
+    """
+    log_error("Authentication failed.", module="authentication", meta_data=meta_data)
+    response = format_error_response(
+        status=401,
+        error_code="AUTHENTICATION_FAILED",
+        message="Authentication failed. Please check your credentials.",
+        details=details,
+        meta_data=meta_data,
+    )
+    return response, 401
+
+
+def handle_unauthorized_error(details=None, meta_data=None):
+    """
+    Handles authorization errors and logs them.
+
+    Args:
+        details (str, optional): Detailed information about the error.
+        meta_data (dict, optional): Additional context for the error.
+
+    Returns:
+        tuple: JSON response and HTTP status code.
+    """
+    log_error(
+        "Unauthorized access attempt.", module="authorization", meta_data=meta_data
+    )
+    response = format_error_response(
+        status=403,
+        error_code="UNAUTHORIZED_ACCESS",
+        message="You are not authorized to access this resource.",
+        details=details,
+        meta_data=meta_data,
+    )
+    return response, 403
+
+
+def handle_route_error(error, meta_data=None):
+    """
+    Handles route-specific errors with standardized logging and response.
+
+    Args:
+        error (Exception): The exception to handle.
+        meta_data (dict, optional): Additional context for the error.
+
+    Returns:
+        tuple: A tuple containing the JSON response and the HTTP status code.
+    """
+    log_error(error, module="route", meta_data=meta_data)
+    response = format_error_response(
+        status=500,
+        error_code="ROUTE_ERROR",
+        message="An error occurred while processing the request.",
+        details=str(error),
+        meta_data=meta_data,
+    )
+    return response, 500
+
+
 def handle_http_error(status, error_code, message, meta_data=None):
     """
     Handles predefined HTTP errors with standardized responses.
@@ -144,6 +235,7 @@ def handle_http_error(status, error_code, message, meta_data=None):
         meta_data=meta_data,
     )
     return response, status
+
 
 class ErrorContext:
     """

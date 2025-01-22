@@ -1,11 +1,11 @@
+# File: backend/routes/error_and_health_monitoring_routes.py
+
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.error_handling import (
     log_error,
     format_error_response,
-)
-from backend.utils.error_handling.routes.errors import (
     handle_route_error,
     HealthCheckError,
 )

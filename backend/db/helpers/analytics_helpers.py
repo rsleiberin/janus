@@ -1,9 +1,12 @@
+# File: backend/db/helpers/analytics_helpers.py
+
 from backend.db import db
 from backend.models import Analytics
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.db.errors import handle_database_error
+from backend.utils.error_handling.error_handling import handle_database_error
+from backend.utils.error_handling.exceptions import FileHandlerError  # Ensure this is correctly imported if used
 
 # Initialize the logger
 logger = CentralizedLogger(name="analytics_helpers")

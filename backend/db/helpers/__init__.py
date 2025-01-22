@@ -1,3 +1,5 @@
+# File: backend/db/helpers/__init__.py
+
 # Import helper modules explicitly
 from . import admin_helpers
 from . import analytics_helpers
@@ -7,9 +9,6 @@ from . import multi_model_helpers
 from . import security_helpers
 from . import user_helpers
 
-# Import helper errors explicitly
-from backend.utils.error_handling.db import errors
-
 __all__ = [
     "admin_helpers",
     "analytics_helpers",
@@ -18,5 +17,4 @@ __all__ = [
     "multi_model_helpers",
     "security_helpers",
     "user_helpers",
-    "errors",
 ]

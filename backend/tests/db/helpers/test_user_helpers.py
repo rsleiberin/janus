@@ -1,9 +1,11 @@
+# File: backend/tests/db/helpers/test_user_helpers.py
+
 import pytest
 from backend.db import db
 from backend.db.helpers.user_helpers import UserHelpers
 from backend.models import User
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.utils.errors import handle_error_with_logging
+from backend.utils.error_handling.exceptions import GeneralError
 
 logger = CentralizedLogger("test_user_helpers")
 
@@ -38,11 +40,9 @@ def test_get_by_id():
     assert fetched_user.id == created_user.id, "Fetched ID does not match created user."
 
     # Test failure for non-existent ID
-    try:
+    with pytest.raises(GeneralError) as exc_info:
         UserHelpers.get_by_id(9999)
-    except Exception as e:
-        error_details = handle_error_with_logging(e, user_id=9999)
-        assert error_details["error_type"] == "GeneralError"
+    assert "An error occurred in user_helpers: User with ID 9999 not found." in str(exc_info.value)
 
     logger.log_to_console("DEBUG", "test_get_by_id passed successfully.")
 
@@ -63,11 +63,9 @@ def test_get_by_email():
     assert fetched_by_email.id == created_user.id, "Email-based fetch mismatch."
 
     # Test failure for non-existent email
-    try:
+    with pytest.raises(GeneralError) as exc_info:
         UserHelpers.get_by_email("nonexistent@example.com")
-    except Exception as e:
-        error_details = handle_error_with_logging(e, email="nonexistent@example.com")
-        assert error_details["error_type"] == "GeneralError"
+    assert "An error occurred in user_helpers: User with email nonexistent@example.com not found." in str(exc_info.value)
 
     logger.log_to_console("DEBUG", "test_get_by_email passed successfully.")
 
@@ -102,11 +100,10 @@ def test_delete_user():
 
     # Test successful deletion
     UserHelpers.delete(user_id)
-    try:
+
+    with pytest.raises(GeneralError) as exc_info:
         UserHelpers.get_by_id(user_id)
-    except Exception as e:
-        error_details = handle_error_with_logging(e, user_id=user_id)
-        assert error_details["error_type"] == "GeneralError"
+    assert f"An error occurred in user_helpers: User with ID {user_id} not found." in str(exc_info.value)
 
     logger.log_to_console("DEBUG", "test_delete_user passed successfully.")
 
@@ -150,11 +147,10 @@ def test_exists_user():
 def test_user_query_error():
     logger.log_to_console("DEBUG", "Starting test_user_query_error...")
 
-    # Simulate a query error by deliberately causing an invalid SQLAlchemy query
-    try:
-        db.session.query(User).filter_by(nonexistent_field="value").all()
-    except Exception as e:
-        error_details = handle_error_with_logging(e)
-        assert error_details["error_type"] == "GeneralError"
+    # Simulate a query error by deliberately causing an invalid SQLAlchemy query using the helper method
+    with pytest.raises(GeneralError) as exc_info:
+        UserHelpers.get_user_by_nonexistent_field("value")
+    
+    assert "An error occurred in user_helpers: Entity namespace for \"users\" has no property \"nonexistent_field\"" in str(exc_info.value)
 
     logger.log_to_console("DEBUG", "test_user_query_error passed successfully.")

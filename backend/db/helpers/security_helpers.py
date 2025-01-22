@@ -1,7 +1,7 @@
 from backend.db import db
 from backend.models import Security
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.db.errors import handle_database_error
+from backend.utils.error_handling.error_handling import handle_database_error
 from typing import List
 
 logger = CentralizedLogger("security_helpers")

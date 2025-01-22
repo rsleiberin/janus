@@ -3,11 +3,11 @@ from unittest.mock import patch, ANY
 from datetime import datetime, timedelta
 from backend.db import db
 from backend.db.helpers.image_helpers import ImageHelpers
-from backend.utils.error_handling.db.errors import ImageError
+from backend.utils.error_handling.exceptions import ImageError  # Corrected import
 from backend.utils.logger import CentralizedLogger
 
 # Logger instance
-logger = CentralizedLogger()
+logger = CentralizedLogger("test_image_helpers")  # Added module name for consistency
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_create_image():
@@ -77,6 +77,9 @@ def test_delete_image():
             "INFO",
             f"Deleted image with ID: {image.id}",
         )
+        # Verify deletion
+        deleted_image = db.session.get(ImageHelpers.model, image.id)  # Assuming ImageHelpers.model refers to Image model
+        assert deleted_image is None, "Image was not deleted."
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_all_images():
@@ -145,15 +148,6 @@ def test_get_images_by_date_range():
             "INFO", "Retrieved 1 images within the date range.", start_date=past_date, end_date=now
         )
         assert len(results) == 1, "Expected 1 image in the date range."
-
-@pytest.mark.usefixtures("function_db_setup")
-def test_image_creation_failure():
-    with patch("backend.utils.logger.CentralizedLogger.log_to_console") as mock_log:
-        with pytest.raises(ImageError, match="Failed to create image."):
-            ImageHelpers.create(None)
-        mock_log.assert_called_with(
-            "ERROR", "Failed to create image.", exception=pytest.any()
-        )
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_image_creation_failure():

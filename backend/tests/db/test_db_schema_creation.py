@@ -3,10 +3,11 @@ from sqlalchemy import inspect
 from backend.db.db_schema_creation import create_schema
 from backend.db import db
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.db.errors import SchemaCreationError
+from backend.utils.error_handling.exceptions import SchemaCreationError
+
 
 # Set up logger for tests
-logger = CentralizedLogger("test_logger", log_level="DEBUG")
+logger = CentralizedLogger("test_db_schema_creation", log_level="DEBUG")
 
 
 @pytest.mark.usefixtures("function_db_setup")

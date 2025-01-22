@@ -3,7 +3,7 @@ from flask import Flask
 from backend.db import db  # The shared SQLAlchemy instance
 from backend.config import DevelopmentConfig  # Or ProductionConfig for production
 from backend.utils.logger import CentralizedLogger
-from backend.utils.error_handling.db.errors import DatabaseConnectionError
+from backend.utils.error_handling.exceptions import DatabaseConnectionError
 
 logger = CentralizedLogger()
 
