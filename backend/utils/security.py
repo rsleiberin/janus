@@ -3,7 +3,7 @@
 import re
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.error_handling import ErrorContext
-from backend.utils.error_handling.utils.errors import (
+from backend.utils.error_handling.exceptions import (
     AuthenticationError,
     AuthorizationError,
     ValidationError,

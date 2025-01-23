@@ -4,7 +4,7 @@ import os
 import re
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.error_handling import ErrorContext, log_error
-from backend.utils.error_handling.utils.errors import FileHandlerError
+from backend.utils.error_handling.exceptions import FileHandlerError
 
 logger = CentralizedLogger(name="file_handler_logger")
 UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", "backend/uploads")

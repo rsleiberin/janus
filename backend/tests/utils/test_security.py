@@ -7,7 +7,7 @@ from backend.utils.security import (
     validate_input,
     sanitize_input,
 )
-from backend.utils.error_handling.utils.errors import (
+from backend.utils.error_handling.exceptions import (
     AuthenticationError,
     AuthorizationError,
     ValidationError,

@@ -8,7 +8,7 @@ from backend.utils.error_handling.error_handling import (
     handle_http_error,
     ErrorContext,
 )
-from backend.utils.error_handling.utils.errors import FileHandlerError
+from backend.utils.error_handling.exceptions import FileHandlerError
 
 
 def test_format_error_response():

@@ -2,7 +2,8 @@ from backend.utils.logger import CentralizedLogger
 from backend.db.db_setup import create_app
 from backend.db import db
 from sqlalchemy import inspect
-from backend.utils.error_handling.db.errors import SchemaCreationError
+from backend.utils.error_handling.exceptions import SchemaCreationError
+
 
 logger = CentralizedLogger()
 

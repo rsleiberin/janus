@@ -1,7 +1,9 @@
 import pytest
+from backend.db import db
 from unittest.mock import patch
+from backend.models import Log
 from backend.db.helpers.log_helpers import LogHelpers
-from backend.utils.error_handling.exceptions import LogNotFoundError  # Corrected import
+from backend.utils.error_handling.exceptions import LogNotFoundError
 
 
 @pytest.mark.usefixtures("function_db_setup")
@@ -21,11 +23,9 @@ def test_create_log():
         )
         assert log is not None, "Failed to create log."
 
-        # Verify the actual log call structure
         mock_console_log.assert_any_call(
-            "INFO", "Image created successfully.", image_data={"key": "value"}  # Adjusted based on your LogHelpers implementation
+            "INFO", f"Log entry created successfully with ID {log.id}.", meta_data={"key": "value"}
         )
-
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_by_id():
@@ -38,7 +38,7 @@ def test_get_by_id():
         fetched_log = LogHelpers.get_by_id(log.id)
         mock_log.assert_called_with(
             "INFO",
-            f"Fetched log by ID: {log.id}",
+            f"Retrieved log by ID: {log.id}.",
         )
         assert fetched_log.id == log.id, "Log ID mismatch."
 
@@ -52,7 +52,7 @@ def test_delete_log():
     assert LogHelpers.delete_log(log.id), "Failed to delete log."
 
     # Test deletion of nonexistent log
-    with pytest.raises(LogNotFoundError, match="Log with ID 9999 not found."):
+    with pytest.raises(LogNotFoundError, match="Requested log entry was not found."):
         LogHelpers.delete_log(9999)
 
 
@@ -100,16 +100,27 @@ def test_get_recent_logs():
     recent_logs = LogHelpers.get_recent_logs(limit=3)
     assert len(recent_logs) == 3, "Expected 3 recent logs."
 
-
 @pytest.mark.usefixtures("function_db_setup")
-def test_count_logs():
+def test_count_logs(app):
     """
     Test counting logs.
     """
-    LogHelpers.create_log(action="Log 1", user_id=1)
-    LogHelpers.create_log(action="Log 2", user_id=2)
-    count = LogHelpers.count()
-    assert count == 2, "Expected log count to be 2."
+    with app.app_context():  # Ensure the app context is active
+        # Explicitly clear all logs to start clean
+        db.session.query(Log).delete()
+        db.session.commit()
+
+        # Verify database starts empty
+        count_before = LogHelpers.count()
+        assert count_before == 0, f"Expected log count to be 0, found {count_before}"
+
+        # Create new logs
+        LogHelpers.create_log(action="Log 1", user_id=1)
+        LogHelpers.create_log(action="Log 2", user_id=2)
+
+        # Verify count after creation
+        count_after = LogHelpers.count()
+        assert count_after == 2, f"Expected log count to be 2, found {count_after}"
 
 
 @pytest.mark.usefixtures("function_db_setup")

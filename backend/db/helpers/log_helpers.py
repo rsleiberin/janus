@@ -1,7 +1,5 @@
-# File: backend/db/helpers/log_helpers.py
-
 from datetime import datetime
-from typing import List  # Import List from typing for type annotations
+from typing import List
 from sqlalchemy import text
 from backend.utils.logger import CentralizedLogger
 from backend.db import db
@@ -15,7 +13,12 @@ logger = CentralizedLogger("log_helpers")
 class LogHelpers:
     @staticmethod
     def create_log(
-        action: str, user_id: int, module: str = None, level: str = "INFO", meta_data: dict = None
+        action: str,
+        user_id: int,
+        module: str = None,
+        level: str = "INFO",
+        meta_data: dict = None,
+        log_to_db: bool = False,
     ) -> Log:
         """
         Create a new log entry.
@@ -32,23 +35,25 @@ class LogHelpers:
             db.session.add(new_log)
             db.session.commit()
 
-            logger.log_to_console("INFO", f"Log entry created successfully with ID {new_log.id}.")
-            logger.log_to_db(
-                "INFO",
-                "Log entry created successfully.",
-                module="log_helpers",
-                meta_data={"log_id": new_log.id, "action": action, "user_id": user_id},
-            )
+            logger.log_to_console("INFO", f"Log entry created successfully with ID {new_log.id}.", meta_data=meta_data)
+            if log_to_db:
+                logger.log_to_db(
+                    "INFO",
+                    "Log entry created successfully.",
+                    module="log_helpers",
+                    meta_data={"log_id": new_log.id, "action": action, "user_id": user_id},
+                )
             return new_log
         except Exception as e:
             db.session.rollback()
             logger.log_to_console("ERROR", "Failed to create log.", exception=e, meta_data=meta_data)
-            logger.log_to_db(
-                "ERROR",
-                "Failed to create log.",
-                module="log_helpers",
-                meta_data={"action": action, "user_id": user_id},
-            )
+            if log_to_db:
+                logger.log_to_db(
+                    "ERROR",
+                    "Failed to create log.",
+                    module="log_helpers",
+                    meta_data={"action": action, "user_id": user_id},
+                )
             raise handle_database_error(e, module="log_helpers", meta_data=meta_data)
 
     @staticmethod
@@ -61,12 +66,6 @@ class LogHelpers:
             if not log_entry:
                 raise LogNotFoundError(f"Log with ID {log_id} not found.")
             logger.log_to_console("INFO", f"Retrieved log by ID: {log_id}.")
-            logger.log_to_db(
-                "INFO",
-                "Log retrieved by ID.",
-                module="log_helpers",
-                meta_data={"log_id": log_id},
-            )
             return log_entry
         except Exception as e:
             raise handle_database_error(e, module="log_helpers", meta_data={"log_id": log_id})
@@ -79,12 +78,6 @@ class LogHelpers:
         try:
             logs = Log.query.filter_by(user_id=user_id).all()
             logger.log_to_console("INFO", f"Retrieved {len(logs)} logs for user ID {user_id}.")
-            logger.log_to_db(
-                "INFO",
-                "Logs retrieved for user.",
-                module="log_helpers",
-                meta_data={"user_id": user_id, "count": len(logs)},
-            )
             return logs
         except Exception as e:
             raise handle_database_error(e, module="log_helpers", meta_data={"user_id": user_id})
@@ -97,12 +90,6 @@ class LogHelpers:
         try:
             logs = Log.query.order_by(Log.timestamp.desc()).limit(limit).all()
             logger.log_to_console("INFO", f"Retrieved {len(logs)} recent logs.", meta_data={"limit": limit})
-            logger.log_to_db(
-                "INFO",
-                "Recent logs retrieved.",
-                module="log_helpers",
-                meta_data={"limit": limit, "count": len(logs)},
-            )
             return logs
         except Exception as e:
             raise handle_database_error(e, module="log_helpers", meta_data={"limit": limit})
@@ -120,12 +107,6 @@ class LogHelpers:
             db.session.delete(log_entry)
             db.session.commit()
             logger.log_to_console("INFO", f"Deleted log with ID {log_id}.")
-            logger.log_to_db(
-                "INFO",
-                "Log deleted successfully.",
-                module="log_helpers",
-                meta_data={"log_id": log_id},
-            )
             return True
         except Exception as e:
             db.session.rollback()
@@ -139,12 +120,6 @@ class LogHelpers:
         try:
             total = Log.query.count()
             logger.log_to_console("INFO", f"Total logs count: {total}.")
-            logger.log_to_db(
-                "INFO",
-                "Total logs count retrieved.",
-                module="log_helpers",
-                meta_data={"total_logs": total},
-            )
             return total
         except Exception as e:
             raise handle_database_error(e, module="log_helpers")
@@ -157,12 +132,6 @@ class LogHelpers:
         try:
             logs = Log.query.filter(text(f"json_extract(log_metadata, '$.{key}') IS NOT NULL")).all()
             logger.log_to_console("INFO", f"Retrieved {len(logs)} logs with metadata key: {key}.")
-            logger.log_to_db(
-                "INFO",
-                "Logs retrieved with specific metadata key.",
-                module="log_helpers",
-                meta_data={"key": key, "count": len(logs)},
-            )
             return logs
         except Exception as e:
             raise handle_database_error(e, module="log_helpers", meta_data={"key": key})
@@ -182,14 +151,44 @@ class LogHelpers:
                 "INFO",
                 f"Retrieved {len(logs)} logs with metadata key: {key} and value: {value}.",
             )
-            logger.log_to_db(
-                "INFO",
-                "Logs retrieved with specific metadata key-value pair.",
-                module="log_helpers",
-                meta_data={"key": key, "value": value, "count": len(logs)},
-            )
             return logs
         except Exception as e:
             raise handle_database_error(
                 e, module="log_helpers", meta_data={"key": key, "value": value}
             )
+
+    @staticmethod
+    def get_by_module(module: str) -> List[Log]:
+        """
+        Retrieve logs by module.
+        """
+        try:
+            logs = Log.query.filter_by(module=module).all()
+            logger.log_to_console("INFO", f"Retrieved {len(logs)} logs for module: {module}.")
+            return logs
+        except Exception as e:
+            raise handle_database_error(e, module="log_helpers", meta_data={"module": module})
+
+    @staticmethod
+    def get_by_level(level: str) -> List[Log]:
+        """
+        Retrieve logs by log level.
+        """
+        try:
+            logs = Log.query.filter_by(level=level).all()
+            logger.log_to_console("INFO", f"Retrieved {len(logs)} logs for level: {level}.")
+            return logs
+        except Exception as e:
+            raise handle_database_error(e, module="log_helpers", meta_data={"level": level})
+
+    @staticmethod
+    def exists(action: str) -> bool:
+        """
+        Check if a log with a specific action exists.
+        """
+        try:
+            exists = Log.query.filter_by(action=action).first() is not None
+            logger.log_to_console("INFO", f"Log exists check for action '{action}': {exists}.")
+            return exists
+        except Exception as e:
+            raise handle_database_error(e, module="log_helpers", meta_data={"action": action})

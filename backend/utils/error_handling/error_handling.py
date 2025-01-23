@@ -1,5 +1,3 @@
-# File: backend/utils/error_handling/error_handling.py
-
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.exceptions import (
     DatabaseConnectionError,
@@ -16,7 +14,6 @@ from sqlalchemy.exc import SQLAlchemyError
 
 # Initialize the centralized logger
 logger = CentralizedLogger("error_handling")
-
 
 def format_error_response(status, error_code, message, details=None, meta_data=None):
     """
@@ -43,7 +40,6 @@ def format_error_response(status, error_code, message, details=None, meta_data=N
         response["meta_data"] = meta_data
     return response
 
-
 def log_error(error, module=None, user_id=None, meta_data=None):
     """
     Logs an error message using the centralized logger.
@@ -63,7 +59,6 @@ def log_error(error, module=None, user_id=None, meta_data=None):
         meta_data=meta_data,
     )
 
-
 def handle_database_error(error: Exception, module: str = None, meta_data: dict = None):
     """
     Handles database-related exceptions by logging them and raising a standardized exception.
@@ -80,33 +75,19 @@ def handle_database_error(error: Exception, module: str = None, meta_data: dict 
     # Log the error with context
     log_error(error, module=module, meta_data=meta_data)
 
-    # Map common database-related errors to error codes and messages
-    error_mapping = {
-        DatabaseConnectionError: ("DB_CONNECTION_ERROR", "Failed to connect to the database."),
-        SchemaCreationError: ("SCHEMA_CREATION_ERROR", "Error creating database schema."),
-        SessionCommitError: ("SESSION_COMMIT_ERROR", "Failed to commit database session."),
-        LogNotFoundError: ("LOG_NOT_FOUND", "Requested log entry was not found."),
-        SQLAlchemyError: ("SQLALCHEMY_ERROR", "An unexpected database error occurred."),
-    }
-
-    # Iterate through the mapping and check with isinstance to handle subclasses
-    for exc_type, (error_code, message) in error_mapping.items():
-        if isinstance(error, exc_type):
-            if isinstance(error, DatabaseConnectionError):
-                raise DatabaseConnectionError(message) from error
-            elif isinstance(error, SchemaCreationError):
-                raise SchemaCreationError(message) from error
-            elif isinstance(error, SessionCommitError):
-                raise SessionCommitError(message) from error
-            elif isinstance(error, LogNotFoundError):
-                raise LogNotFoundError(message) from error
-            else:
-                # For SQLAlchemyError and its subclasses, include the original error message
-                raise GeneralError(f"An error occurred in {module}: {str(error)}") from error
-
-    # If no match found in the mapping, raise a GeneralError with the original message
-    raise GeneralError(f"An error occurred in {module}: {str(error)}") from error
-
+    # If the error is already a DatabaseError, re-raise it without wrapping
+    if isinstance(error, DatabaseConnectionError):
+        raise DatabaseConnectionError("Failed to connect to the database.") from error
+    elif isinstance(error, SchemaCreationError):
+        raise SchemaCreationError("Error creating database schema.") from error
+    elif isinstance(error, SessionCommitError):
+        raise SessionCommitError("Failed to commit database session.") from error
+    elif isinstance(error, LogNotFoundError):
+        raise LogNotFoundError("Requested log entry was not found.") from error
+    elif isinstance(error, SQLAlchemyError):
+        raise GeneralError(f"An unexpected database error occurred: {str(error)}") from error
+    else:
+        raise GeneralError(f"An error occurred in {module}: {str(error)}") from error
 
 def handle_error_with_logging(error: Exception, module: str = None, meta_data: dict = None):
     """
@@ -122,7 +103,6 @@ def handle_error_with_logging(error: Exception, module: str = None, meta_data: d
     """
     log_error(error, module=module, meta_data=meta_data)
     raise GeneralError(f"An error occurred in {module}: {str(error)}") from error
-
 
 def handle_general_error(error, meta_data=None):
     """
@@ -145,7 +125,6 @@ def handle_general_error(error, meta_data=None):
     )
     return response, 500
 
-
 def handle_authentication_error(details=None, meta_data=None):
     """
     Handles authentication errors and logs them.
@@ -167,7 +146,6 @@ def handle_authentication_error(details=None, meta_data=None):
     )
     return response, 401
 
-
 def handle_unauthorized_error(details=None, meta_data=None):
     """
     Handles authorization errors and logs them.
@@ -179,9 +157,7 @@ def handle_unauthorized_error(details=None, meta_data=None):
     Returns:
         tuple: JSON response and HTTP status code.
     """
-    log_error(
-        "Unauthorized access attempt.", module="authorization", meta_data=meta_data
-    )
+    log_error("Unauthorized access attempt.", module="authorization", meta_data=meta_data)
     response = format_error_response(
         status=403,
         error_code="UNAUTHORIZED_ACCESS",
@@ -190,7 +166,6 @@ def handle_unauthorized_error(details=None, meta_data=None):
         meta_data=meta_data,
     )
     return response, 403
-
 
 def handle_route_error(error, meta_data=None):
     """
@@ -212,7 +187,6 @@ def handle_route_error(error, meta_data=None):
         meta_data=meta_data,
     )
     return response, 500
-
 
 def handle_http_error(status, error_code, message, meta_data=None):
     """
@@ -236,6 +210,95 @@ def handle_http_error(status, error_code, message, meta_data=None):
     )
     return response, status
 
+def handle_health_check_error(details=None, meta_data=None):
+    """
+    Handles health check-related errors and logs them.
+
+    Args:
+        details (str, optional): Detailed information about the error.
+        meta_data (dict, optional): Additional context for the error.
+
+    Returns:
+        tuple: JSON response and HTTP status code.
+    """
+    log_error(
+        "Health check failed.", module="health_check", meta_data=meta_data
+    )
+    response = format_error_response(
+        status=500,
+        error_code="HEALTH_CHECK_FAILED",
+        message="A health check failure occurred.",
+        details=details,
+        meta_data=meta_data,
+    )
+    return response, 500
+
+def handle_image_error(details=None, meta_data=None):
+    """
+    Handles image-related errors and logs them.
+
+    Args:
+        details (str, optional): Detailed information about the error.
+        meta_data (dict, optional): Additional context for the error.
+
+    Returns:
+        tuple: JSON response and HTTP status code.
+    """
+    log_error(
+        "Image processing error occurred.", module="image_processing", meta_data=meta_data
+    )
+    response = format_error_response(
+        status=500,
+        error_code="IMAGE_ERROR",
+        message="An error occurred during image processing.",
+        details=details,
+        meta_data=meta_data,
+    )
+    return response, 500
+
+def handle_file_handler_error(details=None, meta_data=None):
+    """
+    Handles file handler-related errors and logs them.
+
+    Args:
+        details (str, optional): Detailed information about the error.
+        meta_data (dict, optional): Additional context for the error.
+
+    Returns:
+        tuple: JSON response and HTTP status code.
+    """
+    log_error(
+        "File handler error occurred.", module="file_handler", meta_data=meta_data
+    )
+    response = format_error_response(
+        status=500,
+        error_code="FILE_HANDLER_ERROR",
+        message="An error occurred during file handling.",
+        details=details,
+        meta_data=meta_data,
+    )
+    return response, 500
+
+def handle_security_error(details=None, meta_data=None):
+    """
+    Handles security-related errors and logs them.
+
+    Args:
+        details (str, optional): Detailed information about the error.
+        meta_data (dict, optional): Additional context for the error.
+
+    Returns:
+        tuple: JSON response and HTTP status code.
+    """
+    log_error("Security error occurred.", module="security", meta_data=meta_data)
+    response = format_error_response(
+        status=403,
+        error_code="SECURITY_ERROR",
+        message="A security error occurred.",
+        details=details,
+        meta_data=meta_data,
+    )
+    return response, 403
 
 class ErrorContext:
     """

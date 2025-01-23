@@ -1,5 +1,3 @@
-# File: backend/utils/error_handling/__init__.py
-
 from .error_handling import (
     handle_database_error,
     handle_error_with_logging,
@@ -8,6 +6,11 @@ from .error_handling import (
     handle_unauthorized_error,
     handle_route_error,
     handle_http_error,
+    handle_health_check_error,
+    handle_image_error,
+    handle_file_handler_error,
+    handle_security_error,
+    ErrorContext,
 )
 from .exceptions import (
     DatabaseConnectionError,
@@ -16,9 +19,9 @@ from .exceptions import (
     LogNotFoundError,
     GeneralError,
     HealthCheckError,
-    ImageError,            # Ensure all custom exceptions are included
-    FileHandlerError,      # Add any other custom exceptions as needed
-    SecurityError,         # Example additional exception
+    ImageError,
+    FileHandlerError,
+    SecurityError,
 )
 
 __all__ = [
@@ -29,6 +32,11 @@ __all__ = [
     "handle_unauthorized_error",
     "handle_route_error",
     "handle_http_error",
+    "handle_health_check_error",
+    "handle_image_error",
+    "handle_file_handler_error",
+    "handle_security_error",
+    "ErrorContext",
     "DatabaseConnectionError",
     "SchemaCreationError",
     "SessionCommitError",
