@@ -27,6 +27,22 @@ class ImageHelpers:
             raise ImageError("Failed to create image.") from e
 
     @staticmethod
+    def delete(image_id: int) -> None:
+        """Delete an image by its ID."""
+        try:
+            image = db.session.get(Image, image_id)
+            if not image:
+                raise ImageError(f"Image with ID {image_id} not found.")
+
+            db.session.delete(image)
+            db.session.commit()
+            logger.log_to_console("INFO", f"Deleted image with ID: {image_id}")
+            logger.log_to_db("INFO", "Image deleted successfully.", module="image_helpers", meta_data={"image_id": image_id})
+        except Exception as e:
+            db.session.rollback()
+            raise handle_database_error(e, module="image_helpers", meta_data={"image_id": image_id})
+
+    @staticmethod
     def get_images_by_size(min_width: int, min_height: int) -> List[Image]:
         """Retrieve images larger than specified dimensions."""
         try:
@@ -73,22 +89,6 @@ class ImageHelpers:
         except Exception as e:
             db.session.rollback()
             raise handle_database_error(e, module="image_helpers", meta_data={"image_id": image_id, "updates": updated_data})
-
-    @staticmethod
-    def delete(image_id: int) -> None:
-        """Delete an image by its ID."""
-        try:
-            image = db.session.get(Image, image_id)
-            if not image:
-                raise ImageError(f"Image with ID {image_id} not found.")
-
-            db.session.delete(image)
-            db.session.commit()
-            logger.log_to_console("INFO", f"Deleted image with ID: {image_id}")
-            logger.log_to_db("INFO", "Image deleted successfully.", module="image_helpers", meta_data={"image_id": image_id})
-        except Exception as e:
-            db.session.rollback()
-            raise handle_database_error(e, module="image_helpers", meta_data={"image_id": image_id})
 
     @staticmethod
     def get_all() -> List[Image]:

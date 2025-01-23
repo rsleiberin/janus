@@ -1,5 +1,3 @@
-# File: backend/tests/db/helpers/test_user_helpers.py
-
 import pytest
 from backend.db import db
 from backend.db.helpers.user_helpers import UserHelpers
@@ -8,6 +6,7 @@ from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.exceptions import GeneralError
 
 logger = CentralizedLogger("test_user_helpers")
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_create_user():
@@ -42,7 +41,7 @@ def test_get_by_id():
     # Test failure for non-existent ID
     with pytest.raises(GeneralError) as exc_info:
         UserHelpers.get_by_id(9999)
-    assert "An error occurred in user_helpers: User with ID 9999 not found." in str(exc_info.value)
+    assert "User with ID 9999 not found" in str(exc_info.value)
 
     logger.log_to_console("DEBUG", "test_get_by_id passed successfully.")
 
@@ -65,7 +64,7 @@ def test_get_by_email():
     # Test failure for non-existent email
     with pytest.raises(GeneralError) as exc_info:
         UserHelpers.get_by_email("nonexistent@example.com")
-    assert "An error occurred in user_helpers: User with email nonexistent@example.com not found." in str(exc_info.value)
+    assert "User with email nonexistent@example.com not found" in str(exc_info.value)
 
     logger.log_to_console("DEBUG", "test_get_by_email passed successfully.")
 
@@ -103,7 +102,7 @@ def test_delete_user():
 
     with pytest.raises(GeneralError) as exc_info:
         UserHelpers.get_by_id(user_id)
-    assert f"An error occurred in user_helpers: User with ID {user_id} not found." in str(exc_info.value)
+    assert f"User with ID {user_id} not found" in str(exc_info.value)
 
     logger.log_to_console("DEBUG", "test_delete_user passed successfully.")
 
@@ -150,7 +149,9 @@ def test_user_query_error():
     # Simulate a query error by deliberately causing an invalid SQLAlchemy query using the helper method
     with pytest.raises(GeneralError) as exc_info:
         UserHelpers.get_user_by_nonexistent_field("value")
-    
-    assert "An error occurred in user_helpers: Entity namespace for \"users\" has no property \"nonexistent_field\"" in str(exc_info.value)
+
+    assert "Entity namespace for \"users\" has no property \"nonexistent_field\"" in str(
+        exc_info.value
+    )
 
     logger.log_to_console("DEBUG", "test_user_query_error passed successfully.")

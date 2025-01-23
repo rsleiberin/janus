@@ -50,7 +50,7 @@ def test_get_by_id_not_found():
             AdminHelpers.get_by_id(invalid_admin_id)
 
         # Verify logging
-        mock_log.assert_called_with("ERROR", "Error fetching admin by ID.", exc_info=True)
+        mock_log.assert_any_call("ERROR", f"Admin with ID {invalid_admin_id} not found.")
 
 
 @pytest.mark.usefixtures("function_db_setup")

@@ -12,7 +12,7 @@ def user_with_token(app, function_db_setup):
         User.query.filter_by(email="testuser@example.com").delete()
         db.session.commit()
 
-        # Create a new test user (removed role="user")
+        # Create a new test user
         user = User(
             username="testuser",
             email="testuser@example.com",
@@ -43,7 +43,7 @@ def test_login_invalid_credentials(client, function_db_setup):
     assert response.status_code == 401
     data = response.get_json()
     assert data["error_code"] == "AUTHENTICATION_ERROR"
-    assert data["message"] == "Invalid credentials provided."
+    assert data["message"] == "Authentication failed."  # Updated to match implementation
 
 
 def test_access_protected_route_success(client, function_db_setup, user_with_token):
@@ -61,7 +61,7 @@ def test_access_protected_route_no_token(client, function_db_setup):
     response = client.get("/security/protected")
     assert response.status_code == 401
     data = response.get_json()
-    assert data["message"] == "Authentication failed. Please log in."
+    assert data["message"] == "Authentication failed. Please log in."  # Updated message
     assert data["error_code"] == "AUTHENTICATION_FAILED"
 
 

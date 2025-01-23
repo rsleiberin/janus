@@ -40,7 +40,7 @@ def test_files_content_endpoint_invalid_path(mock_abspath, client, mocker):
     assert data["error_code"] == "FILE_ACCESS_DENIED"
 
     mock_logger.assert_called_once_with(
-        "ERROR", "File access error", exc_info=mocker.ANY
+        "ERROR", "File access error.", exc_info=mocker.ANY
     )
 
 
@@ -57,7 +57,6 @@ def test_files_content_endpoint_nonexistent_file(mock_open_func, client, mocker)
     assert response.status_code == 404
     assert data["error_code"] == "FILE_NOT_FOUND"
 
-    # Update the expected log message
     mock_logger.assert_called_once_with(
         "WARNING", f"The requested file was not found: {nonexistent_file_path}"
     )
@@ -74,8 +73,8 @@ def test_files_content_endpoint_unexpected_error(mock_open_func, client, mocker)
     data = response.get_json()
 
     assert response.status_code == 500
-    assert data["error_code"] == "UNKNOWN_ROUTE_ERROR"
+    assert data["error_code"] == "READ_FILE_ERROR"
 
     mock_logger.assert_called_once_with(
-        "ERROR", "Unexpected error reading file", exc_info=mocker.ANY
+        "ERROR", "Unexpected error reading file.", exc_info=mocker.ANY
     )

@@ -3,11 +3,13 @@ from unittest.mock import patch, ANY
 from datetime import datetime, timedelta
 from backend.db import db
 from backend.db.helpers.image_helpers import ImageHelpers
+from backend.models import Image
 from backend.utils.error_handling.exceptions import ImageError  # Corrected import
 from backend.utils.logger import CentralizedLogger
 
 # Logger instance
-logger = CentralizedLogger("test_image_helpers")  # Added module name for consistency
+logger = CentralizedLogger("test_image_helpers")
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_create_image():
@@ -23,6 +25,7 @@ def test_create_image():
             "INFO", "Image created successfully.", image_data=image_data
         )
         assert image.id is not None, "Image ID is missing after creation."
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_by_id():
@@ -40,6 +43,7 @@ def test_get_by_id():
             f"Retrieved image by ID: {image.id}",
         )
         assert fetched_image.id == image.id, "Fetched image ID does not match."
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_update_image():
@@ -61,6 +65,7 @@ def test_update_image():
         )
         assert updated_image.width == 1024, "Image width not updated correctly."
 
+
 @pytest.mark.usefixtures("function_db_setup")
 def test_delete_image():
     image_data = {
@@ -78,8 +83,9 @@ def test_delete_image():
             f"Deleted image with ID: {image.id}",
         )
         # Verify deletion
-        deleted_image = db.session.get(ImageHelpers.model, image.id)  # Assuming ImageHelpers.model refers to Image model
+        deleted_image = db.session.get(Image, image.id)
         assert deleted_image is None, "Image was not deleted."
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_all_images():
@@ -94,6 +100,7 @@ def test_get_all_images():
         all_images = ImageHelpers.get_all()
         mock_log.assert_called_with("INFO", "Retrieved all images.", count=2)
         assert len(all_images) == 2, "Expected 2 images but found a different count."
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_exists_image():
@@ -110,6 +117,7 @@ def test_exists_image():
         )
         assert exists is True, "Image existence check failed."
 
+
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_images_by_size():
     ImageHelpers.create(
@@ -125,6 +133,7 @@ def test_get_images_by_size():
             "INFO", "Retrieved 1 images larger than 1280x720.", min_width=1280, min_height=720
         )
         assert len(large_images) == 1, "Expected 1 large image."
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_get_images_by_date_range():
@@ -148,6 +157,7 @@ def test_get_images_by_date_range():
             "INFO", "Retrieved 1 images within the date range.", start_date=past_date, end_date=now
         )
         assert len(results) == 1, "Expected 1 image in the date range."
+
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_image_creation_failure():

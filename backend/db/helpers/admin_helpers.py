@@ -35,12 +35,14 @@ class AdminHelpers:
     def get_by_id(admin_id):
         """Get an admin by their ID."""
         try:
-            with current_app.app_context():
-                admin = db.session.get(Admin, admin_id)
-                if not admin:
-                    raise DatabaseError(f"Admin with ID {admin_id} not found.")
-                logger.log_to_console("INFO", f"Fetched admin by ID: {admin_id}")
-                return admin
+            admin = db.session.get(Admin, admin_id)
+            if not admin:
+                raise DatabaseError(f"Admin with ID {admin_id} not found.")
+            logger.log_to_console("INFO", f"Fetched admin by ID: {admin_id}")
+            return admin
+        except DatabaseError as db_error:
+            logger.log_to_console("ERROR", str(db_error))
+            raise
         except Exception as e:
             logger.log_to_console("ERROR", "Error fetching admin by ID.", exc_info=e)
             raise handle_database_error(e, module="admin_helpers", meta_data={"admin_id": admin_id})

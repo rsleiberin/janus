@@ -9,6 +9,8 @@ from backend.utils.error_handling.exceptions import (
     ImageError,
     FileHandlerError,
     SecurityError,
+    ValidationError,  # Ensure this is imported if used elsewhere
+    AuthenticationError,  # Ensure this is imported if used elsewhere
 )
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -96,7 +98,7 @@ def handle_error_with_logging(error: Exception, module: str = None, meta_data: d
     Args:
         error (Exception): The exception to handle.
         module (str, optional): The module or context where the error occurred.
-        meta_data (dict, optional): Additional metadata to provide context.
+        meta_data (dict, optional): Additional metadata for the error.
 
     Raises:
         GeneralError: A standardized general error.
@@ -299,6 +301,31 @@ def handle_security_error(details=None, meta_data=None):
         meta_data=meta_data,
     )
     return response, 403
+
+def handle_validation_error(details=None, meta_data=None):
+    """
+    Handles validation errors by logging them and returning a standardized response.
+
+    Args:
+        details (str, optional): Detailed information about the validation error.
+        meta_data (dict, optional): Additional context for the error.
+
+    Returns:
+        tuple: JSON response and HTTP status code.
+    """
+    log_error(
+        "Validation failed.",
+        module="validation",
+        meta_data=meta_data
+    )
+    response = format_error_response(
+        status=400,
+        error_code="VALIDATION_ERROR",
+        message="A validation error occurred.",
+        details=details,
+        meta_data=meta_data,
+    )
+    return response, 400
 
 class ErrorContext:
     """
