@@ -1,16 +1,19 @@
+import os
 from backend.utils.logger import CentralizedLogger
-from backend.db.db_setup import create_app
+from backend.app import create_app
 from backend.db import db
 from sqlalchemy import inspect
 from backend.utils.error_handling.exceptions import SchemaCreationError
+from dotenv import load_dotenv
 
+# Load environment variables from .flaskenv
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "..", "..", "backend", ".flaskenv"))
 
 logger = CentralizedLogger()
 
-
 def create_schema():
     """Function to create the database schema."""
-    app = create_app()
+    app = create_app(os.getenv("FLASK_ENV", "development"))
     with app.app_context():
         try:
             logger.log_to_console("DEBUG", "Creating database schema...")
@@ -35,7 +38,6 @@ def create_schema():
             )
         except Exception as error:
             raise SchemaCreationError("Error while creating the schema.") from error
-
 
 if __name__ == "__main__":
     create_schema()

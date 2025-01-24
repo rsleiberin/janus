@@ -5,10 +5,8 @@ from backend.db import db
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.exceptions import SchemaCreationError
 
-
 # Set up logger for tests
 logger = CentralizedLogger("test_db_schema_creation", log_level="DEBUG")
-
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_create_schema():
@@ -21,7 +19,7 @@ def test_create_schema():
         create_schema()
         inspector = inspect(db.engine)
         tables = inspector.get_table_names()
-        logger.log_to_console("DEBUG", "Tables found", tables=tables)
+        logger.log_to_console("DEBUG", f"Tables found: {tables}")
 
         expected = {"users", "admins", "images", "logs", "analytics", "security"}
         missing = expected - set(tables)

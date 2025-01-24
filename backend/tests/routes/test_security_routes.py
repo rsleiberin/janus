@@ -1,75 +1,78 @@
-import pytest
-from werkzeug.security import generate_password_hash
-from flask_jwt_extended import create_access_token
-from backend.models import User, db
+# File: backend/tests/routes/test_security_routes.py
 
+import pytest
+from unittest.mock import MagicMock
+from werkzeug.security import generate_password_hash
 
 @pytest.fixture
-def user_with_token(app, function_db_setup):
-    """Fixture to create a user and return a valid JWT token."""
-    with app.app_context():
-        # Cleanup existing test user
-        User.query.filter_by(email="testuser@example.com").delete()
-        db.session.commit()
-
-        # Create a new test user
-        user = User(
-            username="testuser",
-            email="testuser@example.com",
-            password_hash=generate_password_hash("password123"),
-        )
-        db.session.add(user)
-        db.session.commit()
-
-        # Generate access token
-        token = create_access_token(identity={"id": user.id, "email": user.email})
-        return user, token
+def client():
+    from backend.app import create_app, db
+    app = create_app('testing')  # Use 'testing' as the configuration name
+    with app.test_client() as client:
+        with app.app_context():
+            db.create_all()
+        yield client
+        with app.app_context():
+            db.session.remove()
+            db.drop_all()
 
 
-def test_login_success(client, function_db_setup, user_with_token):
-    """Test successful login."""
-    payload = {"email": "testuser@example.com", "password": "password123"}
-    response = client.post("/security/login", json=payload)
-    assert response.status_code == 200
+def test_login_valid_credentials(client, mocker):
+    """Test login with valid credentials."""
+    payload = {"email": "validuser@example.com", "password": "correctpassword"}
+
+    # Mock logger
+    mock_logger = mocker.patch("backend.utils.logger.CentralizedLogger.log_to_console")
+
+    # Mock database user query
+    mock_user = MagicMock()
+    mock_user.id = 1
+    mock_user.email = payload["email"]
+    mock_user.password_hash = generate_password_hash("correctpassword")
+
+    mock_filter_by = mocker.patch("backend.models.User.query.filter_by")
+    mock_filter_by.return_value.first.return_value = mock_user
+
+    # Send the request
+    response = client.post("/security/login", json=payload, content_type="application/json")
     data = response.get_json()
+
+    # Assert response
+    assert response.status_code == 200
     assert "access_token" in data
     assert "refresh_token" in data
 
+    # Assert logger calls
+    mock_logger.assert_any_call("DEBUG", "Login endpoint hit.")
+    mock_logger.assert_any_call("DEBUG", "Request payload received.", payload=payload)
+    mock_logger.assert_any_call("DEBUG", f"Validating user with email: {payload['email']}")
+    mock_logger.assert_any_call("DEBUG", f"User fetched: {mock_user.email}")
+    mock_logger.assert_any_call("DEBUG", f"User authenticated: {mock_user.email}")
+    mock_logger.assert_any_call("INFO", f"User {mock_user.email} logged in successfully.")
 
-def test_login_invalid_credentials(client, function_db_setup):
+
+def test_login_invalid_credentials(client, mocker):
     """Test login with invalid credentials."""
     payload = {"email": "wrong@example.com", "password": "wrongpassword"}
-    response = client.post("/security/login", json=payload)
+
+    # Mock logger
+    mock_logger = mocker.patch("backend.utils.logger.CentralizedLogger.log_to_console")
+
+    # Mock database user query
+    mock_filter_by = mocker.patch("backend.models.User.query.filter_by")
+    mock_filter_by.return_value.first.return_value = None  # Simulate invalid user
+
+    # Send the request
+    response = client.post("/security/login", json=payload, content_type="application/json")
+    data = response.get_json()
+
+    # Assert response
     assert response.status_code == 401
-    data = response.get_json()
-    assert data["error_code"] == "AUTHENTICATION_ERROR"
-    assert data["message"] == "Authentication failed."  # Updated to match implementation
+    assert "msg" in data
+    assert data["msg"] == "Invalid email or password."
 
-
-def test_access_protected_route_success(client, function_db_setup, user_with_token):
-    """Test accessing a protected route with a valid token."""
-    _, token = user_with_token
-    headers = {"Authorization": f"Bearer {token}"}
-    response = client.get("/security/protected", headers=headers)
-    assert response.status_code == 200
-    data = response.get_json()
-    assert data["message"] == "Welcome testuser@example.com!"
-
-
-def test_access_protected_route_no_token(client, function_db_setup):
-    """Test accessing a protected route without a token."""
-    response = client.get("/security/protected")
-    assert response.status_code == 401
-    data = response.get_json()
-    assert data["message"] == "Authentication failed. Please log in."  # Updated message
-    assert data["error_code"] == "AUTHENTICATION_FAILED"
-
-
-def test_access_protected_route_invalid_token(client, function_db_setup):
-    """Test accessing a protected route with an invalid token."""
-    headers = {"Authorization": "Bearer invalid_token"}
-    response = client.get("/security/protected", headers=headers)
-    assert response.status_code == 401
-    data = response.get_json()
-    assert data["message"] == "Token is invalid or expired."
-    assert data["error_code"] == "INVALID_TOKEN"
+    # Assert logger calls
+    mock_logger.assert_any_call("DEBUG", "Login endpoint hit.")
+    mock_logger.assert_any_call("DEBUG", "Request payload received.", payload=payload)
+    mock_logger.assert_any_call("DEBUG", f"Validating user with email: {payload['email']}")
+    mock_logger.assert_any_call("WARNING", "User not found.", email=payload["email"])

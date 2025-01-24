@@ -1,36 +1,39 @@
 import os
 from flask import Flask
 from backend.db import db  # The shared SQLAlchemy instance
-from backend.config import DevelopmentConfig  # Or ProductionConfig for production
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.exceptions import DatabaseConnectionError
+from backend.app import create_app
 
 logger = CentralizedLogger()
 
+def create_app_with_db(config_name="development"):
+    """
+    Factory function to create and configure the Flask application with the database.
 
-def create_app():
-    """Factory function to create and configure the Flask application."""
-    app = Flask(__name__)
+    Args:
+        config_name (str): The configuration name to use ('development', 'testing', 'production').
 
-    # Apply configuration
-    config = DevelopmentConfig()  # Explicitly instantiate the config class
-    app.config.from_object(config)
-    app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
-    logger.log_to_console(
-        "DEBUG", f"Using database URI: {app.config['SQLALCHEMY_DATABASE_URI']}"
-    )
+    Returns:
+        Flask: Configured Flask application.
+    """
+    logger.log_to_console("DEBUG", f"Creating app with config: {config_name}...")
+
+    app = create_app(config_name)
 
     # Initialize the database
     try:
-        db.init_app(app)
+        with app.app_context():
+            db.create_all()
+            logger.log_to_console("DEBUG", "Database initialized successfully.")
     except Exception as error:
+        logger.log_to_console("ERROR", "Failed to initialize the database.", details=str(error))
         raise DatabaseConnectionError("Failed to initialize the database.") from error
 
     return app
 
-
 if __name__ == "__main__":
-    app = create_app()
+    app = create_app_with_db()
 
     # Verify the database file exists
     db_path = os.path.abspath(
