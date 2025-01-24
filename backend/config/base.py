@@ -1,7 +1,8 @@
 """
 Base configuration for the Flask application.
 
-This class includes common settings that are inherited by specific environment configurations.
+This class includes common settings that are inherited by specific environment
+configurations.
 """
 
 import os

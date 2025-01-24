@@ -4,7 +4,7 @@ Pytest fixtures for initializing the Flask application and database.
 
 import os
 import pytest
-from backend.app import create_app, db
+from backend import create_app, db
 
 @pytest.fixture(scope="session")
 def app():

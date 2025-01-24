@@ -3,14 +3,22 @@ This module initializes the Flask application, sets up configurations,
 and registers extensions for the backend.
 """
 
-import os
 from flask import Flask
 from flask_migrate import Migrate
-from flask_jwt_extended import JWTManager
 from backend.db import db
 from backend.config import config_by_name
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.error_handling import handle_general_error
+from backend.routes import register_blueprints  # Moved import to top
+
+# Explicitly import all models to ensure they are registered with SQLAlchemy
+from backend.models import Image  # noqa: F401
+from backend.models import ImageAnalysis  # noqa: F401
+from backend.models import User  # noqa: F401
+from backend.models import Admin  # noqa: F401
+from backend.models import Log  # noqa: F401
+from backend.models import Analytics  # noqa: F401
+from backend.models import Security  # noqa: F401
 
 # Initialize logger
 logger = CentralizedLogger("backend_init")
@@ -30,7 +38,8 @@ def create_app(config_name="development", testing=False):
     config_class = config_by_name.get(config_name)
     if not config_class:
         raise ValueError(
-            f"Invalid config name '{config_name}'. Available configs: {list(config_by_name.keys())}"
+            f"Invalid config name '{config_name}'. Available configs: "
+            f"{list(config_by_name.keys())}"
         )
 
     app.config.from_object(config_class)
@@ -40,22 +49,14 @@ def create_app(config_name="development", testing=False):
     db.init_app(app)
     migrate.init_app(app, db)
 
+    # Register blueprints
+    register_blueprints(app)
+
     # Register global error handler
     @app.errorhandler(Exception)
     def handle_unhandled_exception(e):
         logger.log_to_console("ERROR", str(e), module="general")
         return handle_general_error(e)
-
-    # Explicitly import all models to ensure they are registered with SQLAlchemy
-    from backend.models import (
-        Image,
-        ImageAnalysis,
-        User,
-        Admin,
-        Log,
-        Analytics,
-        Security,
-    )
 
     logger.log_to_console("INFO", "App creation complete.")
     return app
