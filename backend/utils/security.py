@@ -19,22 +19,21 @@ def check_authentication(credentials):
     Args:
         credentials (dict): A dictionary containing authentication info,
                             e.g., {"username": "...", "password": "..."}
-    
+
     Returns:
         bool: True if authentication succeeds.
-    
+
     Raises:
         AuthenticationError: If credentials are invalid.
     """
     with ErrorContext(module="security", meta_data={"operation": "authentication"}):
-        # Example check (replace with real authentication logic)
         username = credentials.get("username")
         password = credentials.get("password")
 
         if not username or not password:
             raise AuthenticationError("Missing credentials.")
 
-        # Dummy logic for demonstration:
+        # Replace with real authentication logic
         if username != "admin" or password != "password":
             raise AuthenticationError("Invalid username or password.")
 
@@ -58,7 +57,6 @@ def check_authorization(user_role, required_role):
         AuthorizationError: If user_role is insufficient to meet required_role.
     """
     with ErrorContext(module="security", meta_data={"operation": "authorization"}):
-        # Example logic: only 'admin' can access certain resources
         if user_role != required_role:
             raise AuthorizationError(
                 f"User role '{user_role}' does not meet requirement '{required_role}'."
@@ -104,7 +102,7 @@ def sanitize_input(input_string):
         str: The sanitized string.
     """
     with ErrorContext(module="security", meta_data={"operation": "sanitize_input"}):
-        # Very simplistic HTML tag remover
+        # Simple HTML tag remover; consider using more robust sanitization as needed
         sanitized = re.sub(r"<[^>]*>", "", input_string or "")
 
         logger.log_to_console(

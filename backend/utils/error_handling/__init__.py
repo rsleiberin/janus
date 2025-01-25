@@ -1,3 +1,5 @@
+# File: backend/utils/error_handling/__init__.py
+
 from .error_handling import (
     handle_database_error,
     handle_error_with_logging,
@@ -10,6 +12,7 @@ from .error_handling import (
     handle_image_error,
     handle_file_handler_error,
     handle_security_error,
+    handle_validation_error,
     ErrorContext,
 )
 from .exceptions import (
@@ -22,6 +25,10 @@ from .exceptions import (
     ImageError,
     FileHandlerError,
     SecurityError,
+    AuthenticationError,
+    AuthorizationError,
+    ValidationError,
+    AnalyticsError,
 )
 
 __all__ = [
@@ -36,6 +43,7 @@ __all__ = [
     "handle_image_error",
     "handle_file_handler_error",
     "handle_security_error",
+    "handle_validation_error",
     "ErrorContext",
     "DatabaseConnectionError",
     "SchemaCreationError",
@@ -46,4 +54,8 @@ __all__ = [
     "ImageError",
     "FileHandlerError",
     "SecurityError",
+    "AuthenticationError",
+    "AuthorizationError",
+    "ValidationError",
+    "AnalyticsError",
 ]

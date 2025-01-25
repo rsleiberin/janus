@@ -9,16 +9,8 @@ from backend.db import db
 from backend.config import config_by_name
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.error_handling import handle_general_error
-from backend.routes import register_blueprints  # Moved import to top
-
-# Explicitly import all models to ensure they are registered with SQLAlchemy
-from backend.models import Image  # noqa: F401
-from backend.models import ImageAnalysis  # noqa: F401
-from backend.models import User  # noqa: F401
-from backend.models import Admin  # noqa: F401
-from backend.models import Log  # noqa: F401
-from backend.models import Analytics  # noqa: F401
-from backend.models import Security  # noqa: F401
+from backend.routes import register_blueprints
+from backend.models import User, Admin, Image, ImageAnalysis, Log, Analytics, Security
 
 # Initialize logger
 logger = CentralizedLogger("backend_init")

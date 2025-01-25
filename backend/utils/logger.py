@@ -3,7 +3,7 @@
 import logging
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy.exc import SQLAlchemyError
 from backend.db import db
 from backend.models import Log
@@ -16,7 +16,7 @@ class CentralizedLogger:
     Args:
         name (str): The logger's name.
         log_level (str, optional): Logging level (DEBUG, INFO, WARNING,
-        ERROR, CRITICAL).
+            ERROR, CRITICAL).
             If not provided, the value is read from the environment
             variable `LOG_LEVEL`.
     """
@@ -36,7 +36,9 @@ class CentralizedLogger:
 
         if not self.logger.handlers:
             handler = logging.StreamHandler()
-            formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+            formatter = logging.Formatter(
+                "%(asctime)s - %(levelname)s - %(message)s"
+            )
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
 
@@ -60,7 +62,9 @@ class CentralizedLogger:
         if log_method:
             log_method(formatted_message)
         else:
-            self.logger.warning("Invalid log level '%s': %s", level, formatted_message)
+            self.logger.warning(
+                "Invalid log level '%s': %s", level, formatted_message
+            )
 
     def log_to_db(self, level, message, module=None, user_id=None, meta_data=None):
         """
@@ -79,7 +83,7 @@ class CentralizedLogger:
                 level=level,
                 module=module,
                 user_id=user_id,
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(timezone.utc),
                 log_metadata=meta_data,
             )
             db.session.add(log_entry)

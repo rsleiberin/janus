@@ -33,6 +33,12 @@ def construct_file_path(user_id, filename):
 def is_valid_filename(filename):
     """
     Validates the filename to prevent malicious or invalid paths.
+
+    Args:
+        filename (str): The filename to validate.
+
+    Returns:
+        bool: True if the filename is valid, False otherwise.
     """
     return not re.search(r"(\.\.|\/)", filename)
 
@@ -40,6 +46,16 @@ def is_valid_filename(filename):
 def read_file(user_id, filename):
     """
     Reads the contents of a file in text mode (UTF-8).
+
+    Args:
+        user_id (str): The ID of the user.
+        filename (str): The name of the file.
+
+    Returns:
+        str: The contents of the file.
+
+    Raises:
+        FileHandlerError: If the file does not exist or cannot be read.
     """
     file_path = construct_file_path(user_id, filename)
     with ErrorContext(
@@ -53,20 +69,25 @@ def read_file(user_id, filename):
             logger.log_to_console("INFO", f"File read successfully: {file_path}")
             return data
         except Exception as e:
-            log_error(e, module="file_handler", meta_data={"file_path": file_path})
+            log_error(
+                e, module="file_handler", meta_data={"file_path": file_path}
+            )
             raise FileHandlerError(f"Failed to read file: {file_path}") from e
 
 
 def write_file(user_id, filename, content, mode="w"):
     """
-    Writes content to a file. If mode is binary (e.g. "wb"), omit encoding.
+    Writes content to a file. If mode is binary (e.g., "wb"), omit encoding.
 
     Args:
         user_id (str): The ID of the user.
         filename (str): The name of the file.
         content (str/bytes): The data to write.
         mode (str, optional): File open mode, defaults to "w" (text).
-                              Use "wb" for binary data (e.g. images).
+                              Use "wb" for binary data (e.g., images).
+
+    Raises:
+        FileHandlerError: If the filename is invalid or the file cannot be written.
     """
     if not is_valid_filename(filename):
         raise FileHandlerError(f"Invalid filename: {filename}")
@@ -80,9 +101,9 @@ def write_file(user_id, filename, content, mode="w"):
         if not os.path.exists(user_directory):
             os.makedirs(user_directory)  # Ensure the user's directory exists
         try:
-            # Omit encoding if we're in binary mode
+            # Omit encoding if in binary mode
             if "b" in mode:
-                with open(file_path, mode) as f:  # pylint: disable=unspecified-encoding
+                with open(file_path, mode) as f:
                     f.write(content)  # content should be bytes
             else:
                 with open(file_path, mode, encoding="utf-8") as f:
@@ -90,13 +111,22 @@ def write_file(user_id, filename, content, mode="w"):
 
             logger.log_to_console("INFO", f"File written successfully: {file_path}")
         except Exception as e:
-            log_error(e, module="file_handler", meta_data={"file_path": file_path})
+            log_error(
+                e, module="file_handler", meta_data={"file_path": file_path}
+            )
             raise FileHandlerError(f"Failed to write file: {file_path}") from e
 
 
 def delete_file(user_id, filename):
     """
     Deletes a file if it exists.
+
+    Args:
+        user_id (str): The ID of the user.
+        filename (str): The name of the file.
+
+    Raises:
+        FileHandlerError: If the file cannot be deleted.
     """
     file_path = construct_file_path(user_id, filename)
     with ErrorContext(
@@ -111,5 +141,7 @@ def delete_file(user_id, filename):
             os.remove(file_path)
             logger.log_to_console("INFO", f"File deleted successfully: {file_path}")
         except Exception as e:
-            log_error(e, module="file_handler", meta_data={"file_path": file_path})
+            log_error(
+                e, module="file_handler", meta_data={"file_path": file_path}
+            )
             raise FileHandlerError(f"Failed to delete file: {file_path}") from e

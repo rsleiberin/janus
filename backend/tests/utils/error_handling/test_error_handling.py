@@ -1,5 +1,3 @@
-# File: backend/tests/utils/error_handling/test_error_handling.py
-
 import pytest
 from backend.utils.error_handling.error_handling import (
     format_error_response,
@@ -11,8 +9,8 @@ from backend.utils.error_handling.error_handling import (
 from backend.utils.error_handling.exceptions import FileHandlerError
 
 
+@pytest.mark.usefixtures("function_db_setup")
 def test_format_error_response():
-    """Test the format_error_response function."""
     response = format_error_response(
         status=400,
         error_code="BAD_REQUEST",
@@ -31,7 +29,10 @@ def test_format_error_response():
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_log_error(app):
-    """Test the log_error function."""
+    """
+    Test that log_error properly logs the exception and raises FileHandlerError afterward
+    to confirm the chaining works as expected.
+    """
     with app.app_context():
         with pytest.raises(FileHandlerError, match="Test error"):
             try:
@@ -39,12 +40,13 @@ def test_log_error(app):
             except ValueError as e:
                 log_error(e, module="test_module", user_id=42, meta_data={"action": "test"})
                 raise FileHandlerError("Test error") from e
-        # Ensure no unhandled exceptions are raised.
 
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_handle_general_error(app):
-    """Test the handle_general_error function."""
+    """
+    Tests that handle_general_error logs the error and returns a 500 response with details.
+    """
     with app.app_context():
         try:
             raise ValueError("Something went wrong!")
@@ -60,7 +62,9 @@ def test_handle_general_error(app):
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_handle_http_error():
-    """Test the handle_http_error function."""
+    """
+    Tests that handle_http_error returns a structured response for a given HTTP error code.
+    """
     response, status = handle_http_error(
         status=404,
         error_code="NOT_FOUND",
@@ -76,10 +80,14 @@ def test_handle_http_error():
 
 @pytest.mark.usefixtures("function_db_setup")
 def test_error_context(app):
-    """Test the ErrorContext manager."""
+    """
+    Tests that ErrorContext logs errors automatically if an exception is raised inside its context.
+    """
     with app.app_context():
         with pytest.raises(ValueError, match="This is a test error"):
             with ErrorContext(
-                module="test_context", user_id=42, meta_data={"test": "data"}
+                module="test_context",
+                user_id=42,
+                meta_data={"test": "data"}
             ):
                 raise ValueError("This is a test error")

@@ -28,7 +28,7 @@ Through a modular structure, the backend is easily extensible for advanced funct
 
 ## Phases (Project Roadmap)
 
-### Status: Pending Review
+### Status: Ongoing
 
 This backend is currently undergoing a comprehensive refactor to improve code maintainability, readability, and adherence to best practices. The refactor has revealed areas needing significant architectural updates, which are being systematically addressed.
 
@@ -37,16 +37,19 @@ This backend is currently undergoing a comprehensive refactor to improve code ma
    - Implemented database models, migrations, and foundational tests.
    - Achieved MVP with consistent error handling and JWT-based security.
 
-2. **Phase 2 (Pending Review)**
+2. **Phase 2 (Completed)**
+   - Addressed and resolved all Flake8 `F401` warnings by separating import statements.
+   - Ensured Pylint and Black pass without issues, achieving a code quality rating of 10.00/10.
+   - Confirmed that all tests pass successfully without ImportErrors.
+
+3. **Phase 3 (Pending Review)**
    - Introduce advanced image analysis (image_analysis_routes, helpers).
    - Enhance utility scripts for modular CRUD operations.
    - Refine performance and testing, laying groundwork for next-stage features.
 
-3. **Phase 3 (Pending Review)**
+4. **Phase 4 (Pending Review)**
    - Integrate with the Next.js frontend (optional SSR templates, static assets).
    - Offer expanded user/admin flows, e.g., multi-tenant design tokens or real-time dashboards.
-
-4. **Phase 4 (Pending Review)**
    - Focus on scalability and specialized integrations (machine learning modules, large-scale analytics, or third-party APIs).
    - Optionally migrate from SQLite to a production-grade database, aligning with usage demands.
 
@@ -56,7 +59,11 @@ This backend is currently undergoing a comprehensive refactor to improve code ma
 
 - **app.py**  
   Main Flask application entry point.  
-  **Status:** Pending Review
+  **Status:** Completed
+
+- **__init__.py**  
+  Initializes the Flask application, sets up configurations, and registers extensions.  
+  **Status:** Completed
 
 - **models.py**  
   SQLAlchemy models for defining the database schema.  
@@ -106,24 +113,24 @@ This backend is currently undergoing a comprehensive refactor to improve code ma
 
 ## Usage
 
-- **Install Dependencies**  
-  Use `pip install -r requirements.txt` to install required packages.
+1. **Install Dependencies**  
+   Use `pip install -r requirements.txt` to install required packages.
 
-- **Environment Variables** (optional)  
-  - `FLASK_ENV=development`
-  - `UPLOAD_FOLDER=backend/uploads`
-  - `DATABASE_URL=sqlite:///backend/instance/backend.db`
+2. **Environment Variables** (optional)  
+   - `FLASK_ENV=development`
+   - `UPLOAD_FOLDER=backend/uploads`
+   - `DATABASE_URL=sqlite:///backend/instance/backend.db`
 
-- **Initialize the DB**  
-  Run `flask db upgrade` to apply migrations (if needed).
+3. **Initialize the DB**  
+   Run `flask db upgrade` to apply migrations (if needed).
 
-- **Start the Server**  
-  - `flask run`  
-    or  
-  - `python3 backend/app.py`
+4. **Start the Server**  
+   - `flask run`  
+     or  
+   - `python3 backend/app.py`
 
-- **Test the Application**  
-  - `pytest backend/tests`
+5. **Test the Application**  
+   - `pytest backend/tests`
 
 ---
 
@@ -138,5 +145,32 @@ This backend is currently undergoing a comprehensive refactor to improve code ma
   All files in the project have been processed using **Flake8**, **Black**, **Pylint**, and **Pytest** to ensure adherence to coding standards and maintain high code quality. These tools are integrated into our documentation and review system to maintain consistency and reliability throughout the codebase.
 - **Separation of Concerns:**  
   Each component of the backend (routes, models, utilities, etc.) is responsible for a specific aspect of the application, promoting modularity and ease of maintenance.
+
+---
+
+
+## Next Steps
+
+1. **Review and Update Remaining Directories:**
+   - Address `Pending Review` statuses by implementing necessary features and ensuring code quality.
+
+2. **Implement Advanced Features:**
+   - Develop advanced image analysis functionalities and enhance utility scripts as outlined in Phase 3.
+
+3. **Integrate Frontend:**
+   - Plan and execute the integration with the Next.js frontend as detailed in Phase 4.
+
+4. **Scale and Optimize:**
+   - Focus on scalability, migrate to a production-grade database, and integrate specialized modules in Phase 4.
+
+5. **Maintain Code Quality:**
+   - Continue using Flake8, Black, Pylint, and Pytest to uphold high code standards.
+   - Regularly update dependencies and monitor for any new code quality issues.
+
+---
+
+Maintaining a clean and well-organized codebase is crucial for the scalability and maintainability of your project. By adhering to best practices and promptly addressing code quality issues, you ensure that your application remains robust and accessible to all team members.
+
+If you encounter any further issues or need assistance with other parts of your project, feel free to reach out. Let's continue optimizing your codebase together!
 
 ---
