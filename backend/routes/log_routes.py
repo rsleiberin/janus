@@ -7,11 +7,9 @@ from backend.utils.error_handling.error_handling import (
     format_error_response,
 )
 
-# Initialize logger for log routes
 logger = CentralizedLogger("log_routes")
 
-# Define Blueprint
-log_bp = Blueprint("log_routes", __name__, url_prefix="/logs")
+log_bp = Blueprint("log_routes", __name__)
 
 
 @log_bp.route("/", methods=["GET"])
