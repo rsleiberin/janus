@@ -1,73 +1,91 @@
+# File: backend/db/helpers/multi_model_helpers.py
+# pylint: disable=R1710,W0718
+
+"""
+Provides cross-model queries or operations that involve multiple tables.
+"""
+
 from typing import List, Optional, Dict
-from datetime import datetime
-from backend.db import db
 from backend.models import Image, Admin, Log, Analytics, Security
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.error_handling import handle_database_error
-from backend.utils.error_handling.exceptions import LogNotFoundError, DatabaseError
 
 logger = CentralizedLogger("multi_model_helpers")
 
 
 def get_logs_by_user(user_id: int) -> List[Log]:
     """
-    Fetch all logs associated with a user.
+    Fetch all logs associated with a user from the Log model.
     """
     try:
-        logs = db.session.query(Log).filter_by(user_id=user_id).all()
-        logger.log_to_console("DEBUG", f"Fetched {len(logs)} logs for user ID {user_id}.")
+        logs = Log.query.filter_by(user_id=user_id).all()
+        logger.log_to_console("DEBUG", f"Fetched {len(logs)} logs for user {user_id}.")
         return logs
-    except Exception as e:
-        raise handle_database_error(e, module="multi_model_helpers", meta_data={"user_id": user_id})
+    except Exception as err:
+        handle_database_error(
+            err, module="multi_model_helpers", meta_data={"user_id": user_id}
+        )
 
 
 def count_user_actions(user_id: int) -> int:
     """
-    Count the number of actions performed by a user.
+    Count the number of actions performed by a user (Log entries).
     """
     try:
-        count = db.session.query(Log).filter_by(user_id=user_id).count()
-        logger.log_to_console("DEBUG", f"Counted {count} actions for user ID {user_id}.")
-        return count
-    except Exception as e:
-        raise handle_database_error(e, module="multi_model_helpers", meta_data={"user_id": user_id})
+        total = Log.query.filter_by(user_id=user_id).count()
+        logger.log_to_console("DEBUG", f"Counted {total} actions for user {user_id}.")
+        return total
+    except Exception as err:
+        handle_database_error(
+            err, module="multi_model_helpers", meta_data={"user_id": user_id}
+        )
 
 
 def is_user_admin(user_id: int) -> bool:
     """
-    Check if a user has admin privileges.
+    Check if a user has an Admin record.
     """
     try:
-        admin_exists = db.session.query(Admin).filter_by(user_id=user_id).first() is not None
-        logger.log_to_console("DEBUG", f"User ID {user_id} admin status: {admin_exists}.")
-        return admin_exists
-    except Exception as e:
-        raise handle_database_error(e, module="multi_model_helpers", meta_data={"user_id": user_id})
+        exists = Admin.query.filter_by(user_id=user_id).first() is not None
+        logger.log_to_console("DEBUG", f"User {user_id} admin status: {exists}.")
+        return exists
+    except Exception as err:
+        handle_database_error(
+            err, module="multi_model_helpers", meta_data={"user_id": user_id}
+        )
 
 
 def get_admin_level(user_id: int) -> Optional[str]:
     """
-    Fetch the admin level of a user.
+    Fetch the admin_level from Admin table if it exists.
     """
     try:
-        admin = db.session.query(Admin).filter_by(user_id=user_id).first()
-        admin_level = admin.admin_level if admin else None
-        logger.log_to_console("DEBUG", f"Admin level for user ID {user_id}: {admin_level}.")
-        return admin_level
-    except Exception as e:
-        raise handle_database_error(e, module="multi_model_helpers", meta_data={"user_id": user_id})
+        admin_rec = Admin.query.filter_by(user_id=user_id).first()
+        level = admin_rec.admin_level if admin_rec else None
+        logger.log_to_console("DEBUG", f"Admin level for user {user_id}: {level}.")
+        return level
+    except Exception as err:
+        handle_database_error(
+            err, module="multi_model_helpers", meta_data={"user_id": user_id}
+        )
 
 
 def get_analytics_data_for_image(image_id: int) -> List[Analytics]:
     """
-    Fetch analytics data associated with a specific image.
+    Example function: fetch Analytics by image ID, if that logic is appropriate.
+    Note: currently, Analytics doesn't store an image_id, so this is hypothetical.
     """
     try:
-        analytics_data = db.session.query(Analytics).filter_by(id=image_id).all()
-        logger.log_to_console("DEBUG", f"Fetched {len(analytics_data)} analytics records for image ID {image_id}.")
+        analytics_data = Analytics.query.filter_by(id=image_id).all()
+        logger.log_to_console(
+            "DEBUG",
+            f"Fetched {len(analytics_data)} analytics records for image ID {image_id}.",
+        )
         return analytics_data
-    except Exception as e:
-        raise handle_database_error(e, module="multi_model_helpers", meta_data={"image_id": image_id})
+    except Exception as err:
+        handle_database_error(
+            err, module="multi_model_helpers", meta_data={"image_id": image_id}
+        )
 
 
 def track_user_security_actions(user_id: int) -> List[Security]:
@@ -75,28 +93,32 @@ def track_user_security_actions(user_id: int) -> List[Security]:
     Fetch all security-related actions for a specific user.
     """
     try:
-        actions = db.session.query(Security).filter_by(user_id=user_id).all()
-        logger.log_to_console("DEBUG", f"Fetched {len(actions)} security actions for user ID {user_id}.")
+        actions = Security.query.filter_by(user_id=user_id).all()
+        logger.log_to_console(
+            "DEBUG", f"Fetched {len(actions)} security actions for user {user_id}."
+        )
         return actions
-    except Exception as e:
-        raise handle_database_error(e, module="multi_model_helpers", meta_data={"user_id": user_id})
+    except Exception as err:
+        handle_database_error(
+            err, module="multi_model_helpers", meta_data={"user_id": user_id}
+        )
 
 
 def get_images_with_analytics() -> List[Dict[str, object]]:
     """
-    Fetch all images with associated analytics data.
+    Example cross-model aggregator: For each Image, fetch related Analytics data.
+    In your current schema, there's no direct link between Image & Analytics.
     """
     try:
-        images = db.session.query(Image).all()
+        images = Image.query.all()
         result = []
         for image in images:
-            analytics = (
-                db.session.query(Analytics)
-                .filter(Analytics.id == image.id)
-                .all()
-            )
+            # Hypothetically, you might do Analytics.query.filter_by(image_id=image.id).all()
+            analytics = Analytics.query.filter(Analytics.id == image.id).all()
             result.append({"image": image, "analytics": analytics})
-        logger.log_to_console("DEBUG", f"Fetched {len(result)} images with analytics data.")
+        logger.log_to_console(
+            "DEBUG", f"Fetched {len(result)} images with analytics data."
+        )
         return result
-    except Exception as e:
-        raise handle_database_error(e, module="multi_model_helpers")
+    except Exception as err:
+        handle_database_error(err, module="multi_model_helpers")

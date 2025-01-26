@@ -1,123 +1,59 @@
-# Database Directory
+# backend/db/README.md
 
 ## Overview
 
-The `db/` directory centralizes scripts and helpers that manage Janus’s data. It ensures consistent schema handling (via Flask-Migrate), provides seed data for testing and development, and offers helper modules for more complex database operations. This structure keeps database logic organized and flexible, simplifying future additions like image analysis, advanced logging, or analytics.
+The `db/` directory centralizes scripts, helpers, and seed data that manage Janus’s backend data. By leveraging **Flask-Migrate** for schema migrations and a modular structure for CRUD logic, this directory simplifies ongoing development, testing, and maintenance.
+
+Key responsibilities of this directory include:
+- **Database Initialization** via Flask-Migrate (e.g., `flask db upgrade`).
+- **Seeding** the database with representative or test data (using the `seed_data/` folder).
+- **Helper Modules** providing targeted CRUD and domain-specific operations.
+- **Production-Ready** patterns for a clean, maintainable data layer.
 
 ---
 
-## Directory Structure with Implementation Stages
+## Directory Structure
 
-### **backend/db/**
-- **README.md**: Documentation
-- **\_\_init\_\_.py**: Module initialization
-- **db_schema_creation.py**: Handles schema creation **[Completed]**
-- **db_setup.py**: Configures database connections **[Completed]**
-- **seed_data.py**: Seeds the database with initial data **[Completed]**
-- **helpers/**: Contains helper modules for database operations
-  - **admin_helpers.py**: Admin-specific logic **[Completed]**
-  - **analytics_helpers.py**: Analytics-related utilities **[Completed]**
-  - **image_helpers.py**: Image-related utilities **[Completed]**
-  - **log_helpers.py**: Log-related utilities **[Completed]**
-  - **multi_model_helpers.py**: Cross-model operations **[Completed]**
-  - **security_helpers.py**: Security-related utilities **[Completed]**
-  - **user_helpers.py**: User-related utilities **[Completed]**
-  - **image_analysis_helpers.py**: Advanced image analysis queries.**[Pending]**
-- **migrations/**: Auto-managed folder for Alembic migrations **[Managed]**
+backend/db/  
+• `__init__.py` – Exposes the shared SQLAlchemy instance (`db`).  
+• `db_setup.py` – Utility to create a Flask app with DB connectivity, relying on Alembic (no direct `create_all()` calls).  
+• `seed_data.py` – Entrypoint for seeding data via domain-specific scripts.  
+• `seed_data/`  
+  ◦ `__init__.py` – Defines `run_all_seeds()`, orchestrating domain seeds.  
+  ◦ `users_seed.py`, `images_seed.py`, `logs_seed.py`, `security_seed.py` – Scripts generating sample data for each domain.  
+• `helpers/`  
+  ◦ `__init__.py` – Imports all helper modules.  
+  ◦ `base_crud.py` – Generic CRUD class for SQLAlchemy models.  
+  ◦ `admin_helpers.py`, `analytics_helpers.py`, `image_helpers.py`, etc. – Domain modules providing specialized DB logic.  
+• `migrations/`  
+  ◦ (Flask-Migrate-managed files) – Apply schema changes with `flask db upgrade`.
 
 ---
 
-## Database Schema
+## Usage and Best Practices
 
-The database schema is defined in `models.py`. Below is a detailed description of each table, its columns, and relationships.
+1. **Migrations, Not `create_all()`**  
+   • Use `flask db upgrade` to keep your DB in sync with model changes.  
+   • To add or remove columns, generate and apply Alembic scripts with `flask db migrate -m "..."` then `flask db upgrade`.
 
-### **images**
-| Column              | Type         | Attributes                      | Description                                 |
-|---------------------|--------------|----------------------------------|---------------------------------------------|
-| `id`                | Integer      | Primary Key, Autoincrement       | Unique identifier for each image.           |
-| `filename`          | String(255)  | Unique, Not Null, Indexed        | Name of the uploaded image.                 |
-| `user_id`           | Integer      | Foreign Key: `users.id`          | References the user who uploaded the image. |
-| `width`             | Integer      | Nullable                        | Width of the image.                         |
-| `height`            | Integer      | Nullable                        | Height of the image.                        |
-| `bit_depth`         | Integer      | Nullable                        | Bit depth of the image.                     |
-| `color_type`        | String(50)   | Nullable                        | Type of color encoding in the image.        |
-| `compression_method`| String(50)   | Nullable                        | Compression method used for the image.      |
-| `image_metadata`    | JSON         | Nullable                        | JSON field to store additional metadata.    |
-| `created_at`        | DateTime     | Default: `datetime.utcnow`       | Timestamp when the image was added.         |
-| `updated_at`        | DateTime     | Updated on change               | Timestamp when the image was last updated.  |
+2. **Seeding Data**  
+   • After upgrading the schema, seed sample data in a Flask shell:  
+     ```
+     from backend.db.seed_data import run_all_seeds
+     run_all_seeds()
+     ```
+   • Each domain has a dedicated seed file for organization and scalability.
 
----
+3. **Helper Modules**  
+   • **`base_crud.py`** standardizes common methods like `create`, `get_by_id`, `update`, and `delete`.  
+   • Domain-specific helpers (e.g., `analytics_helpers.py`) add more advanced logic when needed.
 
-### **image_analysis**
-| Column              | Type         | Attributes                      | Description                                 |
-|---------------------|--------------|----------------------------------|---------------------------------------------|
-| `id`                | Integer      | Primary Key, Autoincrement       | Unique identifier for each analysis entry.  |
-| `image_id`          | Integer      | Foreign Key: `images.id`         | References the associated image.            |
-| `analysis_results`  | JSON         | Not Null                        | JSON data containing the analysis results.  |
-| `created_at`        | DateTime     | Default: `datetime.utcnow`       | Timestamp when the analysis was created.    |
-| `updated_at`        | DateTime     | Updated on change               | Timestamp when the analysis was last updated.|
+4. **Pending Features**  
+   • `image_analysis_helpers.py` remains a placeholder for advanced image analysis logic.  
+   • As the system evolves, new helper files and seed scripts can be added without disrupting existing code.
 
----
-
-### **users**
-| Column          | Type         | Attributes                 | Description                              |
-|-----------------|--------------|----------------------------|------------------------------------------|
-| `id`            | Integer      | Primary Key, Autoincrement | Unique identifier for each user.         |
-| `username`      | String(255)  | Unique, Not Null           | Username for the user.                   |
-| `email`         | String(255)  | Unique, Not Null           | Email address of the user.               |
-| `password_hash` | String(255)  | Not Null                  | Encrypted password of the user.          |
-
----
-
-### **admins**
-| Column        | Type         | Attributes                 | Description                              |
-|---------------|--------------|----------------------------|------------------------------------------|
-| `id`          | Integer      | Primary Key, Autoincrement | Unique identifier for each admin entry.  |
-| `user_id`     | Integer      | Foreign Key: `users.id`    | Links to the `users` table.              |
-| `admin_level` | String(50)   | Not Null                  | Level of administrative privileges.      |
-
----
-
-### **logs**
-| Column       | Type         | Attributes                 | Description                              |
-|--------------|--------------|----------------------------|------------------------------------------|
-| `id`         | Integer      | Primary Key, Autoincrement | Unique identifier for each log entry.    |
-| `action`     | String(255)  | Not Null                  | Description of the logged action.        |
-| `user_id`    | Integer      | Foreign Key: `users.id`    | Links to the `users` table.              |
-| `timestamp`  | DateTime     | Default: `datetime.utcnow` | Timestamp when the log was created.      |
-| `updated_at` | DateTime     | Updated on change          | Timestamp when the log was last updated. |
-| `module`     | String(100)  | Nullable                  | Module name where the log originated.    |
-| `level`      | String(50)   | Nullable                  | Log level (e.g., INFO, DEBUG).           |
-| `log_metadata`| JSON        | Nullable                  | Additional metadata in JSON format.      |
-
----
-
-### **analytics**
-| Column           | Type         | Attributes                 | Description                              |
-|------------------|--------------|----------------------------|------------------------------------------|
-| `id`             | Integer      | Primary Key, Autoincrement | Unique identifier for each entry.        |
-| `data`           | JSON         | Not Null                  | JSON field to store analytical data.     |
-| `research_topic` | String(255)  | Nullable                  | Optional field for categorizing topics.  |
-| `created_at`     | DateTime     | Default: `datetime.utcnow` | Timestamp when the record was created.   |
-| `updated_at`     | DateTime     | Updated on change          | Timestamp when the record was last updated.|
-
----
-
-### **security**
-| Column       | Type         | Attributes                 | Description                              |
-|--------------|--------------|----------------------------|------------------------------------------|
-| `id`         | Integer      | Primary Key, Autoincrement | Unique identifier for each event.        |
-| `user_id`    | Integer      | Foreign Key: `users.id`    | Links to the `users` table.              |
-| `action`     | String(255)  | Not Null                  | Description of the security event.       |
-| `timestamp`  | DateTime     | Default: `datetime.utcnow` | Time the event was recorded.             |
-| `updated_at` | DateTime     | Updated on change          | Timestamp when the event was last updated.|
-
----
-
-## Managed Tables
-
-### **alembic_version**
-| Column       | Type      | Attributes   | Description                                    |
-|--------------|-----------|--------------|------------------------------------------------|
-| `version_num`| String(32)| Primary Key  | Tracks the current state of database migrations.|
-
+5. **Workflow**  
+   • **Initialize** a Flask app context (e.g., `db_setup.py`)  
+   • **Migrate** (`flask db upgrade`)  
+   • **Seed** (optional)  
+   • **Use** domain helpers in routes or scripts for clean, testable DB access.

@@ -1,48 +1,21 @@
-from backend.db import db
+# File: backend/db/helpers/security_helpers.py
+# pylint: disable=R1710,W0718
+
+from typing import List
+from backend.db.helpers.base_crud import BaseCrudHelper
 from backend.models import Security
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.error_handling import handle_database_error
-from typing import List
 
 logger = CentralizedLogger("security_helpers")
 
 
-class SecurityHelpers:
-    @staticmethod
-    def create_security_entry(user_id: int, action: str) -> Security:
-        """
-        Create a new security entry for a user.
-        """
-        if not user_id or not action:
-            raise ValueError("User ID and action are required.")
+class SecurityHelpers(BaseCrudHelper):
+    """
+    CRUD + specialized queries for Security model.
+    """
 
-        try:
-            security_entry = Security(user_id=user_id, action=action)
-            db.session.add(security_entry)
-            db.session.commit()
-            logger.log_to_console("INFO", f"Created security entry for user ID {user_id}.")
-            return security_entry
-        except Exception as e:
-            db.session.rollback()
-            raise handle_database_error(
-                e, module="security_helpers", meta_data={"user_id": user_id, "action": action}
-            )
-
-    @staticmethod
-    def get_security_by_id(security_id: int) -> Security:
-        """
-        Get a security entry by its ID.
-        """
-        try:
-            security_entry = db.session.get(Security, security_id)
-            if not security_entry:
-                raise ValueError(f"Security entry with ID {security_id} not found.")
-            logger.log_to_console("DEBUG", f"Retrieved security entry ID {security_id}.")
-            return security_entry
-        except Exception as e:
-            raise handle_database_error(
-                e, module="security_helpers", meta_data={"security_id": security_id}
-            )
+    model = Security
 
     @staticmethod
     def get_security_by_user(user_id: int) -> List[Security]:
@@ -50,79 +23,30 @@ class SecurityHelpers:
         Get all security entries for a specific user.
         """
         try:
-            security_entries = db.session.query(Security).filter_by(user_id=user_id).all()
+            entries = Security.query.filter_by(user_id=user_id).all()
             logger.log_to_console(
-                "DEBUG", f"Retrieved {len(security_entries)} security entries for user ID {user_id}."
+                "DEBUG", f"Fetched {len(entries)} security entries for user {user_id}."
             )
-            return security_entries
-        except Exception as e:
-            raise handle_database_error(
-                e, module="security_helpers", meta_data={"user_id": user_id}
+            return entries
+        except Exception as err:
+            handle_database_error(
+                err, module="security_helpers", meta_data={"user_id": user_id}
             )
 
     @staticmethod
     def get_recent_security_entries(limit: int = 10) -> List[Security]:
         """
-        Get the most recent security entries.
+        Get the most recent security entries, sorted by created_at desc.
         """
-        if not isinstance(limit, int) or limit <= 0:
-            raise ValueError("Limit must be a positive integer.")
-
         try:
-            security_entries = (
-                db.session.query(Security)
-                .order_by(Security.timestamp.desc())
-                .limit(limit)
-                .all()
+            entries = (
+                Security.query.order_by(Security.created_at.desc()).limit(limit).all()
             )
-            logger.log_to_console("DEBUG", f"Retrieved {len(security_entries)} recent security entries.")
-            return security_entries
-        except Exception as e:
-            raise handle_database_error(
-                e, module="security_helpers", meta_data={"limit": limit}
+            logger.log_to_console(
+                "DEBUG", f"Retrieved {len(entries)} recent security entries."
             )
-
-    @staticmethod
-    def delete_security_entry(security_id: int) -> None:
-        """
-        Delete a security entry by its ID.
-        """
-        try:
-            security_entry = db.session.get(Security, security_id)
-            if not security_entry:
-                raise ValueError(f"Security entry with ID {security_id} not found.")
-            
-            db.session.delete(security_entry)
-            db.session.commit()
-            logger.log_to_console("INFO", f"Deleted security entry ID {security_id}.")
-        except Exception as e:
-            db.session.rollback()
-            raise handle_database_error(
-                e, module="security_helpers", meta_data={"security_id": security_id}
-            )
-
-    @staticmethod
-    def count() -> int:
-        """
-        Get the total number of security entries.
-        """
-        try:
-            total = db.session.query(Security).count()
-            logger.log_to_console("DEBUG", f"Total security entries: {total}.")
-            return total
-        except Exception as e:
-            raise handle_database_error(e, module="security_helpers")
-
-    @staticmethod
-    def exists(security_id: int) -> bool:
-        """
-        Check if a security entry exists.
-        """
-        try:
-            exists = db.session.query(Security).filter_by(id=security_id).first() is not None
-            logger.log_to_console("DEBUG", f"Security entry ID {security_id} exists: {exists}.")
-            return exists
-        except Exception as e:
-            raise handle_database_error(
-                e, module="security_helpers", meta_data={"security_id": security_id}
+            return entries
+        except Exception as err:
+            handle_database_error(
+                err, module="security_helpers", meta_data={"limit": limit}
             )
