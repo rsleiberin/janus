@@ -69,9 +69,7 @@ def read_file(user_id, filename):
             logger.log_to_console("INFO", f"File read successfully: {file_path}")
             return data
         except Exception as e:
-            log_error(
-                e, module="file_handler", meta_data={"file_path": file_path}
-            )
+            log_error(e, module="file_handler", meta_data={"file_path": file_path})
             raise FileHandlerError(f"Failed to read file: {file_path}") from e
 
 
@@ -103,7 +101,7 @@ def write_file(user_id, filename, content, mode="w"):
         try:
             # Omit encoding if in binary mode
             if "b" in mode:
-                with open(file_path, mode) as f:
+                with open(file_path, mode, encoding="utf-8") as f:
                     f.write(content)  # content should be bytes
             else:
                 with open(file_path, mode, encoding="utf-8") as f:
@@ -111,9 +109,7 @@ def write_file(user_id, filename, content, mode="w"):
 
             logger.log_to_console("INFO", f"File written successfully: {file_path}")
         except Exception as e:
-            log_error(
-                e, module="file_handler", meta_data={"file_path": file_path}
-            )
+            log_error(e, module="file_handler", meta_data={"file_path": file_path})
             raise FileHandlerError(f"Failed to write file: {file_path}") from e
 
 
@@ -141,7 +137,5 @@ def delete_file(user_id, filename):
             os.remove(file_path)
             logger.log_to_console("INFO", f"File deleted successfully: {file_path}")
         except Exception as e:
-            log_error(
-                e, module="file_handler", meta_data={"file_path": file_path}
-            )
+            log_error(e, module="file_handler", meta_data={"file_path": file_path})
             raise FileHandlerError(f"Failed to delete file: {file_path}") from e

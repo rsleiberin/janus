@@ -37,10 +37,13 @@ class UserHelpers(BaseCrudHelper):
             handle_database_error(
                 err, module="user_helpers", meta_data={"email": email}
             )
-        except Exception as err:
+        except Exception as err:  # pylint: disable=W0718
             handle_error_with_logging(
                 err, module="user_helpers", meta_data={"email": email}
             )
+
+        # If admin, explicitly return None so that pylint sees "consistent return"
+        return None
 
     @staticmethod
     def get_user_by_nonexistent_field(value: str):
@@ -55,7 +58,7 @@ class UserHelpers(BaseCrudHelper):
                 module="user_helpers",
                 meta_data={"query": "nonexistent_field"},
             )
-        except Exception as err:
+        except Exception as err:  # pylint: disable=W0718
             handle_error_with_logging(
                 err,
                 module="user_helpers",

@@ -1,3 +1,9 @@
+"""
+Tests for file_routes.py
+"""
+
+# pylint: disable=redefined-outer-name,unused-argument
+
 import pytest
 from unittest.mock import patch
 
@@ -28,17 +34,16 @@ def test_files_endpoint(client, mocker):
 @pytest.mark.usefixtures("client")
 @patch("os.path.abspath")
 def test_files_content_endpoint_invalid_path(mock_abspath, client, mocker):
-    invalid_file_path = "../outside_path.txt"
+    invalid_path = "../outside_path.txt"
     mock_abspath.return_value = "/home/tank/outside_path.txt"
 
     mock_logger = mocker.patch("backend.routes.file_routes.logger.log_to_console")
 
-    response = client.post("/files/content", json={"path": invalid_file_path})
+    response = client.post("/files/content", json={"path": invalid_path})
     data = response.get_json()
 
     assert response.status_code == 403
     assert data["error_code"] == "FILE_ACCESS_DENIED"
-
     mock_logger.assert_called_once_with(
         "ERROR", "File access error.", exc_info=mocker.ANY
     )
@@ -47,18 +52,17 @@ def test_files_content_endpoint_invalid_path(mock_abspath, client, mocker):
 @pytest.mark.usefixtures("client")
 @patch("builtins.open", side_effect=FileNotFoundError)
 def test_files_content_endpoint_nonexistent_file(mock_open_func, client, mocker):
-    nonexistent_file_path = "non_existent_file.txt"
-
+    nonexistent_file = "non_existent_file.txt"
     mock_logger = mocker.patch("backend.routes.file_routes.logger.log_to_console")
 
-    response = client.post("/files/content", json={"path": nonexistent_file_path})
+    response = client.post("/files/content", json={"path": nonexistent_file})
     data = response.get_json()
 
     assert response.status_code == 404
     assert data["error_code"] == "FILE_NOT_FOUND"
 
     mock_logger.assert_called_once_with(
-        "WARNING", f"The requested file was not found: {nonexistent_file_path}"
+        "WARNING", f"The requested file was not found: {nonexistent_file}"
     )
 
 
@@ -66,7 +70,6 @@ def test_files_content_endpoint_nonexistent_file(mock_open_func, client, mocker)
 @patch("builtins.open", side_effect=Exception("Mock unexpected error"))
 def test_files_content_endpoint_unexpected_error(mock_open_func, client, mocker):
     file_path = "README.md"
-
     mock_logger = mocker.patch("backend.routes.file_routes.logger.log_to_console")
 
     response = client.post("/files/content", json={"path": file_path})

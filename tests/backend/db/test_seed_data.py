@@ -3,7 +3,7 @@
 import pytest
 import logging
 from backend.db import db
-from backend.db.seed_data import seed_data  # Ensure you import from the correct path
+from backend.db.seeds import seed_data  # Ensure you import from the correct path
 from backend.models import User, Admin, Image, Log, Analytics, Security
 
 logging.basicConfig(

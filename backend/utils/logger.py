@@ -36,9 +36,7 @@ class CentralizedLogger:
 
         if not self.logger.handlers:
             handler = logging.StreamHandler()
-            formatter = logging.Formatter(
-                "%(asctime)s - %(levelname)s - %(message)s"
-            )
+            formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
 
@@ -62,9 +60,7 @@ class CentralizedLogger:
         if log_method:
             log_method(formatted_message)
         else:
-            self.logger.warning(
-                "Invalid log level '%s': %s", level, formatted_message
-            )
+            self.logger.warning("Invalid log level '%s': %s", level, formatted_message)
 
     def log_to_db(self, level, message, module=None, user_id=None, meta_data=None):
         """

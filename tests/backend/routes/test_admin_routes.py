@@ -1,6 +1,13 @@
+"""
+Tests for admin_routes.py
+"""
+
+# pylint: disable=redefined-outer-name,unused-argument
+
 import pytest
 from flask_jwt_extended import create_access_token
-from backend.models import User, Log, db
+from backend.db import db
+from backend.models import User, Log
 from backend.routes.admin_routes import logger
 from werkzeug.security import generate_password_hash
 from unittest.mock import call
@@ -9,7 +16,9 @@ from datetime import datetime
 
 @pytest.fixture
 def admin_access_token(app):
-    """Generate a valid JWT access token for an 'admin' user (role in JWT only)."""
+    """
+    Generate a valid JWT access token for an 'admin' user (role in token only).
+    """
     with app.app_context():
         return create_access_token(
             identity={"id": 1, "username": "admin", "role": "admin"}
@@ -18,15 +27,15 @@ def admin_access_token(app):
 
 @pytest.fixture
 def mock_logger(mocker):
-    """Mocks the logger for testing."""
+    """Mocks the logger for admin_routes testing."""
     return mocker.patch.object(logger, "log_to_console")
 
 
-def test_get_all_users_success(
-    client, admin_access_token, mock_logger, function_db_setup
-):
-    """Test fetching all users as an admin."""
-    # Seed the database with users (no 'role' column)
+@pytest.mark.usefixtures("function_db_setup")
+def test_get_all_users_success(client, admin_access_token, mock_logger):
+    """
+    Test fetching all users as an admin.
+    """
     admin_user = User(
         id=1,
         username="admin",
@@ -39,21 +48,18 @@ def test_get_all_users_success(
         email="user@example.com",
         password_hash=generate_password_hash("userpassword"),
     )
-    db.session.add(admin_user)
-    db.session.add(regular_user)
+    db.session.add_all([admin_user, regular_user])
     db.session.commit()
 
     headers = {"Authorization": f"Bearer {admin_access_token}"}
     response = client.get("/admin/users", headers=headers)
 
-    # Assert response status and data
     assert response.status_code == 200
     users = response.get_json()
     assert len(users) == 2
     assert users[0]["username"] == "admin"
     assert users[1]["username"] == "user"
 
-    # Assert logging calls
     expected_calls = [
         call(
             "INFO",
@@ -65,17 +71,21 @@ def test_get_all_users_success(
     mock_logger.assert_has_calls(expected_calls, any_order=False)
 
 
-def test_get_all_users_unauthorized(client, function_db_setup):
-    """Test fetching all users without admin privileges."""
+def test_get_all_users_unauthorized(client):
+    """
+    Test fetching all users without admin privileges.
+    """
     response = client.get("/admin/users")
     assert response.status_code == 401
-    assert response.get_json()["error_code"] == "AUTHENTICATION_FAILED"
+    data = response.get_json()
+    assert data["error_code"] == "AUTHENTICATION_FAILED"
 
 
-def test_delete_user_success(
-    client, admin_access_token, mock_logger, function_db_setup
-):
-    """Test deleting a user as an admin."""
+@pytest.mark.usefixtures("function_db_setup")
+def test_delete_user_success(client, admin_access_token, mock_logger):
+    """
+    Test deleting a user as an admin.
+    """
     admin_user = User(
         id=1,
         username="admin",
@@ -88,8 +98,7 @@ def test_delete_user_success(
         email="user@example.com",
         password_hash=generate_password_hash("userpassword"),
     )
-    db.session.add(admin_user)
-    db.session.add(regular_user)
+    db.session.add_all([admin_user, regular_user])
     db.session.commit()
 
     headers = {"Authorization": f"Bearer {admin_access_token}"}
@@ -98,11 +107,9 @@ def test_delete_user_success(
     assert response.status_code == 200
     assert response.get_json()["message"] == "User deleted successfully."
 
-    # Verify the user is deleted
     deleted_user = db.session.get(User, 2)
     assert deleted_user is None
 
-    # Verify logging
     mock_logger.assert_any_call(
         "INFO",
         "Admin user requested user deletion",
@@ -112,10 +119,11 @@ def test_delete_user_success(
     mock_logger.assert_any_call("INFO", "User deleted successfully", target_user=2)
 
 
-def test_delete_user_not_found(
-    client, admin_access_token, mock_logger, function_db_setup
-):
-    """Test deleting a non-existent user."""
+@pytest.mark.usefixtures("function_db_setup")
+def test_delete_user_not_found(client, admin_access_token, mock_logger):
+    """
+    Test deleting a non-existent user.
+    """
     admin_user = User(
         id=1,
         username="admin",
@@ -129,8 +137,9 @@ def test_delete_user_not_found(
     response = client.delete("/admin/users/999", headers=headers)
 
     assert response.status_code == 404
-    assert response.get_json()["error_code"] == "USER_NOT_FOUND"
-    assert response.get_json()["message"] == "User not found."
+    data = response.get_json()
+    assert data["error_code"] == "USER_NOT_FOUND"
+    assert data["message"] == "User not found."
 
     mock_logger.assert_any_call(
         "INFO",
@@ -143,8 +152,11 @@ def test_delete_user_not_found(
     )
 
 
-def test_get_logs_success(client, admin_access_token, mock_logger, function_db_setup):
-    """Test fetching logs as an admin."""
+@pytest.mark.usefixtures("function_db_setup")
+def test_get_logs_success(client, admin_access_token, mock_logger):
+    """
+    Test fetching logs as an admin.
+    """
     log1 = Log(
         action="Test log 1",
         level="INFO",
@@ -159,18 +171,16 @@ def test_get_logs_success(client, admin_access_token, mock_logger, function_db_s
         user_id=2,
         timestamp=datetime(2025, 1, 11, 1, 0, 0),
     )
-    db.session.add(log1)
-    db.session.add(log2)
+    db.session.add_all([log1, log2])
     db.session.commit()
 
     headers = {"Authorization": f"Bearer {admin_access_token}"}
     response = client.get("/admin/logs", headers=headers)
-
     assert response.status_code == 200
-    logs = response.get_json()
 
-    # Check descending order
+    logs = response.get_json()
     assert len(logs) == 2
+    # Check descending order by timestamp
     assert logs[0]["action"] == "Test log 2"
     assert logs[1]["action"] == "Test log 1"
 
@@ -182,8 +192,11 @@ def test_get_logs_success(client, admin_access_token, mock_logger, function_db_s
     mock_logger.assert_any_call("INFO", "Successfully fetched logs", count=2)
 
 
-def test_get_logs_unauthorized(client, function_db_setup):
-    """Test fetching logs without admin privileges."""
+def test_get_logs_unauthorized(client):
+    """
+    Test fetching logs without admin privileges.
+    """
     response = client.get("/admin/logs")
     assert response.status_code == 401
-    assert response.get_json()["error_code"] == "AUTHENTICATION_FAILED"
+    data = response.get_json()
+    assert data["error_code"] == "AUTHENTICATION_FAILED"

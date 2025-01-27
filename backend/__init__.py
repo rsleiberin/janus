@@ -10,7 +10,6 @@ from backend.config import config_by_name
 from backend.utils.logger import CentralizedLogger
 from backend.utils.error_handling.error_handling import handle_general_error
 from backend.routes import register_blueprints
-from backend.models import User, Admin, Image, ImageAnalysis, Log, Analytics, Security
 
 # Initialize logger
 logger = CentralizedLogger("backend_init")

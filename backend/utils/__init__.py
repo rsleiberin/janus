@@ -1,4 +1,6 @@
-# File: backend/utils/__init__.py
+"""
+Utilities package initialization. Exports for file handling, security, and logging.
+"""
 
 from .logger import CentralizedLogger
 from .file_handler import (
@@ -14,21 +16,6 @@ from .security import (
     validate_input,
     sanitize_input,
 )
-from .error_handling import (
-    handle_database_error,
-    handle_error_with_logging,
-    handle_general_error,
-    handle_authentication_error,
-    handle_unauthorized_error,
-    handle_route_error,
-    handle_http_error,
-    handle_health_check_error,
-    handle_image_error,
-    handle_file_handler_error,
-    handle_security_error,
-    handle_validation_error,
-    ErrorContext,
-)
 
 __all__ = [
     "CentralizedLogger",
@@ -41,17 +28,4 @@ __all__ = [
     "check_authorization",
     "validate_input",
     "sanitize_input",
-    "handle_database_error",
-    "handle_error_with_logging",
-    "handle_general_error",
-    "handle_authentication_error",
-    "handle_unauthorized_error",
-    "handle_route_error",
-    "handle_http_error",
-    "handle_health_check_error",
-    "handle_image_error",
-    "handle_file_handler_error",
-    "handle_security_error",
-    "handle_validation_error",
-    "ErrorContext",
 ]

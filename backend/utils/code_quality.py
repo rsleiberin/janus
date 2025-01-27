@@ -25,7 +25,7 @@ def run_flake8():
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while running Flake8: {e}")
         sys.exit(e.returncode)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=W0718
         print(f"An unexpected error occurred while running Flake8: {e}")
         sys.exit(1)
 
@@ -51,7 +51,7 @@ def run_black():
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while running Black: {e}")
         sys.exit(e.returncode)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=W0718
         print(f"An unexpected error occurred while running Black: {e}")
         sys.exit(1)
 
