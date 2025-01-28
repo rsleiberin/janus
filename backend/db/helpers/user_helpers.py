@@ -48,7 +48,7 @@ class UserHelpers(BaseCrudHelper):
     @staticmethod
     def get_user_by_nonexistent_field(value: str):
         """
-        Demonstrates an error if we query a non-existent column. For testing error handling.
+        Demonstrates an error if we query a non-existent column to test error handling.
         """
         try:
             User.query.filter_by(nonexistent_field=value).all()

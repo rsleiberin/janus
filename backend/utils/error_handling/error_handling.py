@@ -68,7 +68,7 @@ def log_error(error, module=None, user_id=None, meta_data=None):
 
 def handle_database_error(error: Exception, module: str = None, meta_data: dict = None):
     """
-    Handles database-related exceptions by logging them and raising a standardized exception.
+    Handles database-related exceptions by logging raising a standardized exception.
 
     Args:
         error (Exception): The exception that was raised.
@@ -348,8 +348,8 @@ class ErrorContext:
     Context manager for simplified error handling.
 
     Usage:
-        with ErrorContext(module="module_name", user_id=123, meta_data={"key": "value"}):
-            # Your code here
+        with ErrorContext(module="module_name", user_id=123,
+            meta_data={"key": "value"}):
     """
 
     def __init__(self, module, user_id=None, meta_data=None):

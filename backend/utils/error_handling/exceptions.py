@@ -41,7 +41,7 @@ class AuthenticationError(SecurityError):
     Exception for authentication-related issues (e.g., invalid credentials or tokens).
 
     Attributes:
-        user_id (str, optional): ID of the user associated with this authentication error.
+        user_id (str, optional): ID of the user associated with this auth error.
     """
 
     def __init__(self, message="Authentication failed.", user_id=None):
@@ -51,10 +51,10 @@ class AuthenticationError(SecurityError):
 
 class AuthorizationError(SecurityError):
     """
-    Exception for authorization-related issues (e.g., forbidden actions, insufficient role).
+    Exception for auth-related issues (e.g., forbidden actions, insufficient role).
 
     Attributes:
-        action (str, optional): Action attempted that triggered this authorization failure.
+        action (str, optional): Action attempted that triggered this auth failure.
     """
 
     def __init__(self, message="Authorization failed.", action=None):
@@ -98,15 +98,15 @@ class DatabaseError(GeneralError):
 
 
 class DatabaseConnectionError(DatabaseError):
-    """Raised for database connection issues (cannot establish or maintain a DB connection)."""
+    """Raised for DB connection issues (cannot establish or maintain a DB connection)"""
 
 
 class SchemaCreationError(DatabaseError):
-    """Raised for database schema creation errors (e.g., migrations or table creation failures)."""
+    """Raised for DB schema creation errors (migrations or table creation failures)."""
 
 
 class SessionCommitError(DatabaseError):
-    """Raised for errors during database session commits (e.g., constraint violations)."""
+    """Raised for errors during DB session commits (e.g., constraint violations)."""
 
 
 class LogNotFoundError(DatabaseError):
@@ -114,7 +114,7 @@ class LogNotFoundError(DatabaseError):
 
 
 class LogError(DatabaseError):
-    """Raised for log-related database errors (e.g., insertion or retrieval failures)."""
+    """Raised for log-related DB errors (e.g., insertion or retrieval failures)."""
 
 
 class AnalyticsError(DatabaseError):

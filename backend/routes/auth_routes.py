@@ -38,7 +38,8 @@ def register_user():
     """
     Register a new user.
     Stores a 'role' field for future scalability. By default: 'user'.
-    Expects: {"username": "...", "email": "...", "password": "...", [optional "role": "..."]}
+    Expects: {"username": "...", "email": "...", "password": "...",
+        [optional "role": "..."]}
     """
     try:
         data = request.get_json() or {}

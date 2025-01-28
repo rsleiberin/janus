@@ -113,7 +113,6 @@ def get_images_with_analytics() -> List[Dict[str, object]]:
         images = Image.query.all()
         result = []
         for image in images:
-            # Hypothetically, you might do Analytics.query.filter_by(image_id=image.id).all()
             analytics = Analytics.query.filter(Analytics.id == image.id).all()
             result.append({"image": image, "analytics": analytics})
         logger.log_to_console(
