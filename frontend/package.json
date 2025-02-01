@@ -1,7 +1,8 @@
 {
-  "name": "frontend",
+  "name": "@darf-tech/janus-frontend",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
