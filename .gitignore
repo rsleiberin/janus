@@ -8,6 +8,8 @@ __pycache__/
 # Flask backend/
 backend/.flaskenv
 
+# Docs
+docs/*
 
 # Node.js
 node_modules/

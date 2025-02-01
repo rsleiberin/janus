@@ -1,46 +1,69 @@
-Home:
-- Welcome message: Brief intro and what to expect.
-
-Design:
-- Digital: Showcase of digital works.
-- Physical: Physical products and tangible projects.
-- Service: Service-oriented offerings.
-- Research: Presentation of research projects.
-
-Art:
-- Audio:
-  -- Music: Original compositions.
-  -- Oratory: Podcasts, spoken word.
-  -- SFX: Sound effects and ambiances.
-- Visual:
-  -- 2D: Illustrations and paintings.
-  -- 3D: Sculptures and digital models.
-  -- Animation: Animations and short films.
-- Narrative:
-  -- Literary: Written works.
-  -- Worldbuilding: Lore and settings.
-  -- Installation: Exhibitions and on-site artworks.
-- Multimedia:
-  -- Music Videos: Original videos.
-  -- Comics: Graphic works.
-  -- AR: Augmented reality experiences.
-
-Philosophy:
-- Mission:
-  -- Observations: Personal insights.
-  -- Opportunity: Future visions and goals.
-  -- Vision: Overall purpose and direction.
-- Ethics:
-  -- Alignment: Guiding principles.
-  -- Transparency: Process and collaboration openness.
-  -- Integrity: Ethical considerations.
-- Methodology:
-  -- Data-Driven: Influence of data on work.
-  -- Iterative: Emphasis on improvement and feedback.
-  -- AI Enhanced: Incorporation of AI.
-- Holobiont Centered Interaction Design:
-  -- Reasoning: Rationale behind this approach.
-  -- Framework: Guidelines and principles.
-  -- Modularity: Interaction of components.
-
-Shop
+darf.tech  
+├── H1: home (The Open Source Development Studio)  
+│   ├── H2: forge (Latest & Best Work)  
+│   ├── H2: research (Knowledge & Studies)  
+│   ├── H2: tools (Software, Templates, & Code)  
+│   ├── H2: insights (Articles & Deep Dives)  
+│   ├── H2: about (Who We Are)  
+│   ├── H2: join (Contribute & Collaborate)  
+│   ├── H2: contact (Get in Touch)  
+│   └── H2: shop (Coming Soon – Tools & Gear)  
+│  
+├── H1: forge (Infinite Scroll of All Work & Contributions)  
+│   ├── H2: ai-ux (Smarter Interfaces)  
+│   ├── H2: generative (Machine-Made Art)  
+│   ├── H2: automation (Scripting & Efficiency)  
+│   ├── H2: robotics (Future Development)  
+│   ├── H2: animation (Motion & Process)  
+│   ├── H2: open-source (Public Tools & Code)  
+│   └── H2: case-studies (Lessons from the Craft)  
+│  
+├── H1: research (Knowledge & Studies)  
+│   ├── H2: ai-methods (Algorithm Development)  
+│   ├── H2: ux-design (Color & Contrast Systems)  
+│   ├── H2: automation (Workflow & Optimization)  
+│   ├── H2: aces-color (High-Fidelity Palettes)  
+│   ├── H2: data-driven (Decisions with Precision)  
+│   └── H2: research-library (Full Archive)  
+│  
+├── H1: tools (Software, Templates & Code)  
+│   ├── H2: janus (AI & Automation Framework)  
+│   ├── H2: design-kit (Color & UI Systems)  
+│   ├── H2: ai-tools (Scripts & Plugins)  
+│   ├── H2: github (Public Codebase)  
+│   ├── H2: robotics (Hardware & CAD Files)  
+│   └── H2: resources (Guides & Tutorials)  
+│  
+├── H1: insights (Articles & Deep Dives)  
+│   ├── H2: journal (Development Blog)  
+│   ├── H2: design (UX & Systems Thinking)  
+│   ├── H2: open-source (Ethics & Licensing)  
+│   ├── H2: ai-future (Trends & Speculation)  
+│   ├── H2: tutorials (How-To Guides)  
+│   └── H2: thoughts (Bits & Ramblings)  
+│  
+├── H1: about (The Maker & The Mission)  
+│   ├── H2: who-is-darf (About Me)  
+│   ├── H2: darf-and-gnome (The Business Partnership)  
+│   ├── H2: craft (Values & Work Ethic)  
+│   └── H2: studio (What We Do)  
+│  
+├── H1: join (Contribute & Collaborate)  
+│   ├── H2: github (Open Contributions)  
+│   ├── H2: discord (Community & Discussion)  
+│   ├── H2: patreon (Support & Funding)  
+│   └── H2: roadmap (Upcoming Projects)  
+│  
+├── H1: contact (Get in Touch)  
+│   ├── H2: linkedin (Professional Profile)  
+│   ├── H2: email (Direct Contact)  
+│   ├── H2: social (Other Links)  
+│   ├── H2: consulting (Work With Us)  
+│   └── H2: feedback (Suggestions & Ideas)  
+│  
+└── H1: shop (Coming Soon – Tools & Gear)  
+    ├── H2: digital (Software & Design Kits)  
+    ├── H2: physical (Hardware & Prototypes)  
+    ├── H2: nstynct (Performance & Recovery)  
+    ├── H2: revibe (Therapy & Motion)  
+    └── H2: checkout (Future Expansion)  
